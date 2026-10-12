@@ -1,0 +1,848 @@
+{
+  "appName": {
+    "message": "Tabdial – Speed Dial visuel pour le nouvel onglet",
+    "description": "Store and browser name, max 75 characters. Keep the brand Tabdial."
+  },
+  "appDesc": {
+    "message": "Favoris visuels du nouvel onglet : vos sites en groupes et dossiers, sauvegardés chaque jour. Ni sponsor, ni compte, ni abonnement.",
+    "description": "Short store description, max 132 characters."
+  },
+  "actionTitle": {
+    "message": "Ajouter cette page à Tabdial",
+    "description": "Tooltip of the toolbar button that adds the current page."
+  },
+  "tabTitle": {
+    "message": "Nouvel onglet",
+    "description": "Browser tab title of the new tab page. Use the browser's own name for a new tab."
+  },
+  "groups": {
+    "message": "Groupes",
+    "description": "Screen reader name of the group tabs at the top."
+  },
+  "newGroup": {
+    "message": "Nouveau groupe",
+    "description": "Button and dialog title for creating a group of dials."
+  },
+  "renameGroup": {
+    "message": "Renommer le groupe",
+    "description": "Dialog title."
+  },
+  "renameHint": {
+    "message": "Double-cliquez pour renommer",
+    "description": "Tooltip on a group tab."
+  },
+  "settings": {
+    "message": "Paramètres"
+  },
+  "speedDials": {
+    "message": "Raccourcis",
+    "description": "Screen reader name of the grid of sites."
+  },
+  "defaultGroup": {
+    "message": "Accueil",
+    "description": "Name of the first group, made on install."
+  },
+  "importedGroup": {
+    "message": "Importé",
+    "description": "Name for an imported group that had no name."
+  },
+  "welcomeTitle": {
+    "message": "Vos sites préférés, à un clic",
+    "description": "Heading on the empty new tab page right after install."
+  },
+  "welcomeText": {
+    "message": "Commencez par les sites que vous visitez le plus, ajoutez les vôtres ou récupérez vos raccourcis d'une autre extension de speed dial."
+  },
+  "emptyGroupTitle": {
+    "message": "Ce groupe est vide"
+  },
+  "emptyGroupText": {
+    "message": "Ajoutez-y vos sites préférés, ou faites glisser sur son onglet des raccourcis d'un autre groupe."
+  },
+  "addYourMostVisited": {
+    "message": "Ajouter vos sites les plus visités",
+    "description": "Main button on the empty page."
+  },
+  "addSite": {
+    "message": "Ajouter un site",
+    "description": "Button and empty tile that open the dialog for adding a dial."
+  },
+  "importFromOther": {
+    "message": "Importer depuis une autre extension de speed dial",
+    "description": "Link on the empty page that opens the import settings."
+  },
+  "addDial": {
+    "message": "Ajouter un raccourci",
+    "description": "Dialog title. A dial is one site tile on the page."
+  },
+  "editDial": {
+    "message": "Modifier le raccourci",
+    "description": "Dialog title."
+  },
+  "edit": {
+    "message": "Modifier",
+    "description": "Tooltip of the pencil button on a dial."
+  },
+  "editNamed": {
+    "message": "Modifier $1",
+    "description": "Screen reader name of the pencil button. $1 = the dial's title."
+  },
+  "address": {
+    "message": "Adresse",
+    "description": "Field label: the web address of a dial."
+  },
+  "title": {
+    "message": "Titre",
+    "description": "Field label: the name shown under a dial."
+  },
+  "optional": {
+    "message": "Facultatif",
+    "description": "Placeholder of the title field."
+  },
+  "thumbnail": {
+    "message": "Miniature",
+    "description": "The picture of a dial."
+  },
+  "uploadImage": {
+    "message": "Charger une image"
+  },
+  "pasteImageLink": {
+    "message": "…ou collez un lien d'image",
+    "description": "Placeholder of the image address field, under the Upload image button."
+  },
+  "imageLink": {
+    "message": "Lien de l'image"
+  },
+  "removeImage": {
+    "message": "Retirer l'image"
+  },
+  "group": {
+    "message": "Groupe",
+    "description": "Field label: which group the dial is in."
+  },
+  "folder": {
+    "message": "Dossier",
+    "description": "Name of a new folder; also the label of the folder field when editing a dial and the screen reader name of an open folder."
+  },
+  "folderName": {
+    "message": "Nom du dossier",
+    "description": "Screen reader label of the name at the top of an open folder, which can be changed there."
+  },
+  "noFolder": {
+    "message": "Aucun",
+    "description": "Choice in the folder field: the dial is in no folder."
+  },
+  "newFolder": {
+    "message": "Nouveau dossier",
+    "description": "Choice in the folder field: a new folder is made for the dial."
+  },
+  "delete": {
+    "message": "Supprimer"
+  },
+  "cancel": {
+    "message": "Annuler"
+  },
+  "save": {
+    "message": "Enregistrer"
+  },
+  "name": {
+    "message": "Nom",
+    "description": "Field label: the group's name."
+  },
+  "deleteGroup": {
+    "message": "Supprimer le groupe"
+  },
+  "confirmDeleteGroup": {
+    "message": "Supprimer « $1 » et son contenu ($2) ?",
+    "description": "$1 = group name, $2 = a count like \"5 dials\" (nDials)."
+  },
+  "confirmDeleteEmptyGroup": {
+    "message": "Supprimer « $1 » ?",
+    "description": "Asked before deleting a group with no dials. $1 = group name."
+  },
+  "invalidUrl": {
+    "message": "Saisissez une adresse web, par exemple example.com.",
+    "description": "Shown at the address field. Keep example.com."
+  },
+  "alreadyIn": {
+    "message": "Déjà dans « $1 ».",
+    "description": "Shown at the address field when the group already has that site. $1 = group name."
+  },
+  "imageUnreadable": {
+    "message": "Impossible de lire cette image."
+  },
+  "saveFailed": {
+    "message": "Impossible d'enregistrer votre modification : $1",
+    "description": "$1 = the browser's error message."
+  },
+  "nDials_one": {
+    "message": "$1 raccourci",
+    "description": "Count of dials when the language's plural rule says 'one'. $1 = the number."
+  },
+  "nDials_other": {
+    "message": "$1 raccourcis",
+    "description": "Count of dials for every other number. $1 = the number."
+  },
+  "nGroups_one": {
+    "message": "$1 groupe"
+  },
+  "nGroups_other": {
+    "message": "$1 groupes"
+  },
+  "nSites_one": {
+    "message": "$1 site"
+  },
+  "nSites_other": {
+    "message": "$1 sites"
+  },
+  "nThumbnails_one": {
+    "message": "$1 miniature"
+  },
+  "nThumbnails_other": {
+    "message": "$1 miniatures"
+  },
+  "ratePrompt": {
+    "message": "Vous aimez Tabdial ? Une note aide d'autres personnes à le découvrir."
+  },
+  "rateTabdial": {
+    "message": "Noter Tabdial"
+  },
+  "close": {
+    "message": "Fermer"
+  },
+  "background": {
+    "message": "Arrière-plan"
+  },
+  "appearance": {
+    "message": "Apparence"
+  },
+  "bgDefault": {
+    "message": "Arrière-plan par défaut"
+  },
+  "bgLavender": {
+    "message": "Arrière-plan lavande"
+  },
+  "bgMint": {
+    "message": "Arrière-plan menthe"
+  },
+  "bgPeach": {
+    "message": "Arrière-plan pêche"
+  },
+  "bgOcean": {
+    "message": "Arrière-plan océan"
+  },
+  "bgNight": {
+    "message": "Arrière-plan nuit"
+  },
+  "bgLake": {
+    "message": "Photo de lac de montagne"
+  },
+  "bgSea": {
+    "message": "Photo de mer"
+  },
+  "bgFog": {
+    "message": "Photo de forêt dans la brume"
+  },
+  "bgDunes": {
+    "message": "Photo de dunes"
+  },
+  "bgAurora": {
+    "message": "Photo d'aurore boréale"
+  },
+  "bgStars": {
+    "message": "Photo de ciel étoilé"
+  },
+  "bgSunset": {
+    "message": "Photo de coucher de soleil en montagne"
+  },
+  "bgForest": {
+    "message": "Photo de forêt de pins"
+  },
+  "pickColor": {
+    "message": "Choisir une couleur"
+  },
+  "backgroundColor": {
+    "message": "Couleur d'arrière-plan"
+  },
+  "uploadBackground": {
+    "message": "Charger une image d'arrière-plan"
+  },
+  "dialsPerRow": {
+    "message": "Raccourcis par ligne"
+  },
+  "searchPlaceholder": {
+    "message": "Rechercher dans vos sites ou sur le Web"
+  },
+  "searchNoMatch": {
+    "message": "Aucun site ne correspond. Appuyez sur Entrée pour rechercher sur le Web."
+  },
+  "showSearchBox": {
+    "message": "Afficher le champ de recherche"
+  },
+  "sync": {
+    "message": "Synchronisation"
+  },
+  "syncLabel": {
+    "message": "Garder les mêmes raccourcis sur mes autres ordinateurs",
+    "description": "Checkbox."
+  },
+  "syncHint": {
+    "message": "Utilise la synchronisation de votre navigateur : cela fonctionne là où vous êtes connecté au même navigateur avec la synchronisation activée. Les adresses, titres et groupes sont synchronisés ; les miniatures et les paramètres restent sur chaque ordinateur."
+  },
+  "syncTooLong": {
+    "message": "Votre liste de raccourcis est trop longue pour être synchronisée : elle ne l'est donc pas."
+  },
+  "syncUnreadable": {
+    "message": "La liste de raccourcis synchronisée est dans un format que Tabdial ne comprend pas."
+  },
+  "syncCodeHint": {
+    "message": "La synchronisation d'un navigateur s'arrête à ce navigateur : celle de Chrome n'atteint jamais Firefox. Un code de synchronisation garde les mêmes raccourcis dans tous vos navigateurs. Votre liste est stockée sur nexuscortex.dev, chiffrée avec le code : nous ne pouvons donc pas la lire. Gratuit, sans compte."
+  },
+  "syncCodeNew": {
+    "message": "Synchroniser entre navigateurs"
+  },
+  "syncCodeHave": {
+    "message": "Vous avez déjà un code de synchronisation d'un autre navigateur ? Saisissez-le ici."
+  },
+  "syncCode": {
+    "message": "Code de synchronisation"
+  },
+  "syncCodeUse": {
+    "message": "Utiliser ce code"
+  },
+  "syncCodeOnHint": {
+    "message": "Vos raccourcis sont synchronisés entre navigateurs avec ce code. Dans un autre navigateur, ouvrez les Paramètres de Tabdial, allez dans Synchronisation et saisissez-le, ou ouvrez-y le lien. Toute personne qui a le code peut voir et modifier vos raccourcis, et nous ne pouvons pas le retrouver pour vous : gardez-en une copie en lieu sûr."
+  },
+  "copyCode": {
+    "message": "Copier le code"
+  },
+  "copyLink": {
+    "message": "Copier le lien"
+  },
+  "syncCopied": {
+    "message": "Copié. Gardez-le pour vous : toute personne qui l'a peut voir et modifier vos raccourcis."
+  },
+  "syncStopHere": {
+    "message": "Arrêter dans ce navigateur"
+  },
+  "syncStopAll": {
+    "message": "Arrêter partout et supprimer"
+  },
+  "confirmSyncStopAll": {
+    "message": "Arrêter partout la synchronisation entre navigateurs ? La liste sur nexuscortex.dev est supprimée, et vos autres navigateurs s'arrêtent la prochaine fois qu'ils ouvrent un nouvel onglet. Chaque navigateur garde ses raccourcis."
+  },
+  "syncStopped": {
+    "message": "Arrêtée. Ce navigateur garde ses raccourcis."
+  },
+  "syncCodeOn": {
+    "message": "Ce navigateur est maintenant synchronisé avec votre code de synchronisation."
+  },
+  "syncCodeInvalid": {
+    "message": "Ce n'est pas un code de synchronisation. Un code de synchronisation comporte 25 lettres et chiffres, par exemple XXXXX-XXXXX-XXXXX-XXXXX-XXXXX."
+  },
+  "syncCodeUnknown": {
+    "message": "Aucune liste n'est synchronisée avec ce code. Comparez-le avec celui du navigateur d'où il vient."
+  },
+  "confirmSyncCode": {
+    "message": "Synchroniser ce navigateur avec le code de synchronisation de ce lien ? Les raccourcis synchronisés avec lui s'ajoutent aux vôtres, et toute personne qui a le code voit aussi les vôtres. Ne continuez que si ce code est le vôtre."
+  },
+  "jump": {
+    "message": "Accès direct"
+  },
+  "jumpHint": {
+    "message": "Tapez z et une espace dans la barre d'adresse, puis quelques mots de l'adresse ou du titre d'un site, et appuyez sur Entrée pour y aller directement."
+  },
+  "jumpHistory": {
+    "message": "Chercher aussi dans l'historique de navigation"
+  },
+  "jumpHistoryHint": {
+    "message": "Tabdial le lit uniquement sur cet ordinateur ; il n'est jamais envoyé nulle part."
+  },
+  "jumpHistoryAgain": {
+    "message": "Lors de l'enregistrement, « $1 » était activé. Le navigateur le demande sur chaque ordinateur : réactivez-le dans les Paramètres."
+  },
+  "jumpSearch": {
+    "message": "Rechercher « $1 » sur le Web"
+  },
+  "jumpType": {
+    "message": "Tapez quelques mots de l'adresse ou du titre d'un site"
+  },
+  "backups": {
+    "message": "Sauvegardes"
+  },
+  "backupsHint": {
+    "message": "Chaque jour, avant votre première modification, Tabdial conserve une copie de vos raccourcis sur cet ordinateur."
+  },
+  "backupsKept": {
+    "message": "Les $1 dernières sont conservées ; au-delà des $2 plus récentes, les copies gardent vos raccourcis mais pas leurs miniatures.",
+    "description": "Follows backupsHint. $1 = 90, $2 = 7."
+  },
+  "noCopies": {
+    "message": "Aucune copie pour l'instant. La première sera faite à votre prochaine modification."
+  },
+  "beforeRestore": {
+    "message": "Avant votre dernière restauration",
+    "description": "Label of the backup copy made just before a restore."
+  },
+  "dialsInGroups": {
+    "message": "$1 dans $2",
+    "description": "What a backup copy holds. $1 = nDials, $2 = nGroups, e.g. \"12 dials in 3 groups\"."
+  },
+  "restore": {
+    "message": "Restaurer"
+  },
+  "restoreCopy": {
+    "message": "Restaurer la copie du $1",
+    "description": "Screen reader name of a Restore button. $1 = a date like \"Fri, Oct 2\"."
+  },
+  "restoreBefore": {
+    "message": "Restaurer les raccourcis d'avant votre dernière restauration",
+    "description": "Screen reader name of a Restore button."
+  },
+  "confirmRestoreCopy": {
+    "message": "Remplacer vos raccourcis par la copie du $1 ? Vos raccourcis actuels sont conservés : vous pourrez annuler ici.",
+    "description": "$1 = a date."
+  },
+  "confirmRestoreBefore": {
+    "message": "Remplacer vos raccourcis par ceux d'avant votre dernière restauration ? Vos raccourcis actuels sont conservés : vous pourrez annuler ici."
+  },
+  "restoredCopy": {
+    "message": "Copie du $1 restaurée.",
+    "description": "$1 = a date."
+  },
+  "restoredBefore": {
+    "message": "Les raccourcis d'avant votre dernière restauration sont rétablis."
+  },
+  "copyGone": {
+    "message": "Cette copie n'est plus disponible."
+  },
+  "unlockPitch": {
+    "message": "Triez les raccourcis d'un groupe dans vos autres groupes, et créez des équipes pour partager des groupes avec vos collègues.",
+    "description": "Bold first sentence of the paid unlock offer."
+  },
+  "unlockTerms": {
+    "message": "Paiement unique de 9 $$, sans abonnement. Pas satisfait ? Écrivez-nous dans les 30 jours pour être intégralement remboursé.",
+    "description": "Follows unlockPitch. The price is in US dollars in every language: keep $$9 exactly (it shows as $9)."
+  },
+  "unlockFor": {
+    "message": "Débloquer pour 9 $$",
+    "description": "Button. Keep $$9 exactly (it shows as $9)."
+  },
+  "terms": {
+    "message": "Conditions",
+    "description": "Link to the purchase terms."
+  },
+  "alreadyPaid": {
+    "message": "J'ai déjà payé"
+  },
+  "alreadyPaidHint": {
+    "message": "Vos autres ordinateurs où la synchronisation Chrome est activée se débloquent d'eux-mêmes. Ailleurs, connectez-vous avec le compte Google qui reçoit votre sauvegarde."
+  },
+  "signInGoogle": {
+    "message": "Se connecter avec Google"
+  },
+  "licenseHint": {
+    "message": "Ou saisissez la clé de licence affichée après le paiement :"
+  },
+  "licenseKey": {
+    "message": "Clé de licence"
+  },
+  "unlock": {
+    "message": "Débloquer",
+    "description": "Button next to the license key field."
+  },
+  "unlocked": {
+    "message": "Tabdial est débloqué. Merci !"
+  },
+  "paymentServiceError": {
+    "message": "Le service de paiement a renvoyé le code $1. Réessayez plus tard.",
+    "description": "$1 = an HTTP status number."
+  },
+  "driveBackup": {
+    "message": "Sauvegarde Google Drive"
+  },
+  "driveIntro": {
+    "message": "Une fois par jour, tout (miniatures et paramètres compris) est enregistré dans un seul fichier de votre Google Drive. Tabdial ne voit que les fichiers qu'il y crée."
+  },
+  "driveFound": {
+    "message": "Votre Drive contient déjà une sauvegarde Tabdial du $1. Restaurez-la pour récupérer ici ses raccourcis et miniatures, ou sauvegardez maintenant pour la remplacer par celle de cet ordinateur.",
+    "description": "$1 = date and time."
+  },
+  "driveFailed": {
+    "message": "Sauvegarde sur $1. La dernière sauvegarde a échoué : $2",
+    "description": "$1 = Google account email, $2 = error message."
+  },
+  "driveDaily": {
+    "message": "Sauvegarde quotidienne sur $1.",
+    "description": "$1 = Google account email."
+  },
+  "driveDailyLast": {
+    "message": "Sauvegarde quotidienne sur $1. Dernière sauvegarde : $2.",
+    "description": "$1 = Google account email, $2 = date and time."
+  },
+  "driveConnect": {
+    "message": "Connecter Google Drive"
+  },
+  "driveReconnect": {
+    "message": "Reconnecter Google Drive"
+  },
+  "driveNow": {
+    "message": "Sauvegarder maintenant"
+  },
+  "driveRestore": {
+    "message": "Restaurer depuis Drive"
+  },
+  "driveDisconnect": {
+    "message": "Déconnecter"
+  },
+  "driveConnected": {
+    "message": "Google Drive est connecté."
+  },
+  "accountNotPaid": {
+    "message": "Ce compte Google n'a pas encore débloqué Tabdial. Sur l'ordinateur où vous avez payé, connectez une fois Google Drive avec ce compte, ou saisissez la clé de licence affichée après le paiement."
+  },
+  "driveBackedUp": {
+    "message": "Sauvegardé sur Google Drive."
+  },
+  "driveDisconnected": {
+    "message": "Google Drive est déconnecté."
+  },
+  "driveRestored": {
+    "message": "Vous avez restauré $1 et $2 depuis Google Drive.",
+    "description": "$1 = nDials, $2 = nThumbnails."
+  },
+  "confirmDriveRestore": {
+    "message": "Ajouter les raccourcis et miniatures de votre sauvegarde Google Drive qui manquent ici, et utiliser son arrière-plan et sa disposition ?"
+  },
+  "confirmDriveDisconnect": {
+    "message": "Arrêter la sauvegarde sur Google Drive ? Le fichier de sauvegarde reste dans votre Drive."
+  },
+  "driveNotConnected": {
+    "message": "Google Drive n'est pas connecté."
+  },
+  "noDriveBackup": {
+    "message": "Votre Google Drive ne contient pas encore de sauvegarde Tabdial."
+  },
+  "driveSignInAgain": {
+    "message": "Google vous demande de vous reconnecter."
+  },
+  "driveAnswered": {
+    "message": "Google Drive a renvoyé le code $1. Réessayez plus tard.",
+    "description": "$1 = an HTTP status number."
+  },
+  "googleUnreachable": {
+    "message": "Impossible de joindre Google ($1). Tabdial réessaiera.",
+    "description": "$1 = the browser's error message."
+  },
+  "signInUnfinished": {
+    "message": "La connexion à Google n'a pas abouti : $1",
+    "description": "$1 = the browser's error message."
+  },
+  "signInFailed": {
+    "message": "Échec de la connexion à Google ($1).",
+    "description": "$1 = Google's error code, or noAccess."
+  },
+  "noAccess": {
+    "message": "accès refusé"
+  },
+  "yourData": {
+    "message": "Vos données"
+  },
+  "yourDataHint": {
+    "message": "Exportez un fichier pour garder votre propre copie, miniatures comprises, ou pour passer à un autre navigateur."
+  },
+  "export": {
+    "message": "Exporter"
+  },
+  "importFile": {
+    "message": "Importer un fichier"
+  },
+  "addMostVisited": {
+    "message": "Ajouter les sites les plus visités"
+  },
+  "importFormatsHint": {
+    "message": "Vous pouvez importer les fichiers Tabdial et les fichiers d'exportation de Speed Dial 2, Group Speed Dial, speed-dial.net et Yet Another Speed Dial, ainsi que l'exportation JSON de Toby et le fichier de sauvegarde d'Infinity New Tab.",
+    "description": "Keep the product names as they are."
+  },
+  "guides": {
+    "message": "Guides pas à pas :",
+    "description": "Followed by links named Speed Dial 2 and FVD Speed Dial."
+  },
+  "fvdPaste": {
+    "message": "Vous venez de FVD Speed Dial ? Collez son texte exporté"
+  },
+  "pastedText": {
+    "message": "Collez le texte exporté"
+  },
+  "importPasted": {
+    "message": "Importer le texte collé"
+  },
+  "importedAndRestored": {
+    "message": "Vous avez importé $1 et restauré $2.",
+    "description": "$1 = nDials, $2 = nThumbnails."
+  },
+  "imported": {
+    "message": "Vous avez importé $1.",
+    "description": "$1 = nDials."
+  },
+  "restoredThumbnails": {
+    "message": "Vous avez restauré $1.",
+    "description": "$1 = nThumbnails."
+  },
+  "nothingToImport": {
+    "message": "Rien de nouveau à importer : ces raccourcis sont déjà là."
+  },
+  "importUnknown": {
+    "message": "Ce fichier n'est pas dans un format que Tabdial sait lire."
+  },
+  "importEncrypted": {
+    "message": "Cette sauvegarde Group Speed Dial est chiffrée. Désactivez le chiffrement dans Group Speed Dial, exportez à nouveau, puis importez."
+  },
+  "addedSites": {
+    "message": "Vous avez ajouté $1.",
+    "description": "$1 = nSites."
+  },
+  "mostVisitedAlreadyHere": {
+    "message": "Vos sites les plus visités sont déjà là."
+  },
+  "mostVisitedFailed": {
+    "message": "Impossible d'ajouter vos sites les plus visités : $1",
+    "description": "$1 = the browser's error message."
+  },
+  "done": {
+    "message": "Terminé",
+    "description": "Button that closes Settings."
+  },
+  "howToUse": {
+    "message": "Comment utiliser Tabdial"
+  },
+  "webBase": {
+    "message": "https://nexuscortex.dev/tabdial/fr/"
+  },
+  "sortGroup": {
+    "message": "Trier ce groupe"
+  },
+  "sortHeading": {
+    "message": "Trier « $1 »"
+  },
+  "sortAbout": {
+    "message": "Tabdial peut suggérer un groupe plus adapté pour $1 de « $2 ». Pour cela, il envoie le nom de leurs sites (comme example.com) et leurs titres, ainsi que les noms de vos autres groupes avec quelques-uns de leurs sites, à nexuscortex.dev, qui interroge TypeSafe, un service d'IA situé aux États-Unis. Nous n'en conservons rien. Rien n'est déplacé avant votre confirmation."
+  },
+  "sortLocked": {
+    "message": "Le tri suggère un groupe plus adapté pour chaque raccourci de « $1 » et ne déplace que ceux que vous confirmez. Il faut débloquer Tabdial pour l'utiliser."
+  },
+  "sortContinue": {
+    "message": "Continuer"
+  },
+  "sortWaiting": {
+    "message": "Recherche de suggestions…"
+  },
+  "sortReview": {
+    "message": "Ces raccourcis semblent mieux convenir à un autre groupe. Décochez ceux que vous voulez laisser ici."
+  },
+  "sortApply": {
+    "message": "Déplacer"
+  },
+  "sortNothing": {
+    "message": "Aucune suggestion : aucun de ces raccourcis ne convient nettement mieux à l'un de vos autres groupes."
+  },
+  "sortFailed": {
+    "message": "Le tri n'a pas fonctionné cette fois. Vérifiez votre connexion et réessayez dans une minute."
+  },
+
+  "teamUnreachable": {
+    "message": "Impossible de joindre nexuscortex.dev. Vérifiez votre connexion et réessayez."
+  },
+  "teamServiceError": {
+    "message": "nexuscortex.dev a renvoyé le code $1. Réessayez dans une minute."
+  },
+  "teamLinkInvalid": {
+    "message": "Ce n'est pas un lien d'invitation Tabdial. Il commence par https://nexuscortex.dev/tabdial/join/#"
+  },
+  "teamLinkGone": {
+    "message": "Ce lien d'invitation ne fonctionne plus. Demandez le nouveau à un administrateur de l'équipe."
+  },
+  "teamNotMember": {
+    "message": "Vous ne faites plus partie de cette équipe."
+  },
+  "teamNotAdmin": {
+    "message": "Seuls les administrateurs de l'équipe peuvent faire cela."
+  },
+  "teamFrozen": {
+    "message": "Cette équipe est gelée : le déblocage avec lequel elle a été créée a été remboursé, donc personne ne peut modifier ses groupes d'équipe. Racheter le déblocage dans le navigateur qui a créé l'équipe la dégèle."
+  },
+  "teamLastAdmin": {
+    "message": "Une équipe a besoin d'un administrateur. Nommez d'abord quelqu'un d'autre administrateur, ou supprimez l'équipe."
+  },
+  "teamNeedsUnlock": {
+    "message": "La création d'une équipe est comprise dans le déblocage. Rejoindre une équipe est gratuit."
+  },
+  "teamConflict": {
+    "message": "Un autre administrateur vient de modifier $1. Voici maintenant sa version ; refaites votre modification."
+  },
+  "teams": {
+    "message": "Équipes"
+  },
+  "teamsHint": {
+    "message": "Donnez les mêmes raccourcis à votre équipe. Les groupes d'équipe s'affichent dans le nouvel onglet de chacun, à côté de ses propres groupes, et seuls les administrateurs de l'équipe peuvent les modifier. Rejoindre une équipe est gratuit et ne demande aucun compte. Les groupes d'équipe sont stockés sur nexuscortex.dev, chiffrés avec une clé que seul le lien d'invitation de votre équipe contient : nous ne pouvons donc pas les lire. La miniature d'un raccourci d'équipe est partagée elle aussi : tous les membres voient l'image choisie par un administrateur, y compris la capture d'une page."
+  },
+  "inviteLink": {
+    "message": "Lien d'invitation"
+  },
+  "joinTeam": {
+    "message": "Rejoindre"
+  },
+  "createTeam": {
+    "message": "Créer une équipe"
+  },
+  "createTeamHint": {
+    "message": "Vous en serez le premier administrateur. Partagez ensuite son lien d'invitation dans le chat de votre équipe."
+  },
+  "teamName": {
+    "message": "Nom de l'équipe"
+  },
+  "yourName": {
+    "message": "Votre nom"
+  },
+  "yourNameHint": {
+    "message": "Les administrateurs de l'équipe vous voient sous ce nom."
+  },
+  "create": {
+    "message": "Créer"
+  },
+  "teamCreated": {
+    "message": "L'équipe $1 est prête, avec un premier groupe d'équipe. Partagez le lien d'invitation ci-dessous avec votre équipe."
+  },
+  "teamAdmin": {
+    "message": "administrateur"
+  },
+  "teamMember": {
+    "message": "membre"
+  },
+  "nTeamGroups_one": {
+    "message": "$1 groupe d'équipe"
+  },
+  "nTeamGroups_other": {
+    "message": "$1 groupes d'équipe"
+  },
+  "membersAndLink": {
+    "message": "Lien d'invitation et membres"
+  },
+  "dailyCopies": {
+    "message": "Copies quotidiennes"
+  },
+  "leaveTeam": {
+    "message": "Quitter"
+  },
+  "deleteTeam": {
+    "message": "Supprimer l'équipe"
+  },
+  "confirmLeaveTeam": {
+    "message": "Quitter $1 ? Ses groupes d'équipe disparaissent de votre nouvel onglet. Les sites que vous avez copiés dans vos propres groupes restent."
+  },
+  "leftTeam": {
+    "message": "Vous avez quitté $1."
+  },
+  "confirmDeleteTeam": {
+    "message": "Supprimer $1 pour tout le monde ? Ses groupes d'équipe disparaissent du nouvel onglet de chaque membre, et c'est irréversible."
+  },
+  "deletedTeam": {
+    "message": "L'équipe $1 a été supprimée."
+  },
+  "copyInviteLink": {
+    "message": "Copier"
+  },
+  "inviteLinkCopied": {
+    "message": "Lien d'invitation copié. Partagez-le uniquement avec votre équipe : toute personne qui l'a peut rejoindre l'équipe et voir les groupes d'équipe."
+  },
+  "replaceLink": {
+    "message": "Remplacer le lien"
+  },
+  "confirmReplaceLink": {
+    "message": "Remplacer le lien d'invitation ? L'ancien ne fonctionnera plus. Les personnes déjà dans l'équipe ne sont pas concernées."
+  },
+  "linkReplaced": {
+    "message": "Le lien d'invitation a été remplacé. Partagez le nouveau pour inviter des personnes."
+  },
+  "memberJoined": {
+    "message": "a rejoint le $1"
+  },
+  "you": {
+    "message": "vous"
+  },
+  "makeAdmin": {
+    "message": "Nommer administrateur"
+  },
+  "makeMember": {
+    "message": "Repasser en membre"
+  },
+  "removeMember": {
+    "message": "Retirer"
+  },
+  "confirmRemoveMember": {
+    "message": "Retirer $1 de l'équipe ? Le lien d'invitation est aussi remplacé, pour que cette personne ne puisse pas revenir avec l'ancien."
+  },
+  "memberRemoved": {
+    "message": "Vous avez retiré $1 et le lien d'invitation a été remplacé : partagez le nouveau avec votre équipe."
+  },
+  "teamCopiesHint": {
+    "message": "Les groupes d'équipe tels qu'ils étaient avant la première modification de chaque jour, pendant 30 jours. Revenir à l'une de ces copies les modifie pour tout le monde."
+  },
+  "noTeamCopies": {
+    "message": "Aucune copie pour l'instant : la première modification de chaque jour en conserve une."
+  },
+  "confirmRestoreTeamCopy": {
+    "message": "Rétablir pour tout le monde les groupes d'équipe de $2 tels qu'ils étaient le $1 ?"
+  },
+  "teamCopyRestored": {
+    "message": "Les groupes d'équipe sont rétablis tels qu'ils étaient le $1. Les membres les recevront à la prochaine ouverture d'un nouvel onglet."
+  },
+  "joinHeading": {
+    "message": "Rejoindre $1 ?"
+  },
+  "joinHint": {
+    "message": "Vous verrez ses groupes d'équipe à côté de vos propres groupes. Seuls ses administrateurs peuvent les modifier. Rejoindre une équipe est gratuit et ne demande aucun compte."
+  },
+  "alreadyInTeam": {
+    "message": "Vous faites déjà partie de $1."
+  },
+  "joinedTeam": {
+    "message": "Vous avez rejoint $1. Ses groupes d'équipe se trouvent après vos propres groupes."
+  },
+  "teamMark": {
+    "message": "Groupe d'équipe de $1"
+  },
+  "teamGroupMember": {
+    "message": "Un groupe d'équipe de $1. Seuls ses administrateurs peuvent le modifier ; copiez un site dans vos propres groupes avec son bouton de copie."
+  },
+  "teamGroupAdmin": {
+    "message": "Un groupe d'équipe de $1. Ce que vous modifiez ici s'applique à toute l'équipe à l'ouverture d'un nouvel onglet. Cela peut prendre jusqu'à 5 minutes."
+  },
+  "teamGroupEmpty": {
+    "message": "Aucun site dans ce groupe d'équipe pour l'instant."
+  },
+  "copyToMyGroup": {
+    "message": "Copier dans mon groupe"
+  },
+  "copyNamed": {
+    "message": "Copier $1 dans mon groupe"
+  },
+  "confirmDeleteTeamGroup": {
+    "message": "Supprimer le groupe d'équipe « $1 » pour tous les membres de $2 ?"
+  },
+  "moveLeft": {
+    "message": "Déplacer à gauche"
+  },
+  "moveRight": {
+    "message": "Déplacer à droite"
+  },
+  "copyToTeam": {
+    "message": "Copier dans l'équipe $1"
+  },
+  "groupFor": {
+    "message": "Pour"
+  },
+  "onlyMe": {
+    "message": "Moi uniquement"
+  }
+}

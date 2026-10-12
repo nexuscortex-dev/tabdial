@@ -1,0 +1,848 @@
+{
+  "appName": {
+    "message": "Tabdial – 新しいタブのビジュアル スピードダイヤル",
+    "description": "Store and browser name, max 75 characters. Keep the brand Tabdial."
+  },
+  "appDesc": {
+    "message": "新しいタブ用のスピードダイヤル。サイトをグループとフォルダにまとめ、毎日バックアップ。スポンサー枠なし、アカウント不要、サブスクなし。",
+    "description": "Short store description, max 132 characters."
+  },
+  "actionTitle": {
+    "message": "このページを Tabdial に追加",
+    "description": "Tooltip of the toolbar button that adds the current page."
+  },
+  "tabTitle": {
+    "message": "新しいタブ",
+    "description": "Browser tab title of the new tab page. Use the browser's own name for a new tab."
+  },
+  "groups": {
+    "message": "グループ",
+    "description": "Screen reader name of the group tabs at the top."
+  },
+  "newGroup": {
+    "message": "新しいグループ",
+    "description": "Button and dialog title for creating a group of dials."
+  },
+  "renameGroup": {
+    "message": "グループ名を変更",
+    "description": "Dialog title."
+  },
+  "renameHint": {
+    "message": "ダブルクリックで名前を変更",
+    "description": "Tooltip on a group tab."
+  },
+  "settings": {
+    "message": "設定"
+  },
+  "speedDials": {
+    "message": "スピードダイヤル",
+    "description": "Screen reader name of the grid of sites."
+  },
+  "defaultGroup": {
+    "message": "ホーム",
+    "description": "Name of the first group, made on install."
+  },
+  "importedGroup": {
+    "message": "インポート済み",
+    "description": "Name for an imported group that had no name."
+  },
+  "welcomeTitle": {
+    "message": "お気に入りのサイトに、ワンクリックで",
+    "description": "Heading on the empty new tab page right after install."
+  },
+  "welcomeText": {
+    "message": "まずはよく見るサイトや好きなサイトを追加しましょう。ほかのスピードダイヤルからサイトを引き継ぐこともできます。"
+  },
+  "emptyGroupTitle": {
+    "message": "このグループは空です"
+  },
+  "emptyGroupText": {
+    "message": "お気に入りのサイトを追加するか、ほかのグループからこのグループのタブにサイトをドラッグしてください。"
+  },
+  "addYourMostVisited": {
+    "message": "よく見るサイトを追加",
+    "description": "Main button on the empty page."
+  },
+  "addSite": {
+    "message": "サイトを追加",
+    "description": "Button and empty tile that open the dialog for adding a dial."
+  },
+  "importFromOther": {
+    "message": "ほかのスピードダイヤルからインポート",
+    "description": "Link on the empty page that opens the import settings."
+  },
+  "addDial": {
+    "message": "サイトを追加",
+    "description": "Dialog title. A dial is one site tile on the page."
+  },
+  "editDial": {
+    "message": "サイトを編集",
+    "description": "Dialog title."
+  },
+  "edit": {
+    "message": "編集",
+    "description": "Tooltip of the pencil button on a dial."
+  },
+  "editNamed": {
+    "message": "$1 を編集",
+    "description": "Screen reader name of the pencil button. $1 = the dial's title."
+  },
+  "address": {
+    "message": "アドレス",
+    "description": "Field label: the web address of a dial."
+  },
+  "title": {
+    "message": "タイトル",
+    "description": "Field label: the name shown under a dial."
+  },
+  "optional": {
+    "message": "省略可",
+    "description": "Placeholder of the title field."
+  },
+  "thumbnail": {
+    "message": "サムネイル",
+    "description": "The picture of a dial."
+  },
+  "uploadImage": {
+    "message": "画像をアップロード"
+  },
+  "pasteImageLink": {
+    "message": "…または画像のリンクを貼り付け",
+    "description": "Placeholder of the image address field, under the Upload image button."
+  },
+  "imageLink": {
+    "message": "画像のリンク"
+  },
+  "removeImage": {
+    "message": "画像を削除"
+  },
+  "group": {
+    "message": "グループ",
+    "description": "Field label: which group the dial is in."
+  },
+  "folder": {
+    "message": "フォルダ",
+    "description": "Name of a new folder; also the label of the folder field when editing a dial and the screen reader name of an open folder."
+  },
+  "folderName": {
+    "message": "フォルダ名",
+    "description": "Screen reader label of the name at the top of an open folder, which can be changed there."
+  },
+  "noFolder": {
+    "message": "なし",
+    "description": "Choice in the folder field: the dial is in no folder."
+  },
+  "newFolder": {
+    "message": "新しいフォルダ",
+    "description": "Choice in the folder field: a new folder is made for the dial."
+  },
+  "delete": {
+    "message": "削除"
+  },
+  "cancel": {
+    "message": "キャンセル"
+  },
+  "save": {
+    "message": "保存"
+  },
+  "name": {
+    "message": "名前",
+    "description": "Field label: the group's name."
+  },
+  "deleteGroup": {
+    "message": "グループを削除"
+  },
+  "confirmDeleteGroup": {
+    "message": "「$1」と、その中の $2 を削除しますか？",
+    "description": "$1 = group name, $2 = a count like \"5 dials\" (nDials)."
+  },
+  "confirmDeleteEmptyGroup": {
+    "message": "「$1」を削除しますか？",
+    "description": "Asked before deleting a group with no dials. $1 = group name."
+  },
+  "invalidUrl": {
+    "message": "example.com のようなウェブアドレスを入力してください。",
+    "description": "Shown at the address field. Keep example.com."
+  },
+  "alreadyIn": {
+    "message": "「$1」に登録済みです。",
+    "description": "Shown at the address field when the group already has that site. $1 = group name."
+  },
+  "imageUnreadable": {
+    "message": "その画像を読み込めませんでした。"
+  },
+  "saveFailed": {
+    "message": "変更を保存できませんでした：$1",
+    "description": "$1 = the browser's error message."
+  },
+  "nDials_one": {
+    "message": "$1 サイト",
+    "description": "Count of dials when the language's plural rule says 'one'. $1 = the number."
+  },
+  "nDials_other": {
+    "message": "$1 サイト",
+    "description": "Count of dials for every other number. $1 = the number."
+  },
+  "nGroups_one": {
+    "message": "$1 グループ"
+  },
+  "nGroups_other": {
+    "message": "$1 グループ"
+  },
+  "nSites_one": {
+    "message": "$1 サイト"
+  },
+  "nSites_other": {
+    "message": "$1 サイト"
+  },
+  "nThumbnails_one": {
+    "message": "サムネイル $1 枚"
+  },
+  "nThumbnails_other": {
+    "message": "サムネイル $1 枚"
+  },
+  "ratePrompt": {
+    "message": "Tabdial を気に入っていただけましたか？評価をいただくと、ほかの方が見つけやすくなります。"
+  },
+  "rateTabdial": {
+    "message": "Tabdial を評価"
+  },
+  "close": {
+    "message": "閉じる"
+  },
+  "background": {
+    "message": "背景"
+  },
+  "appearance": {
+    "message": "外観"
+  },
+  "bgDefault": {
+    "message": "デフォルトの背景"
+  },
+  "bgLavender": {
+    "message": "ラベンダーの背景"
+  },
+  "bgMint": {
+    "message": "ミントの背景"
+  },
+  "bgPeach": {
+    "message": "ピーチの背景"
+  },
+  "bgOcean": {
+    "message": "オーシャンの背景"
+  },
+  "bgNight": {
+    "message": "ナイトの背景"
+  },
+  "bgLake": {
+    "message": "山の湖の写真"
+  },
+  "bgSea": {
+    "message": "海の写真"
+  },
+  "bgFog": {
+    "message": "霧の森の写真"
+  },
+  "bgDunes": {
+    "message": "砂丘の写真"
+  },
+  "bgAurora": {
+    "message": "オーロラの写真"
+  },
+  "bgStars": {
+    "message": "星空の写真"
+  },
+  "bgSunset": {
+    "message": "夕焼けの山の写真"
+  },
+  "bgForest": {
+    "message": "松林の写真"
+  },
+  "pickColor": {
+    "message": "色を選択"
+  },
+  "backgroundColor": {
+    "message": "背景色"
+  },
+  "uploadBackground": {
+    "message": "背景画像をアップロード"
+  },
+  "dialsPerRow": {
+    "message": "1行に並べるサイト数"
+  },
+  "searchPlaceholder": {
+    "message": "サイトやウェブを検索"
+  },
+  "searchNoMatch": {
+    "message": "一致するサイトはありません。Enter を押すとウェブで検索します。"
+  },
+  "showSearchBox": {
+    "message": "検索ボックスを表示"
+  },
+  "sync": {
+    "message": "同期"
+  },
+  "syncLabel": {
+    "message": "ほかのパソコンでも同じスピードダイヤルを使う",
+    "description": "Checkbox."
+  },
+  "syncHint": {
+    "message": "ブラウザ自身の同期を使うため、同じブラウザにログインして同期をオンにしている環境で使えます。アドレス、タイトル、グループは同期され、サムネイルと設定は各パソコンに保存されたままになります。"
+  },
+  "syncTooLong": {
+    "message": "サイトの一覧が長すぎるため、同期されていません。"
+  },
+  "syncUnreadable": {
+    "message": "同期されたサイトの一覧は、Tabdial が読み取れない形式です。"
+  },
+  "syncCodeHint": {
+    "message": "ブラウザ自身の同期は、そのブラウザの中だけで働きます。Chrome の同期が Firefox に届くことはありません。同期コードを使うと、すべてのブラウザで同じサイトを使えます。一覧は同期コードで暗号化されて nexuscortex.dev に保存されるため、私たちには読めません。無料で、アカウントも不要です。"
+  },
+  "syncCodeNew": {
+    "message": "ブラウザ間で同期する"
+  },
+  "syncCodeHave": {
+    "message": "ほかのブラウザの同期コードをお持ちの場合は、ここに入力してください。"
+  },
+  "syncCode": {
+    "message": "同期コード"
+  },
+  "syncCodeUse": {
+    "message": "このコードを使う"
+  },
+  "syncCodeOnHint": {
+    "message": "サイトは、この同期コードでブラウザ間で同期されています。ほかのブラウザでは、Tabdial の「設定」の「同期」でこのコードを入力するか、そのブラウザでリンクを開いてください。このコードを持っている人は誰でも、あなたのサイトを見たり変更したりできます。また、私たちがコードを復元することはできません。控えを安全な場所に保管してください。"
+  },
+  "copyCode": {
+    "message": "コードをコピー"
+  },
+  "copyLink": {
+    "message": "リンクをコピー"
+  },
+  "syncCopied": {
+    "message": "コピーしました。ほかの人には教えないでください。これを持っている人は誰でも、あなたのサイトを見たり変更したりできます。"
+  },
+  "syncStopHere": {
+    "message": "このブラウザで停止"
+  },
+  "syncStopAll": {
+    "message": "すべてで停止して削除"
+  },
+  "confirmSyncStopAll": {
+    "message": "ブラウザ間の同期をすべてのブラウザで停止しますか？nexuscortex.dev 上の一覧は削除され、ほかのブラウザは次に新しいタブを開いたときに同期を停止します。サイトは各ブラウザに残ります。"
+  },
+  "syncStopped": {
+    "message": "停止しました。サイトはこのブラウザに残ります。"
+  },
+  "syncCodeOn": {
+    "message": "このブラウザは同期コードで同期されるようになりました。"
+  },
+  "syncCodeInvalid": {
+    "message": "これは同期コードではありません。同期コードは 25 文字の英数字です（例: XXXXX-XXXXX-XXXXX-XXXXX-XXXXX）。"
+  },
+  "syncCodeUnknown": {
+    "message": "この同期コードで同期されている一覧はありません。コードの発行元のブラウザで確認してください。"
+  },
+  "confirmSyncCode": {
+    "message": "このリンクの同期コードで、このブラウザを同期しますか？そのコードで同期されているサイトがあなたのサイトに追加され、コードを持っている人はあなたのサイトも見られるようになります。自分のコードである場合にのみ続けてください。"
+  },
+  "jump": {
+    "message": "ジャンプ"
+  },
+  "jumpHint": {
+    "message": "アドレスバーに z とスペースを入力し、続けてサイトのアドレスやタイトルの一部を入力して Enter を押すと、そのサイトに直接移動します。"
+  },
+  "jumpHistory": {
+    "message": "閲覧履歴からも探す"
+  },
+  "jumpHistoryHint": {
+    "message": "Tabdial は閲覧履歴をこのパソコン上でのみ読み取り、どこにも送信しません。"
+  },
+  "jumpHistoryAgain": {
+    "message": "保存した時点では「$1」がオンでした。ブラウザはパソコンごとに許可を確認するため、設定でもう一度オンにしてください。"
+  },
+  "jumpSearch": {
+    "message": "「$1」をウェブで検索"
+  },
+  "jumpType": {
+    "message": "サイトのアドレスやタイトルの一部を入力してください"
+  },
+  "backups": {
+    "message": "バックアップ"
+  },
+  "backupsHint": {
+    "message": "毎日、最初に変更を加える前に、Tabdial はこのパソコンにサイトのコピーを保存します。"
+  },
+  "backupsKept": {
+    "message": "最新の $1 件が保存されます。最新の $2 件より古いコピーには、サイトは残りますがサムネイルは含まれません。",
+    "description": "Follows backupsHint. $1 = 90, $2 = 7."
+  },
+  "noCopies": {
+    "message": "まだコピーはありません。次に何かを変更したときに、最初のコピーが作成されます。"
+  },
+  "beforeRestore": {
+    "message": "前回の復元前",
+    "description": "Label of the backup copy made just before a restore."
+  },
+  "dialsInGroups": {
+    "message": "$2 に $1",
+    "description": "What a backup copy holds. $1 = nDials, $2 = nGroups, e.g. \"12 dials in 3 groups\"."
+  },
+  "restore": {
+    "message": "復元"
+  },
+  "restoreCopy": {
+    "message": "$1 のコピーを復元",
+    "description": "Screen reader name of a Restore button. $1 = a date like \"Fri, Oct 2\"."
+  },
+  "restoreBefore": {
+    "message": "前回の復元前のサイトを復元",
+    "description": "Screen reader name of a Restore button."
+  },
+  "confirmRestoreCopy": {
+    "message": "現在のサイトを $1 のコピーで置き換えますか？現在のサイトも保存されるので、ここから元に戻せます。",
+    "description": "$1 = a date."
+  },
+  "confirmRestoreBefore": {
+    "message": "現在のサイトを、前回の復元前のサイトで置き換えますか？現在のサイトも保存されるので、ここから元に戻せます。"
+  },
+  "restoredCopy": {
+    "message": "$1 のコピーを復元しました。",
+    "description": "$1 = a date."
+  },
+  "restoredBefore": {
+    "message": "前回の復元前のサイトを復元しました。"
+  },
+  "copyGone": {
+    "message": "そのコピーはもう利用できません。"
+  },
+  "unlockPitch": {
+    "message": "グループ内のサイトをほかのグループに整理できます。チームを作成して、同僚とグループを共有することもできます。",
+    "description": "Bold first sentence of the paid unlock offer."
+  },
+  "unlockTerms": {
+    "message": "$$9 の買い切りで、サブスクリプションではありません。ご満足いただけない場合は、30日以内にメールでご連絡いただければ全額返金します。",
+    "description": "Follows unlockPitch. The price is in US dollars in every language: keep $$9 exactly (it shows as $9)."
+  },
+  "unlockFor": {
+    "message": "$$9 でアンロック",
+    "description": "Button. Keep $$9 exactly (it shows as $9)."
+  },
+  "terms": {
+    "message": "利用規約",
+    "description": "Link to the purchase terms."
+  },
+  "alreadyPaid": {
+    "message": "購入済みの方"
+  },
+  "alreadyPaidHint": {
+    "message": "Chrome の同期をオンにしているほかのパソコンは、自動でアンロックされます。それ以外の環境では、バックアップ先の Google アカウントでログインしてください。"
+  },
+  "signInGoogle": {
+    "message": "Google でログイン"
+  },
+  "licenseHint": {
+    "message": "または、お支払い後に表示されたライセンスキーを入力してください："
+  },
+  "licenseKey": {
+    "message": "ライセンスキー"
+  },
+  "unlock": {
+    "message": "アンロック",
+    "description": "Button next to the license key field."
+  },
+  "unlocked": {
+    "message": "Tabdial のアンロックが完了しました。ありがとうございます！"
+  },
+  "paymentServiceError": {
+    "message": "決済サービスがステータス $1 を返しました。しばらくしてからもう一度お試しください。",
+    "description": "$1 = an HTTP status number."
+  },
+  "driveBackup": {
+    "message": "Google Drive へのバックアップ"
+  },
+  "driveIntro": {
+    "message": "1日1回、すべてのデータ（サムネイルや設定も含む）を Google Drive 内の1つのファイルに保存します。Tabdial がアクセスできるのは、Tabdial 自身が作成したファイルだけです。"
+  },
+  "driveFound": {
+    "message": "Google Drive には $1 の Tabdial バックアップがすでにあります。復元するとそのサイトとサムネイルをここに取り込めます。今すぐバックアップすると、このパソコンのデータで置き換えます。",
+    "description": "$1 = date and time."
+  },
+  "driveFailed": {
+    "message": "$1 にバックアップしています。前回のバックアップは失敗しました：$2",
+    "description": "$1 = Google account email, $2 = error message."
+  },
+  "driveDaily": {
+    "message": "毎日 $1 にバックアップしています。",
+    "description": "$1 = Google account email."
+  },
+  "driveDailyLast": {
+    "message": "毎日 $1 にバックアップしています。前回のバックアップ：$2。",
+    "description": "$1 = Google account email, $2 = date and time."
+  },
+  "driveConnect": {
+    "message": "Google Drive に接続"
+  },
+  "driveReconnect": {
+    "message": "Google Drive に再接続"
+  },
+  "driveNow": {
+    "message": "今すぐバックアップ"
+  },
+  "driveRestore": {
+    "message": "Google Drive から復元"
+  },
+  "driveDisconnect": {
+    "message": "接続を解除"
+  },
+  "driveConnected": {
+    "message": "Google Drive に接続しました。"
+  },
+  "accountNotPaid": {
+    "message": "この Google アカウントでは、まだ Tabdial がアンロックされていません。お支払いをしたパソコンでこのアカウントを使って Google Drive に一度接続するか、お支払い後に表示されたライセンスキーを入力してください。"
+  },
+  "driveBackedUp": {
+    "message": "Google Drive にバックアップしました。"
+  },
+  "driveDisconnected": {
+    "message": "Google Drive との接続を解除しました。"
+  },
+  "driveRestored": {
+    "message": "Google Drive から $1 と $2 を復元しました。",
+    "description": "$1 = nDials, $2 = nThumbnails."
+  },
+  "confirmDriveRestore": {
+    "message": "Google Drive のバックアップから、ここにないサイトとサムネイルを追加し、バックアップの背景とレイアウトを使用しますか？"
+  },
+  "confirmDriveDisconnect": {
+    "message": "Google Drive へのバックアップを停止しますか？バックアップファイルは Google Drive に残ります。"
+  },
+  "driveNotConnected": {
+    "message": "Google Drive に接続されていません。"
+  },
+  "noDriveBackup": {
+    "message": "Google Drive にはまだ Tabdial のバックアップがありません。"
+  },
+  "driveSignInAgain": {
+    "message": "Google にもう一度ログインしてください。"
+  },
+  "driveAnswered": {
+    "message": "Google Drive がステータス $1 を返しました。しばらくしてからもう一度お試しください。",
+    "description": "$1 = an HTTP status number."
+  },
+  "googleUnreachable": {
+    "message": "Google に接続できませんでした（$1）。Tabdial があとで再試行します。",
+    "description": "$1 = the browser's error message."
+  },
+  "signInUnfinished": {
+    "message": "Google へのログインが完了しませんでした：$1",
+    "description": "$1 = the browser's error message."
+  },
+  "signInFailed": {
+    "message": "Google へのログインに失敗しました（$1）。",
+    "description": "$1 = Google's error code, or noAccess."
+  },
+  "noAccess": {
+    "message": "アクセス権なし"
+  },
+  "yourData": {
+    "message": "データ"
+  },
+  "yourDataHint": {
+    "message": "ファイルにエクスポートすると、サムネイルも含めたコピーを手元に残したり、別のブラウザに移行したりできます。"
+  },
+  "export": {
+    "message": "エクスポート"
+  },
+  "importFile": {
+    "message": "ファイルをインポート"
+  },
+  "addMostVisited": {
+    "message": "よく見るサイトを追加"
+  },
+  "importFormatsHint": {
+    "message": "インポートできるのは、Tabdial のファイルと、Speed Dial 2、Group Speed Dial、speed-dial.net、Yet Another Speed Dial のエクスポートファイル、Toby の JSON エクスポート、および Infinity New Tab のバックアップファイルです。",
+    "description": "Keep the product names as they are."
+  },
+  "guides": {
+    "message": "手順ガイド：",
+    "description": "Followed by links named Speed Dial 2 and FVD Speed Dial."
+  },
+  "fvdPaste": {
+    "message": "FVD Speed Dial から乗り換えますか？エクスポートしたテキストを貼り付けてください"
+  },
+  "pastedText": {
+    "message": "エクスポートしたテキストを貼り付け"
+  },
+  "importPasted": {
+    "message": "貼り付けたテキストをインポート"
+  },
+  "importedAndRestored": {
+    "message": "$1 をインポートし、$2 を復元しました。",
+    "description": "$1 = nDials, $2 = nThumbnails."
+  },
+  "imported": {
+    "message": "$1 をインポートしました。",
+    "description": "$1 = nDials."
+  },
+  "restoredThumbnails": {
+    "message": "$1 を復元しました。",
+    "description": "$1 = nThumbnails."
+  },
+  "nothingToImport": {
+    "message": "インポートする新しいサイトはありません。すべて登録済みです。"
+  },
+  "importUnknown": {
+    "message": "このファイルは Tabdial で読み込める形式ではありません。"
+  },
+  "importEncrypted": {
+    "message": "この Group Speed Dial のバックアップは暗号化されています。Group Speed Dial で暗号化をオフにしてもう一度エクスポートしてから、インポートしてください。"
+  },
+  "addedSites": {
+    "message": "$1 を追加しました。",
+    "description": "$1 = nSites."
+  },
+  "mostVisitedAlreadyHere": {
+    "message": "よく見るサイトはすでに追加されています。"
+  },
+  "mostVisitedFailed": {
+    "message": "よく見るサイトを追加できませんでした：$1",
+    "description": "$1 = the browser's error message."
+  },
+  "done": {
+    "message": "完了",
+    "description": "Button that closes Settings."
+  },
+  "howToUse": {
+    "message": "Tabdial の使い方"
+  },
+  "webBase": {
+    "message": "https://nexuscortex.dev/tabdial/ja/"
+  },
+  "sortGroup": {
+    "message": "このグループを整理"
+  },
+  "sortHeading": {
+    "message": "「$1」を整理"
+  },
+  "sortAbout": {
+    "message": "Tabdial は「$2」の $1 について、より合うグループを提案できます。そのために、各サイトのドメイン（example.com など）とタイトル、ほかのグループの名前とそこに含まれる一部のサイトのドメインを nexuscortex.dev に送信し、米国の AI サービス TypeSafe に問い合わせます。送信した内容は保存しません。確認するまでサイトは移動しません。"
+  },
+  "sortLocked": {
+    "message": "整理は「$1」の各サイトにより合うグループを提案し、確認したものだけを移動します。利用するには Tabdial のアンロックが必要です。"
+  },
+  "sortContinue": {
+    "message": "続ける"
+  },
+  "sortWaiting": {
+    "message": "提案を取得しています…"
+  },
+  "sortReview": {
+    "message": "これらのサイトはほかのグループのほうが合いそうです。ここに残したいサイトはチェックを外してください。"
+  },
+  "sortApply": {
+    "message": "移動"
+  },
+  "sortNothing": {
+    "message": "提案はありません。ほかのグループのほうが明らかに合うサイトは見つかりませんでした。"
+  },
+  "sortFailed": {
+    "message": "今回は整理できませんでした。接続を確認して、1 分ほどしてからもう一度お試しください。"
+  },
+
+  "teamUnreachable": {
+    "message": "nexuscortex.dev に接続できませんでした。接続を確認して、もう一度お試しください。"
+  },
+  "teamServiceError": {
+    "message": "nexuscortex.dev がステータス $1 を返しました。1 分ほどしてからもう一度お試しください。"
+  },
+  "teamLinkInvalid": {
+    "message": "Tabdial の招待リンクではありません。招待リンクは https://nexuscortex.dev/tabdial/join/# で始まります。"
+  },
+  "teamLinkGone": {
+    "message": "この招待リンクはもう使えません。チームの管理者に新しいリンクを聞いてください。"
+  },
+  "teamNotMember": {
+    "message": "このチームのメンバーではなくなりました。"
+  },
+  "teamNotAdmin": {
+    "message": "この操作はチームの管理者だけが行えます。"
+  },
+  "teamFrozen": {
+    "message": "このチームは凍結されています。作成に使ったアンロックが返金されたため、誰もチームグループを変更できません。チームを作成したブラウザでアンロックをもう一度購入すると、凍結が解除されます。"
+  },
+  "teamLastAdmin": {
+    "message": "チームには管理者が必要です。先にほかの人を管理者にするか、チームを削除してください。"
+  },
+  "teamNeedsUnlock": {
+    "message": "チームの作成はアンロックに含まれています。チームへの参加は無料です。"
+  },
+  "teamConflict": {
+    "message": "ほかの管理者が $1 を変更しました。表示されているのはその変更後の内容です。もう一度変更してください。"
+  },
+  "teams": {
+    "message": "チーム"
+  },
+  "teamsHint": {
+    "message": "チームで同じサイトを使えます。チームグループは全員の新しいタブで自分のグループの横に表示され、変更できるのはチームの管理者だけです。参加は無料で、アカウントも不要です。チームグループは、チームの招待リンクにだけ含まれる鍵で暗号化して nexuscortex.dev に保存されるため、私たちが読むことはできません。チームのサイトのサムネイルも共有されます。管理者が設定した画像は、ページのスクリーンショットも含めて、メンバー全員に表示されます。"
+  },
+  "inviteLink": {
+    "message": "招待リンク"
+  },
+  "joinTeam": {
+    "message": "参加"
+  },
+  "createTeam": {
+    "message": "チームを作成"
+  },
+  "createTeamHint": {
+    "message": "あなたが最初の管理者になります。作成したら、チームのチャットで招待リンクを共有してください。"
+  },
+  "teamName": {
+    "message": "チーム名"
+  },
+  "yourName": {
+    "message": "あなたの名前"
+  },
+  "yourNameHint": {
+    "message": "チームの管理者には、この名前で表示されます。"
+  },
+  "create": {
+    "message": "作成"
+  },
+  "teamCreated": {
+    "message": "$1 の準備ができました。最初のチームグループも作成済みです。下の招待リンクをチームで共有してください。"
+  },
+  "teamAdmin": {
+    "message": "管理者"
+  },
+  "teamMember": {
+    "message": "メンバー"
+  },
+  "nTeamGroups_one": {
+    "message": "$1 チームグループ"
+  },
+  "nTeamGroups_other": {
+    "message": "$1 チームグループ"
+  },
+  "membersAndLink": {
+    "message": "招待リンクとメンバー"
+  },
+  "dailyCopies": {
+    "message": "毎日のコピー"
+  },
+  "leaveTeam": {
+    "message": "退出"
+  },
+  "deleteTeam": {
+    "message": "チームを削除"
+  },
+  "confirmLeaveTeam": {
+    "message": "$1 から退出しますか？チームグループは新しいタブから消えます。自分のグループにコピーしたサイトは残ります。"
+  },
+  "leftTeam": {
+    "message": "$1 から退出しました。"
+  },
+  "confirmDeleteTeam": {
+    "message": "$1 を削除しますか？チームグループはメンバー全員の新しいタブから消え、元に戻すことはできません。"
+  },
+  "deletedTeam": {
+    "message": "$1 を削除しました。"
+  },
+  "copyInviteLink": {
+    "message": "コピー"
+  },
+  "inviteLinkCopied": {
+    "message": "招待リンクをコピーしました。チームのメンバーとだけ共有してください。このリンクを持っている人は誰でも参加して、チームグループを見ることができます。"
+  },
+  "replaceLink": {
+    "message": "リンクを再発行"
+  },
+  "confirmReplaceLink": {
+    "message": "招待リンクを再発行しますか？古いリンクは使えなくなります。すでにチームにいるメンバーには影響しません。"
+  },
+  "linkReplaced": {
+    "message": "招待リンクを再発行しました。新しいリンクを共有して招待してください。"
+  },
+  "memberJoined": {
+    "message": "$1 に参加"
+  },
+  "you": {
+    "message": "あなた"
+  },
+  "makeAdmin": {
+    "message": "管理者にする"
+  },
+  "makeMember": {
+    "message": "メンバーにする"
+  },
+  "removeMember": {
+    "message": "削除"
+  },
+  "confirmRemoveMember": {
+    "message": "$1 をチームから削除しますか？招待リンクも再発行されるため、古いリンクでは戻れなくなります。"
+  },
+  "memberRemoved": {
+    "message": "$1 を削除し、招待リンクを再発行しました。新しいリンクをチームで共有してください。"
+  },
+  "teamCopiesHint": {
+    "message": "毎日最初に変更される前のチームグループを、30日分保存しています。いずれかに戻すと、全員のチームグループが変わります。"
+  },
+  "noTeamCopies": {
+    "message": "まだコピーはありません。毎日、最初の変更のときに保存されます。"
+  },
+  "confirmRestoreTeamCopy": {
+    "message": "$2 のチームグループを $1 の状態に戻しますか？全員に反映されます。"
+  },
+  "teamCopyRestored": {
+    "message": "チームグループを $1 の状態に戻しました。メンバーには、次に新しいタブを開いたときに反映されます。"
+  },
+  "joinHeading": {
+    "message": "$1 に参加しますか？"
+  },
+  "joinHint": {
+    "message": "このチームのチームグループが、自分のグループの横に表示されます。変更できるのはチームの管理者だけです。参加は無料で、アカウントも不要です。"
+  },
+  "alreadyInTeam": {
+    "message": "すでに $1 に参加しています。"
+  },
+  "joinedTeam": {
+    "message": "$1 に参加しました。チームグループは自分のグループの後ろに表示されます。"
+  },
+  "teamMark": {
+    "message": "$1 のチームグループ"
+  },
+  "teamGroupMember": {
+    "message": "$1 のチームグループです。変更できるのはチームの管理者だけです。サイトのコピーボタンで、自分のグループにコピーできます。"
+  },
+  "teamGroupAdmin": {
+    "message": "$1 のチームグループです。ここでの変更は、チーム全員が新しいタブを開いたときに反映されます。最大で 5 分ほどかかることがあります。"
+  },
+  "teamGroupEmpty": {
+    "message": "このチームグループにはまだサイトがありません。"
+  },
+  "copyToMyGroup": {
+    "message": "自分のグループにコピー"
+  },
+  "copyNamed": {
+    "message": "$1 を自分のグループにコピー"
+  },
+  "confirmDeleteTeamGroup": {
+    "message": "$2 の全員から、チームグループ「$1」を削除しますか？"
+  },
+  "moveLeft": {
+    "message": "左へ移動"
+  },
+  "moveRight": {
+    "message": "右へ移動"
+  },
+  "copyToTeam": {
+    "message": "チーム $1 にコピー"
+  },
+  "groupFor": {
+    "message": "対象"
+  },
+  "onlyMe": {
+    "message": "自分のみ"
+  }
+}

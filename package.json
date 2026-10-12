@@ -1,0 +1,10 @@
+{
+  "name": "tabdial",
+  "private": true,
+  "license": "GPL-3.0-only",
+  "type": "module",
+  "scripts": {
+    "zip": "! grep -rl REPLACE_ME src && cd src && zip -qr ../tabdial.zip . -x '.*'",
+    "zip:firefox": "! grep -rl REPLACE_ME src && rm -rf build/firefox && mkdir -p build && cp -R src build/firefox && node -e \"const f='build/firefox/manifest.json',m=JSON.parse(require('fs').readFileSync(f));m.permissions=m.permissions.filter(p=>p!=='favicon').concat('identity');m.optional_permissions=m.optional_permissions.filter(p=>p!=='identity');m.background={scripts:[m.background.service_worker],type:m.background.type};delete m.externally_connectable;require('fs').writeFileSync(f,JSON.stringify(m,null,2))\" && cd build/firefox && zip -qr ../../tabdial-firefox.zip . -x '.*'"
+  }
+}
