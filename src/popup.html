@@ -3,8 +3,9 @@
 <head>
 <meta charset="utf-8">
 <style>
-  :root { color-scheme: light dark; --hover: #f5f6f8; --ink-2: #4b5563; --accent: #2563eb; }
-  @media (prefers-color-scheme: dark) { :root { --hover: #1d222b; --ink-2: #a5aeb8; --accent: #7aa7f7; } }
+  :root { color-scheme: light dark; --hover: light-dark(#f5f6f8, #1d222b); --ink-2: light-dark(#4b5563, #a5aeb8); --accent: light-dark(#2563eb, #7aa7f7); }
+  :root[data-theme="light"] { color-scheme: light; }
+  :root[data-theme="dark"] { color-scheme: dark; }
   body { margin: 0; padding: 8px; width: max-content; min-width: 200px; max-width: 320px; font: 14px/1.4 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
   p { margin: 4px 8px 8px; font-size: 12px; color: var(--ink-2); }
   p:empty { display: none; }

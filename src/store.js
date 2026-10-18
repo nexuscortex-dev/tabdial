@@ -2,8 +2,9 @@
 // (the extension has unlimitedStorage). The dial list is also mirrored to Chrome sync or, with a sync code, to
 // nexuscortex.dev (sync.js). Team groups (team.js) sit among the user's own groups, but only the user's own groups are
 // synced, copied daily and backed up.
-import { pull, push, pullSite, syncCode, sendPictures, fetchPictures } from './sync.js';
-import { addMissing, countDials, dialsOf, fillImages, normalizeUrl, ownGroups, pick, withTeamGroups } from './merge.js';
+import { pull, push, pullSite, pullLook, pushLook, pullNotes, pushNotes, syncCode, sendPictures, fetchPictures, NEW_LOOK } from './sync.js';
+import { newNote } from './notes.js';
+import { addMissing, countDials, dialsOf, fillImages, itemsIn, normalizeUrl, ownGroups, pick, withTeamGroups } from './merge.js';
 
 export { normalizeUrl };
 import { publishTeams, readOnly, sendTeamPictures } from './team.js';
@@ -18,30 +19,45 @@ export function emptyState() {
     groups: [{ id: uid(), name: t('defaultGroup'), dials: [] }],
     activeGroup: null,
     teams: {},
-    settings: { background: 'photos/sunset.webp', columns: 6 }, // a new install opens on a photo
+    settings: { ...NEW_LOOK },
+    notes: [],
+    todos: [],
   };
 }
 
 // Ids of the dials, folders and groups this page last loaded or saved. The service worker and every open new tab page each
 // hold their own copy of the state; these tell a save which stored dials are new to this page and which it deleted.
 let known = new Set();
-const remember = (state) => { known = new Set(state.groups.flatMap((g) => [g.id, ...g.dials.map((d) => d.id), ...dialsOf(g).map((d) => d.id)])); };
+const remember = (state) => { known = new Set([...state.groups.flatMap((g) => [g.id, ...itemsIn(g).map((d) => d.id)]), ...state.notes.map((n) => n.id), ...state.todos.map((x) => x.id)]); };
 
 export async function load() {
   const got = await chrome.storage.local.get(KEY);
   const state = got[KEY] || emptyState();
   state.teams ||= {};
+  state.notes ||= [];
+  state.todos ||= [];
+  if (typeof state.settings.note === 'string') { // the one plain note of 0.5 before it was released
+    const html = state.settings.note.split('\n').map((line) => `<p>${escapeHtml(line) || '<br>'}</p>`).join('');
+    if (state.settings.note.trim()) state.notes.push({ ...newNote(html), id: 'note-0.5', rev: 'note-0.5' }); // the same in every tab
+    delete state.settings.note;
+  }
   if (!state.groups.some((g) => g.id === state.activeGroup)) state.activeGroup = state.groups[0].id;
   remember(state);
   await syncNow(state);
   return state;
 }
 
-// Take in what the other computers synced. The list is marked as seen in the same write that stores it.
+// Take in what the other computers synced: the list, and how the page looks. Each is marked as seen in the same write
+// that stores it.
 export async function syncNow(state) {
   const seen = await pull(state).catch(() => null);
-  if (seen) await save(state, { syncSeen: seen });
+  const look = await pullLook(state).catch(() => null);
+  const notes = await pullNotes(state).catch(() => null);
+  const todos = await pullNotes(state, 'todos').catch(() => null);
+  if (seen || look || notes || todos) await save(state, { ...(seen && { syncSeen: seen }), ...(look && { lookSeen: look }), ...(notes && { notesSeen: notes }), ...(todos && { todosSeen: todos }) });
 }
+
+const escapeHtml = (text) => text.replace(/[&<>"]/g, (c) => `&#${c.charCodeAt(0)};`);
 
 // A page's saves run one after another: a second one starting while the first is still publishing a team group would
 // send the site the version the first started from, and be told another admin had changed the team.
@@ -81,6 +97,27 @@ export async function syncSite(state, now) {
   return changed;
 }
 
+// How the page looks goes to the user's other computers when the page says things have been quiet (newtab.js
+// shareLook), not with every save: in the queue, as a save's own sending is. With a sync code it goes to the site
+// with the list, whose answer may bring another browser's dials: they are stored as in send(). Resolves to whether
+// the state changed.
+// The notes and the to-dos go the same way (sync.js pushNotes), after taking in what another computer wrote in the browser's sync;
+// with a sync code their bodies and pictures the site asked for go once out of the queue, as a save's do.
+export async function sendLook(state) {
+  const changed = await queue(async () => {
+    const notes = await pullNotes(state).catch(() => null);
+    const todos = await pullNotes(state, 'todos').catch(() => null);
+    if (notes || todos) await write(state, { ...(notes && { notesSeen: notes }), ...(todos && { todosSeen: todos }) });
+    const seen = await pushLook(state).catch(() => null);
+    if (seen) await write(state, { syncSeen: seen });
+    await pushNotes(state).catch(() => {});
+    await pushNotes(state, 'todos').catch(() => {});
+    return Boolean(seen || notes || todos);
+  });
+  await sendPictures(state).catch(() => {});
+  return changed;
+}
+
 // Each save stamps a new revision so a page can tell its own writes from changes made elsewhere. An admin's change to a
 // team group is published first (the site's version replaces it if another admin saved in between); what went wrong
 // there is thrown once the save is stored.
@@ -111,7 +148,7 @@ async function send(state) {
 
 // Someone else (the toolbar button, another tab) saved since this page loaded. Keep the dials they added;
 // dials this page deleted stay deleted. A dial they added to a folder goes into that folder, wherever this page has it,
-// or loose into the group if this page took the folder apart. The stored data is only read when this happens. Team
+// or, if this page took the folder apart, into what held it (the folder around it, or the group). The stored data is only read when this happens. Team
 // groups come from the site, not from other writers.
 async function keepAdditionsFromElsewhere(state) {
   const { [KEY]: stored } = await chrome.storage.local.get(KEY);
@@ -122,13 +159,19 @@ async function keepAdditionsFromElsewhere(state) {
     let group = state.groups.find((x) => x.id === g.id && !x.team);
     if (!group && known.has(g.id)) group = targetGroup(state); // a group this page deleted
     if (!group) state.groups.push(group = { id: g.id, name: g.name, dials: [] });
-    for (const item of added) {
-      const folder = item.dials && ownGroups(state.groups).flatMap((x) => x.dials).find((x) => x.dials && x.id === item.id);
-      if (folder) folder.dials.push(...item.dials);
-      else if (item.dials && known.has(item.id)) group.dials.push(...item.dials);
-      else group.dials.push(item);
-    }
+    const into = (list, items) => {
+      for (const item of items) {
+        const folder = item.dials && ownGroups(state.groups).flatMap(itemsIn).find((x) => x.dials && x.id === item.id);
+        if (folder) into(folder.dials, item.dials);
+        else if (item.dials && known.has(item.id)) into(list, item.dials);
+        else list.push(item);
+      }
+    };
+    into(group.dials, added);
   }
+  // A note or a to-do written there that this page never had (one it deleted stays deleted).
+  state.notes.push(...(stored?.notes || []).filter((n) => !known.has(n.id) && !state.notes.some((x) => x.id === n.id)));
+  state.todos.push(...(stored?.todos || []).filter((n) => !known.has(n.id) && !state.todos.some((x) => x.id === n.id)));
 }
 
 // ---------- backups ----------

@@ -279,6 +279,39 @@
   "showSearchBox": {
     "message": "検索ボックスを表示"
   },
+  "dialSize": {
+    "message": "サイトの大きさ"
+  },
+  "dialSpacing": {
+    "message": "間隔"
+  },
+  "roundCorners": {
+    "message": "角の丸み"
+  },
+  "titleSize": {
+    "message": "タイトルの文字サイズ"
+  },
+  "showTitles": {
+    "message": "サイトのタイトルを表示"
+  },
+  "font": {
+    "message": "フォント"
+  },
+  "fontHint": {
+    "message": "このパソコンにインストールされているフォントを選ぶか、名前を入力します。空欄なら既定のフォントです。"
+  },
+  "theme": {
+    "message": "テーマ"
+  },
+  "themeBrowser": {
+    "message": "ブラウザに合わせる"
+  },
+  "themeLight": {
+    "message": "ライト"
+  },
+  "themeDark": {
+    "message": "ダーク"
+  },
   "sync": {
     "message": "同期"
   },
@@ -287,10 +320,10 @@
     "description": "Checkbox."
   },
   "syncHint": {
-    "message": "ブラウザ自身の同期を使うため、同じブラウザにログインして同期をオンにしている環境で使えます。アドレス、タイトル、グループは同期され、サムネイルと設定は各パソコンに保存されたままになります。"
+    "message": "ブラウザ自身の同期を使うため、同じブラウザにログインして同期をオンにしている環境で使えます。アドレス、タイトル、グループ、ページの外観は同期され、サムネイルとアップロードした背景は各パソコンに保存されたままになります。"
   },
   "syncTooLong": {
-    "message": "サイトの一覧が長すぎるため、同期されていません。"
+    "message": "サイトとメモが長すぎて同期できないため、同期していません。いくつか減らすと再開します。"
   },
   "syncUnreadable": {
     "message": "同期されたサイトの一覧は、Tabdial が読み取れない形式です。"
@@ -561,7 +594,7 @@
     "message": "よく見るサイトを追加"
   },
   "importFormatsHint": {
-    "message": "インポートできるのは、Tabdial のファイルと、Speed Dial 2、Group Speed Dial、speed-dial.net、Yet Another Speed Dial のエクスポートファイル、Toby の JSON エクスポート、および Infinity New Tab のバックアップファイルです。",
+    "message": "インポートできるのは、Tabdial のファイルと、Speed Dial 2、Group Speed Dial、speed-dial.net、Yet Another Speed Dial のエクスポートファイル、Toby の JSON エクスポート、Infinity New Tab のバックアップファイル、およびブラウザがエクスポートするブックマーク（HTML ファイル）です。",
     "description": "Keep the product names as they are."
   },
   "guides": {
@@ -844,5 +877,63 @@
   },
   "onlyMe": {
     "message": "自分のみ"
-  }
+  },
+  "bookmarksAndHistory": { "message": "ブックマークと履歴" },
+  "bookmarks": { "message": "ブックマーク" },
+  "history": { "message": "履歴" },
+  "bookmarksAllow": { "message": "ブラウザのブックマークをここに表示し、開いたりサイトとして追加したりできます。Tabdial はブックマークをこのパソコン上でのみ読み取り、どこにも送信しません。" },
+  "historyAllow": { "message": "今週訪れたページをここに表示し、開いたりサイトとして追加したりできます。ジャンプも閲覧履歴から探すようになります。Tabdial は閲覧履歴をこのパソコン上でのみ読み取り、どこにも送信しません。" },
+  "allow": { "message": "許可" },
+  "bookmarksOff": { "message": "ブックマークの読み取りをやめる" },
+  "historyOff": { "message": "履歴の読み取りをやめる（ジャンプも）" },
+  "addTo": { "message": "「$1」に追加" },
+  "drawerEmpty": { "message": "ここには何もありません。" },
+  "drawerSearch": { "message": "ブックマークと履歴を検索" },
+  "notes": { "message": "メモ" },
+  "newNote": { "message": "新しいメモ" },
+  "notePlaceholder": { "message": "ここに何でも書けます。自動で保存されます。" },
+  "formatting": { "message": "書式" },
+  "bold": { "message": "太字" },
+  "italic": { "message": "斜体" },
+  "underline": { "message": "下線" },
+  "strikethrough": { "message": "取り消し線" },
+  "heading": { "message": "見出し" },
+  "subheading": { "message": "小見出し" },
+  "bulletList": { "message": "箇条書き" },
+  "numberedList": { "message": "番号付きリスト" },
+  "checklist": { "message": "チェックリスト" },
+  "quote": { "message": "引用" },
+  "textColor": { "message": "文字の色" },
+  "highlight": { "message": "ハイライト" },
+  "link": { "message": "リンク" },
+  "table": { "message": "表" },
+  "picture": { "message": "画像" },
+  "clearFormatting": { "message": "書式をクリア" },
+  "addRow": { "message": "+ 行" },
+  "addColumn": { "message": "+ 列" },
+  "deleteRow": { "message": "− 行" },
+  "deleteColumn": { "message": "− 列" },
+  "deleteNote": { "message": "メモを削除" },
+  "dragToMove": { "message": "ドラッグで移動", "description": "Tooltip of the bar at the top of a note pinned to the page." },
+  "todos": { "message": "ToDo" },
+  "hideTodos": { "message": "ToDo を隠す" },
+  "addTodo": { "message": "ToDo を追加" },
+  "doneTodos": { "message": "完了（$1）" },
+  "clearDone": { "message": "完了を消去" },
+  "confirmClearDone": { "message": "完了した ToDo をすべて削除しますか？" },
+  "deleteTodo": { "message": "ToDo を削除" },
+  "todosTooLong": { "message": "ToDo が多すぎてブラウザの同期に入りません。同期コードならすべて同期できます。" },
+  "importedTodos": { "message": "ToDo も一緒に取り込みました：$1（右上の ToDo ボタン）。" },
+  "nTodos_one": { "message": "$1 件の ToDo" },
+  "nTodos_other": { "message": "$1 件の ToDo" },
+  "confirmDeleteNote": { "message": "このメモを削除しますか？" },
+  "linkAddress": { "message": "リンク先" },
+  "noteSaved": { "message": "保存しました" },
+  "notesTooLong": { "message": "メモが長すぎてブラウザの同期に入りません。同期コードならすべて同期できます。" },
+  "importedNotes": { "message": "メモも一緒に取り込みました：$1（右上）。" },
+  "nNotes_one": { "message": "$1 件のメモ" },
+  "nNotes_other": { "message": "$1 件のメモ" },
+  "picturesFull": { "message": "メモと画像の容量がいっぱいです。新しい内容はこのパソコンにだけ保存されます。メモや画像、サムネイルを減らすと同期が再開します。" },
+  "syncUsageBrowser": { "message": "ブラウザの同期：$1 / $2 使用中（メモの画像は含まれません）。" },
+  "syncUsageCode": { "message": "同期コードの容量：サイト一覧 $1 使用、メモと画像 $2 / $3。" }
 }

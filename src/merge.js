@@ -23,21 +23,22 @@ export function normalizeUrl(raw) {
   return typedScheme ? s : `https://${s}`;
 }
 
-// A group's `dials` are its dials and its folders, in the order shown; a folder is { id, name, dials } and holds only
-// dials. These are all the group's dials, the ones in its folders included.
-export const dialsOf = (group) => group.dials.flatMap((d) => d.dials || d);
+// A group's `dials` are its dials and its folders, in the order shown; a folder is { id, name, dials } and holds dials
+// and folders. `itemsIn` is every dial and folder of a group (or of a folder), however deep; `dialsOf` its dials.
+export const itemsIn = (group) => group.dials.flatMap((d) => [d, ...(d.dials ? itemsIn(d) : [])]);
+export const dialsOf = (group) => itemsIn(group).filter((d) => !d.dials);
 
 // Of dials and folders, the dials `keep` says yes to; a folder left with none is left out.
 export const pick = (items, keep) => items.flatMap((d) => {
   if (!d.dials) return keep(d) ? [d] : [];
-  const dials = d.dials.filter(keep);
+  const dials = pick(d.dials, keep);
   return dials.length ? [{ ...d, dials }] : [];
 });
 
 // Add dials to a group, skipping addresses the group already has (the same site may sit in two groups on purpose).
-// A folder's dials go into the folder the group has with that id, else that name, else the folder comes along; two
-// folders can have the same name, so each of the group's takes in one. Dials come in finished: final id, normalized
-// url. Returns how many were added.
+// A folder's contents go into the folder the list has with that id, else that name, else the folder comes along, and
+// so on down; two folders can have the same name, so each of the list's takes in one. Dials come in finished: final
+// id, normalized url. Returns how many were added.
 export function addMissing(group, items) {
   const seen = new Set(dialsOf(group).map((d) => urlKey(d.url)));
   const fresh = (d) => {
@@ -45,29 +46,37 @@ export function addMissing(group, items) {
     seen.add(urlKey(d.url));
     return true;
   };
-  const had = group.dials.filter((d) => d.dials);
   let added = 0;
-  for (const item of items) {
-    if (!item.dials) {
-      if (fresh(item)) { group.dials.push(item); added++; }
-      continue;
+  const into = (list, items) => {
+    const had = list.filter((d) => d.dials);
+    for (const item of items) {
+      if (!item.dials) {
+        if (fresh(item)) { list.push(item); added++; }
+        continue;
+      }
+      let i = had.findIndex((f) => f.id === item.id);
+      if (i < 0) i = had.findIndex((f) => f.name.toLowerCase() === item.name.toLowerCase());
+      if (i >= 0) { into(had.splice(i, 1)[0].dials, item.dials); continue; }
+      const folder = { ...item, dials: [] };
+      into(folder.dials, item.dials);
+      if (folder.dials.length) list.push(folder);
     }
-    let i = had.findIndex((f) => f.id === item.id);
-    if (i < 0) i = had.findIndex((f) => f.name.toLowerCase() === item.name.toLowerCase());
-    const dials = item.dials.filter(fresh);
-    if (i >= 0) had.splice(i, 1)[0].dials.push(...dials);
-    else if (dials.length) group.dials.push({ ...item, dials });
-    added += dials.length;
-  }
+  };
+  into(group.dials, items);
   return added;
 }
 
-// Give dials without a thumbnail the one a dial in `from` has, matched by id, then by address.
+// Give dials without a thumbnail the one a dial in `from` has, matched by id, then by address; and dials without an
+// icon the one kept there for their address (an icon is its site's, whatever dial shows it).
 export function fillImages(groups, from) {
-  const dials = from.flatMap(dialsOf).filter((d) => d.image);
-  const byId = new Map(dials.map((d) => [d.id, d.image]));
-  const byUrl = new Map(dials.map((d) => [d.url, d.image]));
-  for (const d of groups.flatMap(dialsOf)) d.image ||= byId.get(d.id) || byUrl.get(d.url) || '';
+  const dials = from.flatMap(dialsOf);
+  const byId = new Map(dials.filter((d) => d.image).map((d) => [d.id, d.image]));
+  const byUrl = new Map(dials.filter((d) => d.image).map((d) => [d.url, d.image]));
+  const icons = new Map(dials.filter((d) => d.icon).map((d) => [d.url, d.icon]));
+  for (const d of groups.flatMap(dialsOf)) {
+    d.image ||= byId.get(d.id) || byUrl.get(d.url) || '';
+    if (!d.icon && icons.has(d.url)) d.icon = icons.get(d.url);
+  }
 }
 
 // Team groups (team.js) aren't the user's own: they stay out of Chrome sync, daily copies, backups and imports.

@@ -31,13 +31,13 @@ In Chrome and Edge a copy loaded this way has another extension id, so Google re
 
 ## What leaves the browser
 
-Dials, thumbnails and settings are kept in the browser's own storage (`store.js`). There are no ads, analytics or tracking. The code talks to nexuscortex.dev, to Google (only for the Drive backup) and, in Firefox, to your dials' own sites for their icons; `grep -rn "https://" src/*.js` lists every address.
+Dials, thumbnails and settings are kept in the browser's own storage (`store.js`). There are no ads, analytics or tracking. The code talks to nexuscortex.dev, to Google (only for the Drive backup), in Firefox to your dials' own sites for their icons, and to Infinity New Tab's icon servers when you import one of its backups; `grep -rn "https://" src/*.js` lists every address.
 
 Without you turning anything on:
 
 | What | Where it goes | Code |
 |---|---|---|
-| Sync (on unless you turn it off) | The dial list (addresses, titles, groups, folders) goes into the browser's own sync storage for extensions. It never reaches nexuscortex.dev. | `sync.js` |
+| Sync (on unless you turn it off) | The dial list (addresses, titles, groups, folders), the settings for how the page looks (not a background you uploaded), your notes (their text; pictures in them stay on the computer) and your to-dos go into the browser's own sync storage for extensions. None of it reaches nexuscortex.dev. | `sync.js`, `notes.js`, `todos.js` |
 | Site icons, in Firefox only | Firefox lends extensions no icon cache, so each dial's site is asked for its `/favicon.ico`. Chrome and Edge use the browser's cache and ask nobody. | `newtab.js` |
 | Removing Tabdial | The browser opens a feedback page; its address carries the version number and nothing else. | `background.js` |
 
@@ -45,14 +45,18 @@ Only if you use it:
 
 | What | Where it goes | Code |
 |---|---|---|
-| Sync code (between browsers) | The dial list, thumbnails and site icons go to nexuscortex.dev, encrypted with a key made from the code, which never leaves the browser. | `sync.js` |
+| Sync code (between browsers) | The dial list, the look, notes (with their pictures), to-dos, thumbnails and site icons go to nexuscortex.dev, encrypted with a key made from the code, which never leaves the browser. | `sync.js` |
 | Teams | A team's groups, their pictures, its name and its members' names go to nexuscortex.dev, encrypted with a key that travels in the invite link's `#` part, which browsers never send to a site. | `team.js` |
 | Google Drive backup | One file in your own Google Drive, between the browser and Google. The `drive.file` scope reaches only files Tabdial made. | `drive.js` |
 | Sort (comes with the unlock) | When you click Continue: the hostnames and titles of the dials in the group being sorted, and your other groups' names with a few of their hostnames, go to nexuscortex.dev, which passes them to an AI service (TypeSafe). | `sort.js` |
 | The unlock | A random purchase id, a license key or, if you unlock by signing in with Google, a Google ID token goes to nexuscortex.dev. The payment itself is on Stripe. | `pay.js` |
 | Jump with browsing history | Read on your computer; it goes nowhere. | `jump.js` |
+| The bookmarks and history drawer | The browser's bookmarks and the last week's history, once you click Allow there: read on your computer; they go nowhere. | `newtab.js` |
+| Importing an Infinity New Tab backup | Each site's icon is fetched once from Infinity's servers, from the links in the backup file, and kept in the dial. Nothing of yours is sent. | `newtab.js` (`fetchIcons`) |
 
 The [privacy policy](https://nexuscortex.dev/tabdial/privacy/) says what the site keeps of each.
+
+**Permissions.** `manifest.json` asks at install only for what asks you nothing: `storage`, `unlimitedStorage`, `favicon` (Chrome, Edge), `activeTab`, `alarms`, `search` and `fontSettings` (Chrome, Edge: the list of installed fonts for Settings > Appearance > Font; Tabdial changes no font setting). `topSites`, `identity`, `history` and `bookmarks` are optional: requested when you click the feature that needs them, and given back when you turn it off.
 
 ## What is not here
 
@@ -91,18 +95,22 @@ Tabdial 是 Chrome、Edge、Firefox 的新标签页扩展：把常用网站排�
 **什么会离开浏览器。** 网站、缩略图和设置都存在浏览器自己的存储里，没有广告、统计或跟踪。
 
 - 不用你打开就会发生的：
-  - 同步（默认开，可在设置里关）：网站列表存进浏览器自带的扩展同步存储，不经过 nexuscortex.dev。
+  - 同步（默认开，可在设置里关）：网站列表、外观设置（你上传的背景图除外）、笔记（文字；里面的图片留在本机）和待办，存进浏览器自带的扩展同步存储，不经过 nexuscortex.dev。
   - Firefox 里向每个网站要它的 `/favicon.ico`（Chrome、Edge 用浏览器的缓存，不发请求）。
   - 卸载时浏览器打开一个反馈页，地址里只带版本号。
 - 你用了才会发生的：
-  - 同步码：列表、缩略图和网站图标加密后存到 nexuscortex.dev，密钥由同步码在浏览器里算出，不离开浏览器。
+  - 同步码：列表、外观、笔记（含图片）、待办、缩略图和网站图标加密后存到 nexuscortex.dev，密钥由同步码在浏览器里算出，不离开浏览器。
   - 团队：团队的分组、图片、名称和成员名加密后存到 nexuscortex.dev，密钥在邀请链接的 `#` 后面，浏览器不会把这部分发给网站。
   - Google Drive 备份：存到你自己的 Drive，只在浏览器和 Google 之间。
   - Sort（付费解锁）：点“继续”时，把要整理的那个分组里网站的域名和标题、其他分组的名称和几个域名，经 nexuscortex.dev 交给一个 AI 服务（TypeSafe）。
   - 解锁：一个随机的购买号、许可密钥，或用 Google 登录解锁时的 Google ID token，发给 nexuscortex.dev；付款在 Stripe 上完成。
   - Jump 读浏览记录：只在本机读，不发出去。
+  - 书签和浏览记录抽屉：你在抽屉里点“允许”后，读浏览器的书签和最近一周的浏览记录，只在本机读，不发出去。
+  - 导入 Infinity 新标签页的备份：按备份文件里的链接，从 Infinity 的服务器取一次每个网站的图标，存进网站卡片；不发送你的任何东西。
 
 网站对每一项保留什么，见[隐私政策](https://nexuscortex.dev/tabdial/zh-cn/privacy/)。
+
+**权限。** 安装时只要不需要你确认的权限：`storage`、`unlimitedStorage`、`favicon`（Chrome、Edge）、`activeTab`、`alarms`、`search` 和 `fontSettings`（Chrome、Edge：为“设置 > 外观 > 字体”列出电脑上装的字体，不改任何字体设置）。`topSites`、`identity`、`history`、`bookmarks` 是可选权限：点到需要它的功能时才申请，关掉功能就交还。
 
 **这里没有什么。** nexuscortex.dev 的服务端（同步码、团队、Sort、购买）不在这个仓库里。它能收到的，就是这里的代码发出去的。
 

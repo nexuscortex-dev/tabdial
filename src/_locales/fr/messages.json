@@ -279,6 +279,39 @@
   "showSearchBox": {
     "message": "Afficher le champ de recherche"
   },
+  "dialSize": {
+    "message": "Taille des raccourcis"
+  },
+  "dialSpacing": {
+    "message": "Espacement"
+  },
+  "roundCorners": {
+    "message": "Coins arrondis"
+  },
+  "titleSize": {
+    "message": "Taille des titres"
+  },
+  "showTitles": {
+    "message": "Afficher les titres des raccourcis"
+  },
+  "font": {
+    "message": "Police"
+  },
+  "fontHint": {
+    "message": "Une police installée sur cet ordinateur : choisissez-en une ou saisissez son nom. Vide, c'est la police par défaut."
+  },
+  "theme": {
+    "message": "Thème"
+  },
+  "themeBrowser": {
+    "message": "Comme le navigateur"
+  },
+  "themeLight": {
+    "message": "Clair"
+  },
+  "themeDark": {
+    "message": "Sombre"
+  },
   "sync": {
     "message": "Synchronisation"
   },
@@ -287,10 +320,10 @@
     "description": "Checkbox."
   },
   "syncHint": {
-    "message": "Utilise la synchronisation de votre navigateur : cela fonctionne là où vous êtes connecté au même navigateur avec la synchronisation activée. Les adresses, titres et groupes sont synchronisés ; les miniatures et les paramètres restent sur chaque ordinateur."
+    "message": "Utilise la synchronisation de votre navigateur : cela fonctionne là où vous êtes connecté au même navigateur avec la synchronisation activée. Les adresses, les titres, les groupes et l'apparence de la page sont synchronisés ; les miniatures et un arrière-plan que vous avez chargé restent sur chaque ordinateur."
   },
   "syncTooLong": {
-    "message": "Votre liste de raccourcis est trop longue pour être synchronisée : elle ne l'est donc pas."
+    "message": "Vos raccourcis et vos notes sont trop longs pour être synchronisés, ils ne le sont donc pas. Retirez-en pour synchroniser à nouveau."
   },
   "syncUnreadable": {
     "message": "La liste de raccourcis synchronisée est dans un format que Tabdial ne comprend pas."
@@ -561,7 +594,7 @@
     "message": "Ajouter les sites les plus visités"
   },
   "importFormatsHint": {
-    "message": "Vous pouvez importer les fichiers Tabdial et les fichiers d'exportation de Speed Dial 2, Group Speed Dial, speed-dial.net et Yet Another Speed Dial, ainsi que l'exportation JSON de Toby et le fichier de sauvegarde d'Infinity New Tab.",
+    "message": "Vous pouvez importer les fichiers Tabdial et les fichiers d'exportation de Speed Dial 2, Group Speed Dial, speed-dial.net et Yet Another Speed Dial, ainsi que l'exportation JSON de Toby, le fichier de sauvegarde d'Infinity New Tab et les favoris exportés par votre navigateur (un fichier HTML).",
     "description": "Keep the product names as they are."
   },
   "guides": {
@@ -844,5 +877,63 @@
   },
   "onlyMe": {
     "message": "Moi uniquement"
-  }
+  },
+  "bookmarksAndHistory": { "message": "Favoris et historique" },
+  "bookmarks": { "message": "Favoris" },
+  "history": { "message": "Historique" },
+  "bookmarksAllow": { "message": "Voyez ici les favoris de votre navigateur, pour les ouvrir ou les ajouter comme raccourcis. Tabdial les lit uniquement sur cet ordinateur ; ils ne sont jamais envoyés nulle part." },
+  "historyAllow": { "message": "Voyez ici les pages visitées cette semaine, pour les ouvrir ou les ajouter comme raccourcis. L'accès direct cherche alors aussi dans l'historique de navigation. Tabdial le lit uniquement sur cet ordinateur ; il n'est jamais envoyé nulle part." },
+  "allow": { "message": "Autoriser" },
+  "bookmarksOff": { "message": "Ne plus lire les favoris" },
+  "historyOff": { "message": "Ne plus lire l'historique (accès direct aussi)" },
+  "addTo": { "message": "Ajouter à « $1 »" },
+  "drawerEmpty": { "message": "Rien ici." },
+  "drawerSearch": { "message": "Rechercher dans les favoris et l'historique" },
+  "notes": { "message": "Notes" },
+  "newNote": { "message": "Nouvelle note" },
+  "notePlaceholder": { "message": "Écrivez ce que vous voulez ici. C'est enregistré automatiquement." },
+  "formatting": { "message": "Mise en forme" },
+  "bold": { "message": "Gras" },
+  "italic": { "message": "Italique" },
+  "underline": { "message": "Souligné" },
+  "strikethrough": { "message": "Barré" },
+  "heading": { "message": "Titre" },
+  "subheading": { "message": "Sous-titre" },
+  "bulletList": { "message": "Liste à puces" },
+  "numberedList": { "message": "Liste numérotée" },
+  "checklist": { "message": "Liste de tâches" },
+  "quote": { "message": "Citation" },
+  "textColor": { "message": "Couleur du texte" },
+  "highlight": { "message": "Surligner" },
+  "link": { "message": "Lien" },
+  "table": { "message": "Tableau" },
+  "picture": { "message": "Image" },
+  "clearFormatting": { "message": "Effacer la mise en forme" },
+  "addRow": { "message": "+ Ligne" },
+  "addColumn": { "message": "+ Colonne" },
+  "deleteRow": { "message": "− Ligne" },
+  "deleteColumn": { "message": "− Colonne" },
+  "deleteNote": { "message": "Supprimer la note" },
+  "dragToMove": { "message": "Faites glisser pour déplacer", "description": "Tooltip of the bar at the top of a note pinned to the page." },
+  "todos": { "message": "Tâches" },
+  "hideTodos": { "message": "Masquer les tâches" },
+  "addTodo": { "message": "Ajouter une tâche" },
+  "doneTodos": { "message": "Faites ($1)" },
+  "clearDone": { "message": "Effacer les tâches faites" },
+  "confirmClearDone": { "message": "Supprimer toutes les tâches faites ?" },
+  "deleteTodo": { "message": "Supprimer la tâche" },
+  "todosTooLong": { "message": "Vos tâches sont trop longues pour la synchronisation du navigateur. Un code de synchronisation les emporte toutes." },
+  "importedTodos": { "message": "Vos tâches ont suivi aussi : $1 (bouton des tâches, en haut à droite)." },
+  "nTodos_one": { "message": "$1 tâche" },
+  "nTodos_other": { "message": "$1 tâches" },
+  "confirmDeleteNote": { "message": "Supprimer cette note ?" },
+  "linkAddress": { "message": "Adresse du lien" },
+  "noteSaved": { "message": "Enregistré" },
+  "notesTooLong": { "message": "Vos notes sont trop longues pour la synchronisation du navigateur. Un code de synchronisation les emporte toutes." },
+  "importedNotes": { "message": "Vos notes ont suivi aussi : $1 (en haut à droite)." },
+  "nNotes_one": { "message": "$1 note" },
+  "nNotes_other": { "message": "$1 notes" },
+  "picturesFull": { "message": "L'espace pour les notes et les images est plein : le nouveau reste sur cet ordinateur. Retirez des notes, images ou miniatures pour synchroniser à nouveau." },
+  "syncUsageBrowser": { "message": "Synchronisation du navigateur : $1 utilisés sur $2 (les images des notes n'y passent pas)." },
+  "syncUsageCode": { "message": "Espace du code : liste $1 utilisée, notes et images $2 sur $3." }
 }

@@ -118,7 +118,7 @@ export async function applyTeam(state, id, key, { name, groups }, version) {
     withPictures(out, have);
     return out;
   };
-  const item = (d) => (Array.isArray(d.dials) ? { id: String(d.id), name: String(d.name || ''), dials: d.dials.map(dial) } : dial(d));
+  const item = (d) => (Array.isArray(d.dials) ? { id: String(d.id), name: String(d.name || ''), dials: d.dials.map(item) } : dial(d));
   const fresh = (g) => ({ id: String(g.id), name: String(g.name), team: id, dials: pick(g.dials.map(item), (d) => d.url) });
   const byId = new Map(groups.map((g) => [String(g.id), fresh(g)]));
   state.groups = state.groups.filter((g) => g.team !== id || byId.has(g.id)).map((g) => (g.team === id ? byId.get(g.id) : g));

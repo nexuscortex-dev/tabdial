@@ -1,7 +1,9 @@
-import { load, save, syncNow, syncSite, uid, normalizeUrl, addDial, targetGroup, listBackups, restoreBackup, addMostVisited, BEFORE_RESTORE, COPIES, FULL_COPIES } from './store.js';
-import { parseImport, exportState, mergeImport, historyOn, permissionNote } from './import.js';
-import { countDials, dialsOf, sameUrl, hostOf, ownGroups } from './merge.js';
-import { syncCode, siteAllowed, parseCode, codeLink, startSync, useCode, stopSync, sendPictures, SYNC_DATA } from './sync.js';
+import { load, save, sendLook, syncNow, syncSite, uid, normalizeUrl, addDial, targetGroup, listBackups, restoreBackup, addMostVisited, shortTitle, BEFORE_RESTORE, COPIES, FULL_COPIES } from './store.js';
+import { parseImport, exportState, mergeImport, historyOn, permissionNote, infinityNotes, infinityTodos } from './import.js';
+import { countDials, dialsOf, itemsIn, sameUrl, hostOf, ownGroups } from './merge.js';
+import { syncCode, siteAllowed, parseCode, codeLink, startSync, useCode, stopSync, sendPictures, lookOf, usage, MAX_DATA, SYNC_DATA } from './sync.js';
+import { newNote, edit, newestFirst, clean, mergeNotes, shown as readyNotes } from './notes.js';
+import { newTodo, change, pending, finished, posBefore, synced as syncedTodos, readSynced as readTodos, mergeTodos, MAX_TEXT } from './todos.js';
 import { readOnly, refreshTeams, fetchTeamPictures, sendTeamPictures, createTeam, peekTeam, joinTeam, leaveTeam, deleteTeam, listMembers, removeMember, replaceLink, setAdmin, listCopies, restoreCopy } from './team.js';
 import { isPaid, checkPaid, recheckPaid, hasAskedToPay, openPaymentPage, unlockWithKey } from './pay.js';
 import { suggestMoves, loose } from './sort.js';
@@ -27,10 +29,11 @@ let state = await load();
 
 const activeGroup = () => state.groups.find((g) => g.id === state.activeGroup) || state.groups[0];
 const findDial = (id) => state.groups.flatMap(dialsOf).find((d) => d.id === id);
-// A group's dials are its dials and its folders (merge.js); these find things by the id of a dial or a folder.
-const findFolder = (id) => state.groups.flatMap((g) => g.dials).find((d) => d.dials && d.id === id);
-const folderOf = (dialId) => state.groups.flatMap((g) => g.dials).find((d) => d.dials?.some((c) => c.id === dialId));
-const groupOf = (id) => state.groups.find((g) => g.dials.some((d) => d.id === id || d.dials?.some((c) => c.id === id)));
+// A group's dials are its dials and its folders, folders in folders too (merge.js); these find things by the id of a
+// dial or a folder.
+const findFolder = (id) => state.groups.flatMap(itemsIn).find((d) => d.dials && d.id === id);
+const folderOf = (id) => state.groups.flatMap(itemsIn).find((d) => d.dials?.some((c) => c.id === id)); // the one it is in
+const groupOf = (id) => state.groups.find((g) => itemsIn(g).some((d) => d.id === id));
 const listOf = (id) => folderOf(id)?.dials || groupOf(id)?.dials; // the list it sits in: its folder's, or its group's
 // Team groups (team.js): only a team's admins change them, while the team isn't frozen.
 const locked = (group) => readOnly(state, group);
@@ -41,12 +44,25 @@ const adminTeams = () => Object.entries(state.teams).filter(([, team]) => team.a
 // (another admin saved first, a refund) may have put the site's version back, so the page is drawn again; so it is
 // when the save brought dials another browser had synced meanwhile (sync.js).
 const saveAndRender = () => {
-  // a folder exists only while it holds a dial
-  for (const g of state.groups) for (let i = g.dials.length; i--;) if (g.dials[i].dials?.length === 0) g.dials.splice(i, 1);
+  // a folder exists only while it holds a dial, and one that held only an emptied folder goes with it
+  const prune = (list) => { for (let i = list.length; i--;) if (list[i].dials && !prune(list[i].dials).length) list.splice(i, 1); return list; };
+  state.groups.forEach((g) => prune(g.dials));
   render();
+  shareLook();
   return save(state).then((merged) => { if (merged) render(); },
     (err) => { render(); showError(err.name === 'TeamError' ? err.message : t('saveFailed', err.message)); });
 };
+
+// The settings for how the page looks go to the user's other computers and browsers (sync.js). A slider or the color
+// picker saves many times a second; the browser allows an extension some 120 writes to its sync a minute, the dial
+// list's among them, and with a sync code each would be a request to the site. So the look goes once things have been
+// quiet for a moment. With a code, the site's answer may bring another browser's changes: the page is drawn again.
+// ponytail: a change made in the last two seconds before the tab closes goes with the next new tab.
+let lookTimer;
+function shareLook() {
+  clearTimeout(lookTimer);
+  lookTimer = setTimeout(() => sendLook(state).then((changed) => changed && render(), () => {}), 2000);
+}
 
 let errorTimer;
 function showError(message, note = false) {
@@ -210,16 +226,28 @@ async function findIcon(url) {
 }
 
 // ---------- render ----------
+// The settings for how the page looks, with what those the user never touched stand at.
+const look = () => ({ size: 100, radius: 16, gap: 18, text: 13, font: '', theme: '', ...state.settings });
+
 function render() {
   iconOf = new Map(state.groups.flatMap(dialsOf).filter((d) => d.icon).map((d) => [d.url, d.icon]));
-  const { background, columns } = state.settings;
+  const { background, columns, size, radius, gap, text, font, theme } = look();
   const kind = backgroundKind(background);
+  document.documentElement.dataset.theme = theme; // '' = as the browser is
+  document.body.classList.toggle('no-titles', state.settings.titles === false);
+  if (notesDialog.open) showNotes(); // e.g. changed on another computer
+  drawTodos();
   document.body.style.backgroundColor = kind === 'color' ? background : '';
   document.body.style.backgroundImage = { default: '', color: 'none', gradient: background, image: `url("${background}")`, photo: `url("${background}")` }[kind];
   document.body.dataset.tone = toneOf(background);
   const { backgroundColor: color, backgroundImage: image } = document.body.style; // for paint.js
-  try { localStorage.setItem('paint', JSON.stringify(kind === 'image' ? null : { color, image, tone: document.body.dataset.tone })); } catch {}
+  try { localStorage.setItem('paint', JSON.stringify({ theme, font, ...(kind !== 'image' && { color, image, tone: document.body.dataset.tone }) })); } catch {}
   document.documentElement.style.setProperty('--cols', columns);
+  document.documentElement.style.setProperty('--tile', `${216 * size / 100 - 18 + gap}px`); // a wider gap moves the dials apart, it doesn't shrink them
+  document.documentElement.style.setProperty('--gap', `${gap}px`);
+  document.documentElement.style.setProperty('--text', `${text}px`);
+  document.documentElement.style.setProperty('--font', font && `"${font}"`); // '' = the usual one
+  document.documentElement.style.setProperty('--radius', `${radius}px`);
   for (const sw of document.querySelectorAll('.swatch[data-bg]')) sw.setAttribute('aria-pressed', String(sw.dataset.bg === background));
   $('.swatch.custom').classList.toggle('on', kind === 'color');
   $('.swatch.custom').style.backgroundColor = kind === 'color' ? background : '';
@@ -242,7 +270,12 @@ function render() {
     b.addEventListener('contextmenu', (e) => openGroupMenu(e, g));
     b.addEventListener('dragover', (e) => { if (dragId && !locked(g)) { e.preventDefault(); b.classList.add('drop-target'); } });
     b.addEventListener('dragleave', () => b.classList.remove('drop-target'));
-    b.addEventListener('drop', (e) => { e.preventDefault(); b.classList.remove('drop-target'); if (moveDial(dragId, g.id)) saveAndRender(); });
+    b.addEventListener('drop', (e) => {
+      e.preventDefault();
+      b.classList.remove('drop-target');
+      const added = adopt(g.id);
+      if (moveDial(dragId, g.id) || added) saveAndRender();
+    });
     return b;
   }));
 
@@ -284,6 +317,7 @@ function dialTile(d, movable, copy) {
   label.className = 'label';
   label.textContent = d.title || hostOf(d.url);
   meta.append(fav, label);
+  if (state.settings.titles === false) a.title = label.textContent; // with the titles hidden, a tile still has its name
   a.append(thumbEl(d.url, d.image, d.title), meta);
   const edit = document.createElement('button');
   edit.className = 'edit';
@@ -296,7 +330,7 @@ function dialTile(d, movable, copy) {
   return li;
 }
 
-// A folder shows its first four dials in small; clicking it opens it.
+// A folder shows its first four dials in small, those of the folders in it included; clicking it opens it.
 function folderTile(folder, movable) {
   const li = document.createElement('li');
   li.draggable = movable;
@@ -306,7 +340,7 @@ function folderTile(folder, movable) {
   button.draggable = false;
   const four = document.createElement('div');
   four.className = 'four';
-  four.append(...folder.dials.slice(0, 4).map((d) => thumbEl(d.url, d.image, d.title)));
+  four.append(...dialsOf(folder).slice(0, 4).map((d) => thumbEl(d.url, d.image, d.title)));
   const meta = document.createElement('div');
   meta.className = 'meta';
   const label = document.createElement('span');
@@ -314,8 +348,9 @@ function folderTile(folder, movable) {
   label.textContent = folder.name;
   const count = document.createElement('span');
   count.className = 'count';
-  count.textContent = plural(folder.dials.length, 'nDials');
+  count.textContent = plural(dialsOf(folder).length, 'nDials');
   meta.append(label, count);
+  if (state.settings.titles === false) button.title = folder.name;
   button.append(four, meta);
   button.addEventListener('click', () => openFolder(folder.id));
   li.append(button);
@@ -324,24 +359,29 @@ function folderTile(folder, movable) {
 }
 
 // ---------- folder ----------
-// An open folder: its dials over the page, its name to change at the top. Dragging a dial out of it closes it, so the
-// dial can be dropped in the group behind.
+// An open folder: its dials and folders over the page, its name to change at the top. A folder in it opens in its
+// place, with a way back up to the one around it. Dragging a dial or folder out of it closes it, so it can be dropped
+// in the group behind.
 const folderDialog = $('#folder-dialog');
 let openFolderId = null; // by id, for the same reason as editingId
 
 function openFolder(id) {
   openFolderId = id;
-  folderDialog.showModal();
+  if (!folderDialog.open) folderDialog.showModal();
   renderFolder();
 }
 function renderFolder() {
   const folder = findFolder(openFolderId);
   if (!folder) return folderDialog.close(); // emptied or deleted, here or elsewhere
   const fixed = locked(groupOf(folder.id));
+  const up = folderOf(folder.id);
+  $('#folder-up').hidden = !up;
+  $('#folder-up-name').textContent = up?.name || '';
   $('#folder-name').value = folder.name;
   $('#folder-name').readOnly = fixed;
-  $('#folder-grid').replaceChildren(...folder.dials.map((d) => dialTile(d, !fixed, fixed)));
+  $('#folder-grid').replaceChildren(...folder.dials.map((d) => (d.dials ? folderTile(d, !fixed) : dialTile(d, !fixed, fixed))));
 }
+$('#folder-up').addEventListener('click', () => { const up = folderOf(openFolderId); if (up) openFolder(up.id); });
 $('#folder-name').addEventListener('change', (e) => {
   const folder = findFolder(openFolderId);
   if (!folder) return;
@@ -438,14 +478,33 @@ function tick() {
 
 // ---------- drag and drop ----------
 // A dial or a folder is dragged by its tile, in a group or in an open folder. Dropped on the left edge of a tile it
-// goes before it; on the rest of the tile, a dial makes a folder with the dial there, or goes into the folder there.
-// A folder holds only dials: a folder being dragged, and anything dropped in an open folder, only ever goes before.
+// goes before it; on the rest of the tile, it goes into the folder there, or a dial makes a folder with the dial
+// there. A folder dropped on a dial only ever goes before it, and never goes into itself or a folder inside it.
 let dragId = null;
+// A page dragged from the drawer (bookmarks and history) is a new dial that is in no list until it is dropped: adopt()
+// then puts it at the end of the group it lands in, or, if that group has the address already, drags that dial instead,
+// and the drop goes on as for any dial. True if a dial was added.
+let dragNew = null;
+function adopt(groupId = activeGroup().id) {
+  if (!dragNew) return false;
+  const group = targetGroup(state, groupId);
+  const same = dialsOf(group).find((d) => sameUrl(d.url, dragNew.url));
+  if (same) dragId = same.id;
+  else group.dials.push(dragNew);
+  dragNew = null;
+  return !same;
+}
+function endDrag() {
+  dragId = dragNew = null;
+  document.querySelectorAll('.dragging, .drop-before, .drop-into').forEach((n) => n.classList.remove('dragging', 'drop-before', 'drop-into'));
+}
 
 const dropsInto = (li, e) => {
   const r = li.getBoundingClientRect();
-  return !li.closest('#folder-grid') && Boolean(findDial(dragId)) && e.clientX - r.left > r.width * .3;
+  return Boolean(dragNew || findDial(dragId) || findFolder(li.dataset.id)) && e.clientX - r.left > r.width * .3;
 };
+// Whether `id` is the folder being dragged or inside it: what it can't be dropped on.
+const inDragged = (id) => { const f = findFolder(dragId); return Boolean(f) && (id === f.id || itemsIn(f).some((d) => d.id === id)); };
 // Takes a dial or a folder out of the list it is in.
 function take(id) {
   const list = listOf(id);
@@ -472,19 +531,17 @@ function wireDrag(li) {
     e.dataTransfer.effectAllowed = 'move';
     e.dataTransfer.setData('text/plain', dragId);
   });
-  li.addEventListener('dragend', () => {
-    dragId = null;
-    document.querySelectorAll('.dragging, .drop-before, .drop-into').forEach((n) => n.classList.remove('dragging', 'drop-before', 'drop-into'));
-  });
+  li.addEventListener('dragend', endDrag);
   li.addEventListener('dragover', (e) => {
-    if (!dragId || dragId === li.dataset.id) return;
+    if (!dragId || inDragged(li.dataset.id)) return;
     e.preventDefault();
     document.querySelectorAll('.drop-before, .drop-into').forEach((n) => n.classList.remove('drop-before', 'drop-into'));
     li.classList.add(dropsInto(li, e) ? 'drop-into' : 'drop-before');
   });
   li.addEventListener('drop', (e) => {
     e.preventDefault();
-    if (dragId === li.dataset.id || !listOf(dragId) || !listOf(li.dataset.id)) return; // gone meanwhile
+    adopt();
+    if (inDragged(li.dataset.id) || !listOf(dragId) || !listOf(li.dataset.id)) return; // or gone meanwhile
     if (dropsInto(li, e)) putInto(dragId, li.dataset.id);
     else placeBefore(dragId, li.dataset.id);
     saveAndRender();
@@ -495,6 +552,7 @@ $('#grid').addEventListener('dragover', (e) => { if (dragId && e.target.closest(
 $('#grid').addEventListener('drop', (e) => {
   if (!dragId || !e.target.closest('.add')) return;
   e.preventDefault();
+  adopt();
   if (listOf(dragId)) { activeGroup().dials.push(take(dragId)); saveAndRender(); }
 });
 
@@ -541,12 +599,13 @@ function openDialDialog(dial, copy = false) {
   dialDialog.showModal();
 }
 
-// The folder field: none, one of the chosen group's folders, or a new one. '+' can't be a folder's id.
+// The folder field: none, one of the chosen group's folders (one in another named after it: "Work / Docs"), or a new
+// one. '+' can't be a folder's id.
 const NEW_FOLDER = '+';
 function listFolders(selected) {
   const group = state.groups.find((g) => g.id === dialForm.group.value);
-  const folders = (group?.dials || []).filter((d) => d.dials);
-  dialForm.folder.replaceChildren(new Option(t('noFolder'), ''), ...folders.map((f) => new Option(f.name, f.id)), new Option(t('newFolder'), NEW_FOLDER));
+  const options = (list, path) => list.filter((d) => d.dials).flatMap((f) => [new Option(path + f.name, f.id), ...options(f.dials, `${path + f.name} / `)]);
+  dialForm.folder.replaceChildren(new Option(t('noFolder'), ''), ...options(group?.dials || [], ''), new Option(t('newFolder'), NEW_FOLDER));
   dialForm.folder.value = selected || '';
 }
 
@@ -590,11 +649,12 @@ dialDialog.addEventListener('close', () => {
     Object.assign(dial, fields);
   }
   else dial = addDial(state, groupId, fields); // a new dial, or one removed elsewhere while this dialog was open
-  // Where it goes: into the chosen folder, into a new one (where the dial was, if it was loose in that group), or
-  // loose into the group. A dial that is there already stays where it is.
+  // Where it goes: into the chosen folder, into a new one (where the dial was, if it was in that group), or loose
+  // into the group. A dial that is there already stays where it is.
   const folder = findFolder(dialForm.folder.value);
   if (dialForm.folder.value === NEW_FOLDER) {
-    const list = targetGroup(state, groupId).dials;
+    const group = targetGroup(state, groupId);
+    const list = groupOf(dial.id) === group ? listOf(dial.id) : group.dials;
     const i = list.findIndex((d) => d.id === dial.id);
     take(dial.id);
     list.splice(i < 0 ? list.length : i, 0, { id: uid(), name: t('folder'), dials: [dial] });
@@ -706,6 +766,521 @@ $('#menu-delete').addEventListener('click', () => { groupMenu.hidePopover(); del
 addEventListener('pointerdown', (e) => { if (!groupMenu.contains(e.target)) groupMenu.hidePopover(); });
 addEventListener('keydown', (e) => { if (e.key === 'Escape') groupMenu.hidePopover(); });
 
+// ---------- bookmarks and history ----------
+// A drawer down the left side with the browser's bookmarks and the pages visited this week, to open, or to add as dials
+// to the group on screen with their + or by dragging them onto the dials (the drawer closes as a page leaves it), and
+// a search box over both. Each list is read only once its optional permission is allowed, which is asked here the first
+// time and kept until "Stop reading". The history is the one Jump reads (Settings), so allowing it here turns that on
+// too, and stopping it here stops Jump's as well.
+const drawer = $('#drawer');
+const LISTS = {
+  bookmarks: { permissions: ['bookmarks'], allow: 'bookmarksAllow', off: 'bookmarksOff' },
+  history: { permissions: ['history'], allow: 'historyAllow', off: 'historyOff' },
+};
+const drawerTab = () => drawer.querySelector('[name=drawer-tab]:checked').value;
+
+$('#open-drawer').addEventListener('click', () => { drawer.showModal(); showDrawer(); });
+$('#drawer-tabs').addEventListener('change', showDrawer);
+$('#drawer-search').addEventListener('input', showDrawer);
+drawer.addEventListener('dragover', (e) => { if (dragNew && e.clientX > drawer.getBoundingClientRect().right) drawer.close(); });
+
+async function showDrawer() {
+  const tab = drawerTab();
+  const query = $('#drawer-search').value.trim();
+  const list = LISTS[tab];
+  const allowed = await chrome.permissions.contains({ permissions: list.permissions });
+  $('#drawer-allow').hidden = allowed;
+  $('#drawer-search').hidden = !allowed;
+  $('#drawer-allow-text').textContent = t(list.allow);
+  $('#drawer-off').hidden = !allowed;
+  $('#drawer-off').textContent = t(list.off);
+  const items = !allowed ? [] : tab === 'bookmarks' ? await bookmarkList(query) : await historyItems(query);
+  if (tab !== drawerTab() || query !== $('#drawer-search').value.trim()) return; // changed meanwhile
+  $('#drawer-list').replaceChildren(...items, ...(allowed && !items.length ? [Object.assign(document.createElement('li'), { className: 'none', textContent: t('drawerEmpty') })] : []));
+}
+
+$('#drawer-allow-button').addEventListener('click', async () => {
+  if (await chrome.permissions.request({ permissions: LISTS[drawerTab()].permissions })) showDrawer(); // first: it needs this click
+});
+$('#drawer-off').addEventListener('click', async () => {
+  const tab = drawerTab();
+  await chrome.permissions.remove({ permissions: LISTS[tab].permissions });
+  if (tab === 'history') await chrome.storage.local.set({ historyDeclined: true }); // as Jump's checkbox does
+  showDrawer();
+});
+
+// The tree, or with words searched the bookmarks that have them (the browser's own search: titles and addresses).
+// Separators and Firefox's smart folders (place:) are left out, as is anything a dial couldn't open.
+const shown = (node) => (node.url ? normalizeUrl(node.url) && !node.url.startsWith('place:') : node.type !== 'separator');
+async function bookmarkList(query) {
+  if (query) return (await chrome.bookmarks.search(query)).filter((node) => node.url && shown(node)).map((node) => pageItem(node.url, node.title));
+  return bookmarkItems((await chrome.bookmarks.getTree())[0].children, true);
+}
+
+// A folder's contents are drawn when it is first opened; the bookmarks bar (Chrome, Edge) or toolbar (Firefox) is open
+// from the start.
+function bookmarkItems(nodes, top = false) {
+  return nodes.filter(shown).map((node) => {
+    if (node.url) return pageItem(node.url, node.title);
+    const li = document.createElement('li');
+    const folder = document.createElement('details');
+    const summary = document.createElement('summary');
+    summary.append(icon('i-folder'), node.title);
+    const inside = document.createElement('ul');
+    const fill = () => { if (folder.open && !inside.childElementCount) inside.append(...bookmarkItems(node.children || [])); };
+    folder.addEventListener('toggle', fill);
+    folder.open = top && (node.folderType === 'bookmarks-bar' || node.id === '1' || node.id === 'toolbar_____');
+    fill();
+    folder.append(summary, inside);
+    li.append(folder);
+    return li;
+  });
+}
+
+// The last week's pages, or with words searched the pages of any time that have them, newest first, under the day they
+// were visited on; new tabs (this page) left out.
+async function historyItems(query) {
+  const pages = await chrome.history.search({ text: query, startTime: query ? 0 : Date.now() - 7 * 864e5, maxResults: 300 });
+  const items = [];
+  let day = '';
+  for (const page of pages.filter((p) => normalizeUrl(p.url) && !p.url.startsWith(location.origin)).sort((a, b) => b.lastVisitTime - a.lastVisitTime)) {
+    const date = dateFormat.format(page.lastVisitTime);
+    if (date !== day) items.push(Object.assign(document.createElement('li'), { className: 'day', textContent: day = date }));
+    items.push(pageItem(page.url, page.title));
+  }
+  return items;
+}
+
+// A page in the drawer: its link, and a button that adds it to the group on screen (or to the user's first own group,
+// on a team group they can't change), or says it is there already.
+function pageItem(url, title) {
+  const li = document.createElement('li');
+  li.className = 'page';
+  const a = document.createElement('a');
+  a.href = url;
+  a.title = url;
+  if (browserIcons) { // Firefox would ask each site for its icon: there the titles stand alone
+    const fav = Object.assign(new Image(), { alt: '', loading: 'lazy', src: faviconUrl(url, 32) });
+    a.append(fav);
+  }
+  const label = document.createElement('span');
+  label.textContent = title || hostOf(url);
+  a.append(label);
+  const group = targetGroup(state, activeGroup().id);
+  const add = document.createElement('button');
+  add.type = 'button';
+  add.className = 'icon-btn';
+  const mark = (done) => {
+    add.replaceChildren(icon(done ? 'i-check' : 'i-plus'));
+    add.disabled = done;
+    add.title = t(done ? 'alreadyIn' : 'addTo', group.name);
+    add.setAttribute('aria-label', `${add.title}: ${label.textContent}`);
+  };
+  mark(dialsOf(group).some((d) => sameUrl(d.url, url)));
+  add.addEventListener('click', () => {
+    addDial(state, group.id, { url, title: shortTitle(title) });
+    mark(true);
+    saveAndRender();
+  });
+  li.addEventListener('dragstart', () => { dragId = (dragNew = { id: uid(), url: normalizeUrl(url), title: shortTitle(title), image: '' }).id; });
+  li.addEventListener('dragend', endDrag);
+  li.append(a, add);
+  return li;
+}
+
+// ---------- notes ----------
+// The user's notes (notes.js), in a drawer down the right side: the list, newest first, then the note picked, written
+// in place under a toolbar. A note is stored half a second after the last change and when the drawer closes; one left
+// empty goes when another is picked or the drawer closes. What is pasted is cleaned first (clean), and pictures are made
+// small enough to sync (MAX_DATA). A link opens with Ctrl or ⌘ held, a checklist item ticks by its box.
+// ponytail: a change made in the last half second before the tab closes may not be kept.
+const notesDialog = $('#notes');
+const editor = $('#note-editor');
+editor.dataset.placeholder = t('notePlaceholder');
+document.execCommand('defaultParagraphSeparator', false, 'p');
+let noteId = null; // the note in the editor
+let shownRev = null; // and which version of it
+let noteTimer = null;
+const currentNote = () => readyNotes(state.notes).find((n) => n.id === noteId); // a note waiting for its body isn't shown (notes.js)
+const textOf = (html) => new DOMParser().parseFromString(clean(html).replace(/<\/(p|h\d|li|blockquote|pre|td|th)>|<br>/g, '\n'), 'text/html').body.textContent;
+const noteBlank = (html) => !textOf(html).trim() && !/<(img|table|hr)\b/.test(html);
+const markEmpty = () => editor.toggleAttribute('data-empty', noteBlank(editor.innerHTML));
+
+// What the user should know about their notes not syncing: the room is full, or sync failed.
+async function warnNotes() {
+  const { syncError, syncFull } = await chrome.storage.local.get(['syncError', 'syncFull']);
+  const text = state.settings.sync === false ? '' : syncError || ((await syncCode()) && syncFull && t('picturesFull')) || '';
+  $('#notes-warning').textContent = text;
+  $('#notes-warning').hidden = !text;
+}
+
+function showNotes() {
+  warnNotes();
+  if (!currentNote()) pickNote(newestFirst(readyNotes(state.notes))[0]?.id, false);
+  $('#note-list').replaceChildren(...newestFirst(readyNotes(state.notes)).map((note) => {
+    const [title, second = ''] = textOf(note.html).split('\n').map((line) => line.trim()).filter(Boolean);
+    const li = document.createElement('li');
+    if (note.id === noteId) li.setAttribute('aria-current', 'true');
+    li.append(Object.assign(document.createElement('span'), { className: 'title', textContent: title || t('newNote') }),
+      Object.assign(document.createElement('span'), { className: 'more', textContent: [when(note.at), second].filter(Boolean).join(' · ') }));
+    li.addEventListener('click', () => { pickNote(note.id); editor.focus(); });
+    return li;
+  }));
+  const note = currentNote();
+  if (note && note.rev !== shownRev && document.activeElement !== editor) { // changed elsewhere meanwhile
+    editor.innerHTML = clean(note.html) || '<p><br></p>'; // a first line in a paragraph, as the rest
+    shownRev = note.rev;
+    markEmpty();
+  }
+}
+
+// Put a note in the editor (none: a new one), storing the one that was there; an empty one other than it goes.
+function pickNote(id, draw = true) {
+  keepNote();
+  if (!id) state.notes.push(newNote());
+  const note = readyNotes(state.notes).find((n) => n.id === id) || state.notes.at(-1);
+  dropEmpty(note.id);
+  noteId = note.id;
+  shownRev = note.rev;
+  editor.innerHTML = clean(note.html) || '<p><br></p>'; // a first line in a paragraph, as the rest
+  markEmpty();
+  if (draw) showNotes();
+}
+
+function dropEmpty(keep) {
+  const kept = state.notes.filter((n) => n.id === keep || typeof n.html !== 'string' || !noteBlank(n.html));
+  if (kept.length === state.notes.length) return;
+  state.notes = kept;
+  saveAndRender();
+}
+
+// Store what the editor has, if it changed.
+function keepNote() {
+  if (!noteTimer) return;
+  clearTimeout(noteTimer);
+  noteTimer = null;
+  const note = currentNote();
+  const html = clean(editor.innerHTML);
+  if (!note || html === note.html) return;
+  edit(note, html);
+  shownRev = note.rev;
+  saveAndRender().then(() => { $('#note-status').textContent = t('noteSaved'); });
+}
+const changed = () => {
+  markEmpty();
+  $('#note-status').textContent = '';
+  clearTimeout(noteTimer);
+  noteTimer = setTimeout(keepNote, 500);
+};
+
+$('#open-notes').addEventListener('click', () => {
+  notesDialog.showModal();
+  pickNote(currentNote()?.id || newestFirst(readyNotes(state.notes))[0]?.id);
+  editor.focus();
+});
+$('#note-new').addEventListener('click', () => { pickNote(null); editor.focus(); });
+$('#note-delete').addEventListener('click', () => {
+  const note = currentNote();
+  if (!note || (!noteBlank(note.html) && !confirm(t('confirmDeleteNote')))) return;
+  clearTimeout(noteTimer);
+  noteTimer = null;
+  state.notes = state.notes.filter((n) => n !== note);
+  saveAndRender();
+  pickNote(newestFirst(readyNotes(state.notes))[0]?.id);
+});
+notesDialog.addEventListener('close', () => { keepNote(); dropEmpty(); });
+addEventListener('pagehide', keepNote);
+
+// The selection in the editor, kept for the toolbar's color and picture pickers, which take the focus.
+let noteRange = null;
+document.addEventListener('selectionchange', () => {
+  const sel = getSelection();
+  if (!sel.rangeCount || !editor.contains(sel.anchorNode)) return;
+  noteRange = sel.getRangeAt(0).cloneRange();
+  $('#table-tools').hidden = !at()?.closest('td, th');
+  for (const b of $('#note-tools').querySelectorAll('[data-cmd]')) b.setAttribute('aria-pressed', String(document.queryCommandState(b.dataset.cmd)));
+});
+const at = () => { const node = getSelection().anchorNode; return node?.nodeType === Node.TEXT_NODE ? node.parentElement : node; };
+function format(command, value) {
+  editor.focus();
+  if (noteRange && !editor.contains(getSelection().anchorNode)) {
+    getSelection().removeAllRanges();
+    getSelection().addRange(noteRange);
+  }
+  document.execCommand('styleWithCSS', false, command === 'foreColor' || command === 'hiliteColor'); // a color is a style; bold is <b>
+  document.execCommand(command, false, value);
+  changed();
+}
+
+$('#note-tools').addEventListener('mousedown', (e) => { if (e.target.closest('button')) e.preventDefault(); }); // the editor keeps its selection
+$('#note-tools').addEventListener('click', (e) => {
+  const b = e.target.closest('button');
+  if (b?.dataset.cmd) format(b.dataset.cmd);
+  else if (b?.dataset.block) format('formatBlock', document.queryCommandValue('formatBlock').toLowerCase() === b.dataset.block ? 'p' : b.dataset.block);
+  else if (b?.dataset.table) tableEdit(b.dataset.table);
+});
+$('#note-color').addEventListener('change', (e) => format('foreColor', e.target.value));
+$('#note-highlight').addEventListener('change', (e) => format('hiliteColor', e.target.value));
+$('#note-checklist').addEventListener('click', checklist);
+function checklist() {
+  const list = at()?.closest('ul, ol');
+  if (list?.matches('ul[data-checklist]')) return format('insertUnorderedList'); // off
+  if (list?.tagName !== 'UL') format('insertUnorderedList');
+  at()?.closest('ul')?.setAttribute('data-checklist', '');
+  changed();
+}
+$('#note-link').addEventListener('click', () => {
+  const range = noteRange;
+  let url = prompt(t('linkAddress'), 'https://')?.trim();
+  if (!url || url === 'https://') return;
+  if (!/^(https?:|mailto:)/i.test(url)) url = `https://${url}`;
+  noteRange = range;
+  if (range && !range.collapsed) format('createLink', url);
+  else format('insertHTML', clean(`<a href="${url.replace(/"/g, '%22')}">${url.replace(/</g, '&lt;')}</a>&nbsp;`));
+});
+$('#note-table').addEventListener('click', () => {
+  const row = `<tr>${'<td><br></td>'.repeat(3)}</tr>`;
+  format('insertHTML', `<table><tbody>${row.repeat(3)}</tbody></table><p><br></p>`);
+});
+function tableEdit(what) {
+  const cell = at()?.closest('td, th');
+  if (!cell) return;
+  const table = cell.closest('table');
+  const i = cell.cellIndex;
+  const emptyCell = (tag = 'td') => Object.assign(document.createElement(tag), { innerHTML: '<br>' });
+  if (what === 'row') {
+    const tr = document.createElement('tr');
+    tr.append(...Array.from(cell.parentElement.cells, () => emptyCell()));
+    cell.parentElement.after(tr);
+  } else if (what === 'column') for (const tr of table.rows) (tr.cells[i] ? tr.cells[i].after(emptyCell(tr.cells[i].tagName)) : tr.append(emptyCell()));
+  else if (what === '-row') (table.rows.length > 1 ? cell.parentElement.remove() : table.remove());
+  else if (cell.parentElement.cells.length > 1) for (const tr of table.rows) tr.cells[i]?.remove();
+  else table.remove();
+  changed();
+}
+
+$('#note-image').addEventListener('change', (e) => { insertPictures([...e.target.files]); e.target.value = ''; });
+editor.addEventListener('paste', (e) => {
+  const files = [...e.clipboardData.files];
+  const html = e.clipboardData.getData('text/html');
+  if (!files.length && !html) return; // plain text: as the browser pastes it
+  e.preventDefault();
+  if (files.length) insertPictures(files);
+  else format('insertHTML', clean(html));
+});
+editor.addEventListener('drop', (e) => {
+  const files = [...e.dataTransfer.files];
+  if (!files.length) return;
+  e.preventDefault();
+  insertPictures(files);
+});
+// Small enough for sync to carry (sync.js MAX_DATA): a photo is made smaller until it is.
+async function insertPictures(files) {
+  for (const file of files.filter((f) => /^image\/(png|jpeg|gif|webp)$/.test(f.type))) {
+    let data = await readAsDataUrl(file, 1200, 140_000);
+    for (const side of [900, 600, 400]) if (data.length > MAX_DATA) data = await readAsDataUrl(file, side);
+    format('insertHTML', `<img src="${data}">`);
+  }
+}
+
+editor.addEventListener('input', (e) => {
+  if (e.inputType === 'insertText' && e.data === ' ') shortcut();
+  if (e.inputType === 'insertParagraph') at()?.closest('li')?.removeAttribute('data-done'); // a new item isn't done yet
+  changed();
+});
+// Markdown at the start of a line: "- " or "* " a list, "1. " a numbered one, "[] " a checklist, "# " and "## "
+// headings, "> " a quote.
+const SHORTCUTS = { '-': 'insertUnorderedList', '*': 'insertUnorderedList', '1.': 'insertOrderedList', '[]': checklist, '#': 'h1', '##': 'h2', '>': 'blockquote' };
+function shortcut() {
+  const node = getSelection().anchorNode;
+  const offset = getSelection().anchorOffset;
+  if (node?.nodeType !== Node.TEXT_NODE || node.previousSibling) return;
+  const mark = node.textContent.slice(0, offset).replace(/[\s ]$/, '');
+  const does = Object.hasOwn(SHORTCUTS, mark) && SHORTCUTS[mark];
+  if (!does || (typeof does === 'string' && does.startsWith('insert') && at().closest('li'))) return;
+  getSelection().setBaseAndExtent(node, 0, node, offset);
+  document.execCommand('delete'); // the mark, as typed
+  if (typeof does === 'function') does();
+  else if (does.startsWith('insert')) format(does);
+  else format('formatBlock', does);
+}
+// Bold, italic, underline from the keyboard: Chrome does these itself, Firefox doesn't (on a Mac its ⌘B opens the bookmarks sidebar)
+const KEYS = { b: 'bold', i: 'italic', u: 'underline' };
+editor.addEventListener('keydown', (e) => {
+  const command = (e.metaKey || e.ctrlKey) && !e.altKey && !e.shiftKey && KEYS[e.key.toLowerCase()];
+  if (!command) return;
+  e.preventDefault();
+  format(command);
+});
+editor.addEventListener('click', (e) => {
+  const item = e.target.closest('ul[data-checklist] > li');
+  if (item && e.target === item && e.clientX - item.getBoundingClientRect().left < 24) {
+    item.toggleAttribute('data-done');
+    if (item.hasAttribute('data-done')) item.setAttribute('data-done', 'true');
+    changed();
+  }
+  const link = e.target.closest('a[href]');
+  if (link && (e.metaKey || e.ctrlKey)) open(link.href, '_blank', 'noopener');
+});
+
+// ---------- to-dos ----------
+// The to-dos (todos.js), in a card on the page that the header's button shows and hides. The user drags it by its bar
+// anywhere: its place, x and y from 0 to 1 (`todoAt`), is across the room the window leaves around the card, so the
+// card stays whole in any window and keeps to an edge it was put against. Whether it shows and where follow the user
+// with the look (sync.js). A to-do is written in the field at the top (Enter adds it, first in the list), ticked by
+// its box, changed in place (Enter or leaving it keeps the change; emptied, it goes) and dragged by its grip to another
+// place in the list. Those done fold away under the list, the one done last first.
+// ponytail: a to-do being changed when the tab closes keeps its old text.
+const todoCard = $('#todo');
+const todoById = (id) => state.todos.find((x) => x.id === id);
+const placeTodo = (x, y) => { todoCard.style.setProperty('--x', x); todoCard.style.setProperty('--y', y); };
+const editingTodo = () => document.activeElement?.matches('.todo-list .text');
+let draggedTodo = null;
+// What the list on screen shows; it is drawn again only when that changes, so a click on it isn't lost to a redraw.
+const todosNow = () => state.todos.map((x) => x.rev).join();
+let todosDrawn = '';
+
+function drawTodos() {
+  const on = state.settings.todoOn === true;
+  todoCard.hidden = !on;
+  $('#open-todo').setAttribute('aria-pressed', String(on));
+  if (!on) return;
+  if (!todoCard.classList.contains('moving')) placeTodo(...(state.settings.todoAt || [1, 0.15])); // at first: right, under the header
+  if (editingTodo() || todosNow() === todosDrawn) return; // while one is changed: drawn again once the change is kept
+  todosDrawn = todosNow();
+  const done = finished(state.todos);
+  $('#todo-list').replaceChildren(...pending(state.todos).map(todoItem));
+  $('#todo-done').hidden = !done.length;
+  $('#todo-done summary').textContent = t('doneTodos', done.length);
+  $('#todo-done-list').replaceChildren(...done.map(todoItem));
+}
+
+function todoItem({ id, text: words, done }) {
+  const li = document.createElement('li');
+  li.dataset.id = id;
+  const box = Object.assign(document.createElement('input'), { type: 'checkbox', checked: done });
+  box.setAttribute('aria-label', words);
+  box.addEventListener('change', () => {
+    const todo = todoById(id);
+    if (todo) change(todo, { done: box.checked }); // ticked off again, it goes back where it was
+    saveAndRender();
+  });
+  const text = Object.assign(document.createElement('span'), { className: 'text', textContent: words, spellcheck: false });
+  text.contentEditable = 'plaintext-only';
+  text.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && !e.isComposing) { e.preventDefault(); text.blur(); }
+    if (e.key === 'Escape') { text.textContent = todoById(id)?.text ?? words; text.blur(); }
+  });
+  text.addEventListener('blur', () => {
+    const todo = todoById(id);
+    const now = text.textContent.replace(/\s+/g, ' ').trim().slice(0, MAX_TEXT);
+    if (!todo || now === todo.text) return;
+    if (now) {
+      change(todo, { text: now });
+      box.setAttribute('aria-label', now);
+      if (todosDrawn) todosDrawn = todosNow(); // the list shows it already
+    } else state.todos = state.todos.filter((x) => x !== todo);
+    saveAndRender();
+  });
+  const remove = Object.assign(document.createElement('button'), { type: 'button', className: 'icon-btn', title: t('deleteTodo') });
+  remove.setAttribute('aria-label', t('deleteTodo'));
+  remove.append(icon('i-close'));
+  remove.addEventListener('click', () => {
+    state.todos = state.todos.filter((x) => x.id !== id);
+    saveAndRender();
+  });
+  if (done) li.append(box, text, remove);
+  else {
+    const grip = icon('i-grip');
+    grip.classList.add('grip');
+    grip.addEventListener('pointerdown', () => { li.draggable = true; }); // by its grip only: the text is for writing in
+    li.addEventListener('dragstart', (e) => {
+      draggedTodo = id;
+      e.dataTransfer.effectAllowed = 'move';
+      e.dataTransfer.setData('text/plain', words);
+      li.classList.add('dragging');
+    });
+    li.addEventListener('dragend', () => {
+      li.draggable = false;
+      draggedTodo = null;
+      li.classList.remove('dragging');
+      for (const x of $('#todo-list').querySelectorAll('[data-drop]')) delete x.dataset.drop;
+    });
+    li.append(grip, box, text, remove);
+  }
+  return li;
+}
+
+// Where a dragged to-do would go: before the item under the pointer, or after it past its middle.
+function dropSpot(e) {
+  const over = e.target.closest?.('#todo-list > li');
+  if (!over) return { over: null, next: null };
+  const after = e.clientY > over.getBoundingClientRect().top + over.offsetHeight / 2;
+  return { over, after, next: after ? over.nextElementSibling : over };
+}
+$('#todo-list').addEventListener('dragover', (e) => {
+  if (!draggedTodo) return;
+  e.preventDefault();
+  const { over, after } = dropSpot(e);
+  for (const x of $('#todo-list').querySelectorAll('[data-drop]')) if (x !== over) delete x.dataset.drop;
+  if (over) over.dataset.drop = after ? 'after' : 'before';
+});
+$('#todo-list').addEventListener('drop', (e) => {
+  const moving = draggedTodo && todoById(draggedTodo);
+  if (!moving) return;
+  e.preventDefault();
+  const { over, next } = dropSpot(e);
+  const before = next && todoById(next.dataset.id);
+  if (!over || before === moving) return;
+  change(moving, { pos: posBefore(state.todos.filter((x) => x !== moving), before) });
+  saveAndRender();
+});
+
+$('#open-todo').addEventListener('click', () => {
+  state.settings.todoOn = state.settings.todoOn !== true;
+  saveAndRender();
+  if (state.settings.todoOn) $('#todo-new').focus();
+});
+$('#todo-close').addEventListener('click', () => {
+  state.settings.todoOn = false;
+  saveAndRender();
+});
+$('#todo-add').addEventListener('submit', (e) => {
+  e.preventDefault();
+  const words = $('#todo-new').value.replace(/\s+/g, ' ').trim();
+  if (!words) return;
+  state.todos.push(newTodo(words, posBefore(state.todos, pending(state.todos)[0])));
+  $('#todo-new').value = '';
+  saveAndRender();
+});
+$('#todo-clear').addEventListener('click', () => {
+  if (!confirm(t('confirmClearDone'))) return;
+  state.todos = state.todos.filter((x) => !x.done);
+  saveAndRender();
+});
+
+// The card's bar moves it.
+$('.todo-bar').addEventListener('pointerdown', (e) => {
+  if (e.button !== 0 || e.target.closest('button')) return;
+  e.preventDefault();
+  const bar = e.currentTarget;
+  const { left, top, width, height } = todoCard.getBoundingClientRect();
+  const [dx, dy] = [e.clientX - left, e.clientY - top];
+  const share = (n, room) => Math.round(Math.min(1, Math.max(0, n / room || 0)) * 1000) / 1000;
+  let spot = null;
+  const move = (ev) => placeTodo(...(spot = [share(ev.clientX - dx, innerWidth - width), share(ev.clientY - dy, innerHeight - height)]));
+  todoCard.classList.add('moving');
+  bar.setPointerCapture(e.pointerId);
+  bar.addEventListener('pointermove', move);
+  bar.addEventListener('lostpointercapture', () => { // let go, or the browser took the pointer
+    bar.removeEventListener('pointermove', move);
+    todoCard.classList.remove('moving');
+    if (!spot) return;
+    state.settings.todoAt = spot;
+    saveAndRender();
+  }, { once: true });
+});
+
 // ---------- sort (paid) ----------
 // Suggests a better group for each dial of the group on screen, and moves the ones the user keeps checked.
 const sortDialog = $('#sort-dialog');
@@ -780,9 +1355,16 @@ $('#sort-go').addEventListener('click', async (e) => {
 
 // ---------- settings ----------
 const settingsDialog = $('#settings-dialog');
+// The sliders of the Appearance tab: each is the setting of its name, shown beside it the way given here.
+const sliders = { columns: String, size: (v) => `${v}%`, gap: String, radius: String, text: String };
 $('#open-settings').addEventListener('click', () => {
-  $('#columns').value = state.settings.columns;
-  $('#columns-out').textContent = state.settings.columns;
+  for (const [name, shown] of Object.entries(sliders)) {
+    $(`#${name}`).value = look()[name];
+    $(`#${name}-out`).textContent = shown(look()[name]);
+  }
+  $('#titles-on').checked = state.settings.titles !== false;
+  $('#theme').value = look().theme;
+  $('#font').value = look().font;
   $('#bg-color').value = backgroundKind(state.settings.background) === 'color' ? state.settings.background : '#f1f3f6';
   $('#import-status').textContent = '';
   $('#sync-on').checked = state.settings.sync !== false;
@@ -807,8 +1389,17 @@ function showTab(name) {
 $('#settings-tabs').addEventListener('change', (e) => showTab(e.target.value));
 
 async function showSyncStatus() {
-  const { syncError } = await chrome.storage.local.get('syncError');
-  $('#sync-status').textContent = state.settings.sync !== false && syncError || '';
+  const { syncError, syncFull } = await chrome.storage.local.get(['syncError', 'syncFull']);
+  const on = state.settings.sync !== false;
+  $('#sync-status').textContent = on ? [syncError, (await syncCode()) && syncFull && t('picturesFull')].filter(Boolean).join('\n') : '';
+  $('#sync-usage').textContent = '';
+  if (!on) return;
+  const used = await usage(state).catch(() => null);
+  const size = (bytes) => new Intl.NumberFormat(uiLanguage(), { style: 'unit', unit: bytes >= 1e6 ? 'megabyte' : 'kilobyte', maximumFractionDigits: 1 })
+    .format(bytes >= 1e6 ? bytes / 1e6 : Math.max(0.1, bytes / 1e3));
+  const percent = (part, all) => new Intl.NumberFormat(uiLanguage(), { style: 'percent' }).format(Math.min(1, part / all));
+  if (used?.browser !== undefined) $('#sync-usage').textContent = t('syncUsageBrowser', size(used.browser), size(used.most));
+  else if (used) $('#sync-usage').textContent = t('syncUsageCode', percent(used.text, used.textMost), size(used.pictures), size(used.picturesMost));
 }
 $('#sync-on').addEventListener('change', async (e) => {
   state.settings.sync = e.target.checked;
@@ -864,15 +1455,18 @@ async function syncWith(code) {
 // shows them: Firefox lends extensions no icons, and a new Chrome hasn't been to the sites yet. An admin's browser does
 // the same for the team's dials (team.js), whose members may never have opened those sites.
 // ponytail: an icon is kept once; a site's new icon isn't picked up until the dial's address changes.
+// The browser hands an icon over as a PNG, whatever it calls it: Chrome says image/bmp and Edge says nothing, and a
+// picture that doesn't say it is one is refused by the browser it is sent to (sync.js fetchInto). So it is kept as
+// what it is, and an icon 0.4 kept in Edge without a type is kept again.
+const dataUrl = async (blob) => `data:${blob.type};base64,${new Uint8Array(await blob.arrayBuffer()).toBase64()}`;
 async function keepIcons() {
   if (!browserIcons) return;
   const code = await syncCode();
   let kept = false;
   for (const d of state.groups.filter((g) => (g.team ? !locked(g) : code)).flatMap(dialsOf)) {
     try {
-      if (d.icon || d.ico || !(await findIcon(d.url))) continue;
-      const blob = await (await fetch(faviconUrl(d.url, 32))).blob();
-      d.icon = `data:${blob.type};base64,${new Uint8Array(await blob.arrayBuffer()).toBase64()}`;
+      if (d.icon?.startsWith('data:image/') || d.ico || !(await findIcon(d.url))) continue;
+      d.icon = await dataUrl(new Blob([await (await fetch(faviconUrl(d.url, 32))).blob()], { type: 'image/png' }));
       kept = true;
     } catch {} // that icon another time
   }
@@ -1068,9 +1662,10 @@ $('#drive-restore').addEventListener('click', (e) => run(e.currentTarget, async 
   if (!confirm(t('confirmDriveRestore'))) return;
   const text = await readDriveBackup();
   const { added, thumbnails } = mergeImport(state, parseImport(text));
-  const { background, columns } = JSON.parse(text).settings || {};
-  if (typeof background === 'string') state.settings.background = background;
-  if (Number.isInteger(columns)) state.settings.columns = columns;
+  const { settings } = JSON.parse(text);
+  if (typeof settings?.background === 'string') state.settings.background = settings.background; // an uploaded picture too
+  takeNotesAndTodos(text);
+  Object.assign(state.settings, lookOf(settings));
   await saveAndRender();
   await backUpToDrive(true); // the backup now holds this computer's dials too, and daily backups go on from here
   backupStatus([t('driveRestored', plural(added, 'nDials'), plural(thumbnails, 'nThumbnails')), await permissionNote(text)].filter(Boolean).join('\n'));
@@ -1271,11 +1866,24 @@ async function addTopSites() {
   }
 }
 $('#settings-dialog .add-top-sites').addEventListener('click', addTopSites);
-$('#columns').addEventListener('input', (e) => {
-  state.settings.columns = Number(e.target.value);
-  $('#columns-out').textContent = e.target.value;
-  saveAndRender();
-});
+for (const [name, shown] of Object.entries(sliders)) {
+  $(`#${name}`).addEventListener('input', (e) => {
+    state.settings[name] = Number(e.target.value);
+    $(`#${name}-out`).textContent = shown(e.target.value);
+    saveAndRender();
+  });
+}
+$('#titles-on').addEventListener('change', (e) => { state.settings.titles = e.target.checked; saveAndRender(); });
+$('#theme').addEventListener('change', (e) => { state.settings.theme = e.target.value; saveAndRender(); });
+$('#font').addEventListener('input', (e) => { state.settings.font = e.target.value.trim().replace(/["\\]/g, ''); saveAndRender(); });
+// The fonts on this computer, to pick from, each under the name the browser shows for it: asked of the browser when the
+// field is first entered (chrome.fontSettings, which names families only and so answers at once; queryLocalFonts took
+// 9 s to describe 1,615 faces). Firefox has no such list: there a font's name is typed. The list stays in the page.
+$('#font').addEventListener('focus', async () => {
+  try {
+    $('#fonts').replaceChildren(...(await chrome.fontSettings.getFontList()).map((f) => new Option(f.displayName, f.fontId)));
+  } catch {}
+}, { once: true });
 $('#search-on').addEventListener('change', (e) => {
   state.settings.searchBox = e.target.checked;
   $('#search').value = query = '';
@@ -1291,7 +1899,8 @@ $('#bg-file').addEventListener('change', async (e) => {
   const file = e.target.files[0];
   if (!file) return;
   try {
-    state.settings.background = await readAsDataUrl(file, 2560);
+    // No larger than the screen can show, and kept as the file it is when it fits: compressing it again only costs sharpness.
+    state.settings.background = await readAsDataUrl(file, Math.max(2560, Math.max(screen.width, screen.height) * devicePixelRatio), 3e6);
     saveAndRender();
   } catch {
     showError(t('imageUnreadable'));
@@ -1307,17 +1916,53 @@ $('#export').addEventListener('click', async () => {
   URL.revokeObjectURL(a.href);
 });
 
+// An import can name a dial's icon by a link: Infinity's backup does, its icons being on Infinity's servers. Each is
+// fetched once, here, and kept in the dial, small; shown from the link, it would ask that server on every new tab.
+// One that doesn't come within a few seconds is left out, and the dial shows its site's own icon, as any other does.
+async function fetchIcons(groups) {
+  await Promise.all(groups.flatMap(dialsOf).filter((d) => /^https:/i.test(d.icon || '')).map(async (d) => {
+    try {
+      const picture = await createImageBitmap(await (await fetch(d.icon, { signal: AbortSignal.timeout(6000) })).blob());
+      const canvas = new OffscreenCanvas(64, 64);
+      canvas.getContext('2d').drawImage(picture, 0, 0, 64, 64);
+      d.icon = await dataUrl(await canvas.convertToBlob());
+    } catch {
+      delete d.icon;
+    }
+  }));
+}
+
+// The notes and to-dos of a Tabdial export or Drive backup, merged in by id as sync does. Returns how many are new.
+function takeNotesAndTodos(text) {
+  let notes, todos;
+  try { ({ notes, todos } = JSON.parse(text)); } catch { return [0, 0]; }
+  const had = new Set([...state.notes, ...state.todos].map((x) => x.id));
+  const valid = Array.isArray(notes) ? notes.filter((n) => typeof n?.id === 'string' && typeof n.rev === 'string' && Number.isFinite(n.at) && typeof n.html === 'string') : [];
+  state.notes = mergeNotes(state.notes, valid, null);
+  state.todos = mergeTodos(state.todos, (Array.isArray(todos) && readTodos(syncedTodos(todos.filter(Boolean)))) || [], null);
+  return [state.notes.filter((n) => !had.has(n.id) && !noteBlank(n.html)).length, state.todos.filter((x) => !had.has(x.id)).length];
+}
+
 async function importText(text) {
   const status = $('#import-status');
   try {
-    const { added, thumbnails } = mergeImport(state, parseImport(text));
+    const groups = parseImport(text);
+    await fetchIcons(groups);
+    const { added, thumbnails } = mergeImport(state, groups);
+    const notes = infinityNotes(text).map(clean).filter((html) => !noteBlank(html) && !state.notes.some((n) => n.html === html));
+    state.notes.push(...notes.map(newNote));
+    const todos = infinityTodos(text).filter((x) => !state.todos.some((y) => y.text === x.text));
+    for (const { text: words, done } of todos) state.todos.push({ ...newTodo(words, posBefore(state.todos)), done });
+    const [ownNotes, ownTodos] = takeNotesAndTodos(text); // a Tabdial export's own
     await saveAndRender();
     status.textContent = added && thumbnails ? t('importedAndRestored', plural(added, 'nDials'), plural(thumbnails, 'nThumbnails'))
       : added ? t('imported', plural(added, 'nDials'))
       : thumbnails ? t('restoredThumbnails', plural(thumbnails, 'nThumbnails'))
       : t('nothingToImport');
-    const note = await permissionNote(text);
-    if (note) status.textContent += `\n${note}`;
+    if (notes.length + ownNotes) status.textContent += `\n${t('importedNotes', plural(notes.length + ownNotes, 'nNotes'))}`;
+    if (todos.length + ownTodos) status.textContent += `\n${t('importedTodos', plural(todos.length + ownTodos, 'nTodos'))}`;
+    const permission = await permissionNote(text);
+    if (permission) status.textContent += `\n${permission}`;
   } catch (err) {
     status.textContent = err.message;
   }
@@ -1332,12 +1977,18 @@ $('#import-paste').addEventListener('click', () => {
   $('#import-text').value = '';
 });
 
-// Resize uploads so a photo doesn't bloat storage.
-function readAsDataUrl(file, maxSide) {
+// Resize uploads so a photo doesn't bloat storage. A picture that is already small enough, in pixels and at most
+// `keepBytes` as a file, is stored as it is (an animated one then still moves).
+function readAsDataUrl(file, maxSide, keepBytes = 0) {
   return new Promise((resolve, reject) => {
     const img = new Image();
     img.onload = () => {
       const scale = Math.min(1, maxSide / Math.max(img.width, img.height));
+      if (scale === 1 && file.size <= keepBytes) {
+        URL.revokeObjectURL(img.src);
+        const reader = Object.assign(new FileReader(), { onload: () => resolve(reader.result), onerror: reject });
+        return reader.readAsDataURL(file);
+      }
       const canvas = document.createElement('canvas');
       canvas.width = Math.round(img.width * scale);
       canvas.height = Math.round(img.height * scale);
@@ -1405,6 +2056,7 @@ recheckPaid();
 const teamsReady = refreshTeams(state).then((changed) => changed && saveAndRender(), () => {}).then(teamPictures);
 // offline, or the site is down: as it last was. The icons once the team groups are the site's, not while they change.
 syncSite(state).then((changed) => changed && render(), () => {}).then(() => teamsReady).then(keepIcons);
+shareLook();
 // The join page on nexuscortex.dev hands an invite link, or a link with a sync code, over through the service worker
 // (background.js).
 if (location.hash.startsWith('#join=')) {
