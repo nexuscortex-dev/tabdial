@@ -1,12 +1,13 @@
-import { load, save, sendLook, syncNow, syncSite, uid, normalizeUrl, addDial, targetGroup, listBackups, restoreBackup, addMostVisited, shortTitle, BEFORE_RESTORE, COPIES, FULL_COPIES } from './store.js';
+import { load, save, sendLook, syncNow, syncSite, uid, normalizeUrl, addDial, targetGroup, listBackups, restoreBackup, addMostVisited, shortTitle, tidyTitle, BEFORE_RESTORE, COPIES, FULL_COPIES } from './store.js';
 import { parseImport, exportState, mergeImport, historyOn, permissionNote, infinityNotes, infinityTodos } from './import.js';
 import { countDials, dialsOf, itemsIn, sameUrl, hostOf, ownGroups } from './merge.js';
 import { syncCode, siteAllowed, parseCode, codeLink, startSync, useCode, stopSync, sendPictures, lookOf, usage, MAX_DATA, SYNC_DATA } from './sync.js';
 import { newNote, edit, newestFirst, clean, mergeNotes, shown as readyNotes } from './notes.js';
-import { newTodo, change, pending, finished, posBefore, synced as syncedTodos, readSynced as readTodos, mergeTodos, MAX_TEXT } from './todos.js';
+import { newTodo, change, pending, finished, posBefore, synced as syncedTodos, readSynced as readTodos, mergeTodos, sectionOf, byDue, dayOf, SECTIONS, MAX_TEXT } from './todos.js';
 import { readOnly, refreshTeams, fetchTeamPictures, sendTeamPictures, createTeam, peekTeam, joinTeam, leaveTeam, deleteTeam, listMembers, removeMember, replaceLink, setAdmin, listCopies, restoreCopy } from './team.js';
 import { isPaid, checkPaid, recheckPaid, hasAskedToPay, openPaymentPage, unlockWithKey } from './pay.js';
 import { suggestMoves, loose } from './sort.js';
+import { remove, moveTo, putInFolder, takeOutOfFolder, undo, prune, hasAddress } from './select.js';
 import { jumpList, jump, matching, searchBoxList } from './jump.js';
 import { getDrive, connectDrive, backUpToDrive, readDriveBackup, disconnectDrive, signInNeeded, identity } from './drive.js';
 import { t, plural, uiLanguage } from './i18n.js';
@@ -44,9 +45,7 @@ const adminTeams = () => Object.entries(state.teams).filter(([, team]) => team.a
 // (another admin saved first, a refund) may have put the site's version back, so the page is drawn again; so it is
 // when the save brought dials another browser had synced meanwhile (sync.js).
 const saveAndRender = () => {
-  // a folder exists only while it holds a dial, and one that held only an emptied folder goes with it
-  const prune = (list) => { for (let i = list.length; i--;) if (list[i].dials && !prune(list[i].dials).length) list.splice(i, 1); return list; };
-  state.groups.forEach((g) => prune(g.dials));
+  state.groups.forEach((g) => prune(g.dials)); // a folder exists only while it holds a dial (select.js)
   render();
   shareLook();
   return save(state).then((merged) => { if (merged) render(); },
@@ -274,6 +273,9 @@ function render() {
       e.preventDefault();
       b.classList.remove('drop-target');
       const added = adopt(g.id);
+      // not into a group that has its address already (a folder: any of its dials')
+      const item = listOf(dragId)?.find((d) => d.id === dragId);
+      if (item && groupOf(dragId) !== g && hasAddress(g, item)) return showError(t('alreadyIn', g.name), true);
       if (moveDial(dragId, g.id) || added) saveAndRender();
     });
     return b;
@@ -289,14 +291,35 @@ function render() {
   $('#search-box').hidden = state.settings.searchBox === false;
   const found = query.trim() ? matching(searchBoxList(state.groups, group.id), query).map((c) => c.dial) : null;
   const dials = found || group.dials;
-  const items = dials.map((d) => (d.dials ? folderTile(d, !fixed) : dialTile(d, !found && !fixed, found ? locked(groupOf(d.id)) : fixed)));
+  checkPicking();
+  const still = fixed || Boolean(picking); // nothing dragged while ticking
+  const items = dials.map((d) => (d.dials ? folderTile(d, !still) : dialTile(d, !found && !still, found ? locked(groupOf(d.id)) : fixed)));
+  $('#select').hidden = fixed || Boolean(found) || !group.dials.length;
+  $('#select').setAttribute('aria-pressed', String(Boolean(picking && !picking.folder)));
 
-  $('#grid').style.setProperty('--n', dials.length ? Math.min(dials.length + (found || fixed ? 0 : 1), columns) : columns);
+  gridCount = dials.length ? dials.length + (found || fixed ? 0 : 1) : 0;
+  fitGrid();
   if (found) $('#grid').replaceChildren(...items, ...(found.length ? [] : [noMatch()]));
   else if (fixed) $('#grid').replaceChildren(...items, ...(group.dials.length ? [] : [noMatch(t('teamGroupEmpty'))]));
   else $('#grid').replaceChildren(...items, group.dials.length || group.team ? addTile() : welcome());
+  markPicked($('#grid'), picking && !picking.folder);
   if (folderDialog.open) renderFolder();
+  showSelectBar();
 }
+
+// As many columns as Settings asks, but fewer when the window is too narrow for dials MIN_DIAL wide (a title in a
+// narrower dial is cut to a few letters), or as wide as Settings makes them when that is less.
+const MIN_DIAL = 140;
+let gridCount = 0; // the tiles in the grid, the add tile included
+function fitGrid() {
+  const { columns, gap, size } = look();
+  const grid = $('#grid');
+  const least = Math.min(MIN_DIAL, 216 * size / 100 - 18);
+  const cols = Math.max(1, Math.min(columns, Math.floor((grid.clientWidth + gap) / (least + gap))));
+  grid.style.setProperty('--c', cols);
+  grid.style.setProperty('--n', gridCount ? Math.min(gridCount, cols) : cols);
+}
+addEventListener('resize', () => { fitGrid(); clearClock(); });
 
 // `copy`: a dial of a group the user can't change can be copied into their own groups instead.
 function dialTile(d, movable, copy) {
@@ -315,8 +338,9 @@ function dialTile(d, movable, copy) {
   fav.src = faviconUrl(d.url, 32);
   const label = document.createElement('span');
   label.className = 'label';
-  label.textContent = d.title || hostOf(d.url);
-  meta.append(fav, label);
+  label.textContent = tidyTitle(d.title) || hostOf(d.url);
+  // The site's icon beside the title only under a picture: over the site's own icon it would say the same twice.
+  meta.append(...(d.image ? [fav] : []), label);
   if (state.settings.titles === false) a.title = label.textContent; // with the titles hidden, a tile still has its name
   a.append(thumbEl(d.url, d.image, d.title), meta);
   const edit = document.createElement('button');
@@ -379,7 +403,13 @@ function renderFolder() {
   $('#folder-up-name').textContent = up?.name || '';
   $('#folder-name').value = folder.name;
   $('#folder-name').readOnly = fixed;
-  $('#folder-grid').replaceChildren(...folder.dials.map((d) => (d.dials ? folderTile(d, !fixed) : dialTile(d, !fixed, fixed))));
+  checkPicking();
+  const still = fixed || Boolean(picking);
+  $('#folder-grid').replaceChildren(...folder.dials.map((d) => (d.dials ? folderTile(d, !still) : dialTile(d, !still, fixed))));
+  $('#folder-select').hidden = fixed;
+  $('#folder-select').setAttribute('aria-pressed', String(Boolean(picking?.folder)));
+  markPicked($('#folder-grid'), picking?.folder);
+  showSelectBar(); // e.g. ended by going up to the folder around this one
 }
 $('#folder-up').addEventListener('click', () => { const up = folderOf(openFolderId); if (up) openFolder(up.id); });
 $('#folder-name').addEventListener('change', (e) => {
@@ -393,6 +423,192 @@ folderDialog.addEventListener('dragover', (e) => {
   const r = folderDialog.getBoundingClientRect();
   const outside = e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom;
   if (dragId && outside) folderDialog.close();
+});
+
+folderDialog.addEventListener('close', () => {
+  if (picking?.folder) { picking = null; render(); }
+  for (const bar of [$('#select-bar'), $('#undo-bar')]) if (folderDialog.contains(bar)) $('#error').before(bar);
+});
+
+// ---------- Selection ----------
+// Ticking dials and folders of one list, a group's or an open folder's, to delete or move them at once (select.js).
+// `picking` says whose list ({ group } or { folder }, by id) and holds the ids ticked; it ends with an action, Done or
+// Esc, and when that list leaves the screen (another group, the folder closed or another opened, words in the Search
+// box). While it lasts a click on a tile ticks it, and nothing is dragged.
+let picking = null;
+const NEW_ITEM = '+'; // the "New group" and "New folder" choices; '+' is nobody's id
+const pickList = () => (picking?.folder ? findFolder(picking.folder)?.dials : state.groups.find((g) => g.id === picking?.group)?.dials);
+const ticked = () => [...picking.ids];
+
+function startPicking(folder) {
+  picking = { ...(folder ? { folder: openFolderId } : { group: activeGroup().id }), ids: new Set(), anchor: null };
+  render();
+}
+function endPicking() {
+  picking = null;
+  render();
+}
+// Still on screen, and only what is still in the list ticked (another tab or computer may have changed it).
+function checkPicking() {
+  if (!picking) return;
+  const list = pickList();
+  const here = picking.folder ? folderDialog.open && openFolderId === picking.folder && list && !locked(groupOf(picking.folder))
+    : !folderDialog.open && picking.group === activeGroup().id && !query.trim() && list && !locked(activeGroup());
+  if (!here) { picking = null; return; }
+  const ids = new Set(list.map((d) => d.id));
+  for (const id of picking.ids) if (!ids.has(id)) picking.ids.delete(id);
+}
+function markPicked(grid, on) {
+  grid.classList.toggle('selecting', Boolean(on));
+  for (const li of grid.querySelectorAll(':scope > li[data-id]')) {
+    const tile = li.querySelector('.tile');
+    li.classList.toggle('picked', Boolean(on) && picking.ids.has(li.dataset.id));
+    if (on) {
+      tile.setAttribute('role', 'checkbox');
+      tile.setAttribute('aria-checked', String(picking.ids.has(li.dataset.id)));
+    } else {
+      tile.removeAttribute('role');
+      tile.removeAttribute('aria-checked');
+    }
+  }
+}
+// One tick on or off; with Shift, every one from the last ticked to this one on.
+function pick(id, range) {
+  const ids = pickList().map((d) => d.id);
+  if (range && ids.includes(picking.anchor)) {
+    const [a, b] = [ids.indexOf(picking.anchor), ids.indexOf(id)].sort((x, y) => x - y);
+    for (const x of ids.slice(a, b + 1)) picking.ids.add(x);
+  } else {
+    if (!picking.ids.delete(id)) picking.ids.add(id);
+    picking.anchor = id;
+  }
+  markPicked(picking.folder ? $('#folder-grid') : $('#grid'), true);
+  showSelectBar();
+}
+for (const grid of [$('#grid'), $('#folder-grid')]) {
+  const mine = () => picking && (grid.id === 'folder-grid') === Boolean(picking.folder);
+  grid.addEventListener('click', (e) => {
+    const li = e.target.closest('li[data-id]');
+    if (!mine() || li?.parentElement !== grid) return;
+    e.preventDefault();
+    e.stopPropagation();
+    pick(li.dataset.id, e.shiftKey);
+  }, true);
+  // Space ticks a dial as it does a folder (a button); Enter is a click
+  grid.addEventListener('keydown', (e) => {
+    if (mine() && e.key === ' ' && e.target.matches('a.tile')) { e.preventDefault(); pick(e.target.closest('li').dataset.id, e.shiftKey); }
+  });
+}
+$('#select').addEventListener('click', () => (picking ? endPicking() : startPicking(false)));
+$('#folder-select').addEventListener('click', () => (picking ? endPicking() : startPicking(true)));
+$('#select-done').addEventListener('click', endPicking);
+// Esc and Delete, unless a dialog over the list has the keys (naming a new group) or the cursor is in a field
+document.addEventListener('keydown', (e) => {
+  if (!picking || document.querySelector('dialog[open]:not(#folder-dialog)')) return;
+  if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); endPicking(); }
+  else if ((e.key === 'Delete' || e.key === 'Backspace') && !e.target.closest('input, textarea, select, [contenteditable]')) {
+    e.preventDefault();
+    $('#select-delete').click();
+  }
+}, true);
+
+// The bar: how many are ticked, and what to do with them. In an open folder it is the folder's, at its foot.
+function showSelectBar() {
+  const bar = $('#select-bar');
+  bar.hidden = !picking;
+  if (!picking) return;
+  if (picking.folder ? !folderDialog.contains(bar) : folderDialog.contains(bar)) (picking.folder ? folderDialog.append(bar) : $('#error').before(bar));
+  const list = pickList() || [];
+  const n = picking.ids.size;
+  $('#select-count').textContent = plural(n, 'nSelected');
+  $('#select-all').textContent = t(list.length && n === list.length ? 'selectNone' : 'selectAll');
+  const label = (key) => Object.assign(new Option(t(key), ''), { disabled: true, hidden: true, selected: true });
+  const here = picking.folder ? groupOf(picking.folder) : activeGroup();
+  $('#select-move').replaceChildren(label('moveTo'),
+    ...state.groups.filter((g) => g !== here && !locked(g)).map((g) => new Option(g.team ? `${g.name} · ${teamName(g)}` : g.name, g.id)),
+    new Option(t('newGroupDots'), NEW_ITEM));
+  // the folders in this list, those in them named after them ("Work / Docs"), but none ticked or inside one ticked
+  const folders = (items, path) => items.filter((d) => d.dials && !picking.ids.has(d.id))
+    .flatMap((f) => [new Option(path + f.name, f.id), ...folders(f.dials, `${path + f.name} / `)]);
+  $('#select-folder').replaceChildren(label('putInFolder'), ...folders(list, ''), new Option(t('newFolder'), NEW_ITEM));
+  $('#select-out').hidden = !picking.folder;
+  for (const el of bar.querySelectorAll('.act')) el.disabled = !n;
+}
+$('#select-all').addEventListener('click', () => {
+  const ids = pickList().map((d) => d.id);
+  picking.ids = new Set(ids.every((id) => picking.ids.has(id)) ? [] : ids);
+  markPicked(picking.folder ? $('#folder-grid') : $('#grid'), true);
+  showSelectBar();
+});
+$('#select-delete').addEventListener('click', () => {
+  if (!picking?.ids.size) return;
+  const record = remove(state, ticked());
+  picking = null;
+  saveAndRender();
+  offerUndo(t('deletedItems', plural(record.places.length, 'nItems')), record);
+});
+$('#select-move').addEventListener('change', (e) => {
+  const to = e.target.value;
+  e.target.value = '';
+  if (!picking?.ids.size || !to) return;
+  if (to === NEW_ITEM) openGroupDialog(null, ticked());
+  else moveTicked(ticked(), to);
+});
+function moveTicked(ids, groupId, newGroup = false) {
+  const { record, moved, kept } = moveTo(state, ids, groupId, newGroup);
+  const name = state.groups.find((g) => g.id === groupId)?.name;
+  picking = null;
+  saveAndRender();
+  offerUndo([moved.length && t('movedItems', plural(moved.length, 'nItems'), name),
+    kept.length && t('keptItems', plural(kept.length, 'nItems'), name)].filter(Boolean).join(' '), moved.length ? record : null);
+}
+$('#select-folder').addEventListener('change', (e) => {
+  const to = e.target.value;
+  e.target.value = '';
+  if (!picking?.ids.size || !to) return;
+  const fresh = to === NEW_ITEM && { id: uid(), name: t('folder') };
+  const { record, folder } = putInFolder(state, ticked(), fresh ? null : to, fresh);
+  if (!folder) return;
+  picking = null;
+  saveAndRender();
+  if (fresh) { // open, its name ready to be typed over
+    openFolder(folder.id);
+    $('#folder-name').focus();
+    $('#folder-name').select();
+  }
+  offerUndo(t('putIntoFolder', plural(record.places.length, 'nItems'), folder.name), record);
+});
+$('#select-out').addEventListener('click', () => {
+  const folder = findFolder(picking?.folder);
+  if (!picking?.ids.size || !folder) return;
+  const record = takeOutOfFolder(state, ticked());
+  picking = null;
+  saveAndRender();
+  offerUndo(t('tookOutOfFolder', plural(record.places.length, 'nItems'), folder.name), record);
+});
+
+// What was just done, with a way back for a few seconds (none when `record` is null). Over an open folder it is shown
+// in it: the page behind can't be clicked then.
+let undoTimer;
+let undoRecord = null;
+function offerUndo(message, record) {
+  if (!message) return;
+  const bar = $('#undo-bar');
+  undoRecord = record;
+  bar.querySelector('span').textContent = message;
+  bar.querySelector('button').hidden = !record;
+  if (folderDialog.open) folderDialog.append(bar);
+  else $('#error').before(bar);
+  bar.hidden = false;
+  clearTimeout(undoTimer);
+  undoTimer = setTimeout(() => { bar.hidden = true; undoRecord = null; }, 8000);
+}
+$('#undo-bar button').addEventListener('click', () => {
+  const record = undoRecord;
+  $('#undo-bar').hidden = true;
+  undoRecord = null;
+  clearTimeout(undoTimer);
+  if (record && undo(state, record)) saveAndRender();
 });
 
 function noMatch(message = t('searchNoMatch')) {
@@ -473,6 +689,8 @@ function tick() {
   // AM/PM left out: at this size the hour alone reads fine.
   $('#clock').textContent = timeFormat.formatToParts(now).filter((p) => p.type !== 'dayPeriod').map((p) => p.value).join('').trim();
   $('#date').textContent = dateFormat.format(now);
+  clearClock(); // the to-do card steps aside from the time as it is now
+  drawTodos(); // a to-do due moves on to today, or gone by, when its day or time comes
   setTimeout(tick, 60e3 - (now % 60e3));
 }
 
@@ -578,6 +796,7 @@ let pendingImage = '';
 function refreshPreview() {
   $('#dial-preview').replaceWith(Object.assign(thumbEl(normalizeUrl(dialForm.url.value), pendingImage, dialForm.title.value.trim()), { id: 'dial-preview' }));
   $('#dial-preview').classList.add('preview');
+  $('#clear-image').hidden = !pendingImage;
 }
 
 // `copy`: a dial of a team group the user can't change, copied as a new dial into one of their own groups.
@@ -586,6 +805,7 @@ function openDialDialog(dial, copy = false) {
   pendingImage = copy ? '' : dial?.image || '';
   $('#dial-heading').textContent = t(copy ? 'copyToMyGroup' : dial ? 'editDial' : 'addDial');
   $('#delete-dial').hidden = !editingId;
+  $('#dial-from-drawer').hidden = Boolean(dial || copy);
   dialForm.reset();
   dialForm.url.value = dial?.url || '';
   dialForm.title.value = dial?.title || '';
@@ -632,6 +852,7 @@ dialForm.imageFile.addEventListener('change', async () => {
   }
 });
 dialForm.imageUrl.addEventListener('change', () => { pendingImage = dialForm.imageUrl.value.trim(); refreshPreview(); });
+$('#dial-from-drawer').addEventListener('click', () => { dialDialog.close(); $('#open-drawer').click(); });
 $('#clear-image').addEventListener('click', () => { pendingImage = ''; dialForm.imageUrl.value = ''; refreshPreview(); });
 
 dialDialog.addEventListener('close', () => {
@@ -664,18 +885,22 @@ dialDialog.addEventListener('close', () => {
 });
 
 $('#delete-dial').addEventListener('click', () => {
-  if (listOf(editingId)) take(editingId);
+  const dial = findDial(editingId);
+  const record = dial && remove(state, [dial.id]);
   dialDialog.close('deleted');
   saveAndRender();
+  if (dial) offerUndo(t('deletedNamed', tidyTitle(dial.title) || hostOf(dial.url)), record);
 });
 
 // ---------- group dialog ----------
 const groupDialog = $('#group-dialog');
 const groupForm = $('#group-form');
 let editingGroupId = null; // by id, for the same reason as editingId
+let movingIds = null; // a new group for the ticked dials and folders (Selection), which go into it when it is made
 
-function openGroupDialog(group) {
+function openGroupDialog(group, moving = null) {
   editingGroupId = group?.id ?? null;
+  movingIds = moving;
   $('#group-heading').textContent = t(group ? 'renameGroup' : 'newGroup');
   $('#delete-group').hidden = !group || !deletable(group);
   groupForm.name.value = group?.name || '';
@@ -688,6 +913,8 @@ function openGroupDialog(group) {
 }
 $('#add-group').addEventListener('click', () => openGroupDialog(null));
 groupDialog.addEventListener('close', () => {
+  const moving = movingIds;
+  movingIds = null;
   if (groupDialog.returnValue !== 'save') return;
   const name = groupForm.name.value.trim();
   if (!name) return;
@@ -697,6 +924,7 @@ groupDialog.addEventListener('close', () => {
   } else {
     const group = { id: uid(), name, dials: [], ...(groupForm.team.value && { team: groupForm.team.value }) };
     state.groups.push(group);
+    if (moving) return moveTicked(moving, group.id, true); // the group being viewed stays on screen
     state.activeGroup = group.id;
   }
   saveAndRender();
@@ -1129,7 +1357,9 @@ editor.addEventListener('click', (e) => {
 // card stays whole in any window and keeps to an edge it was put against. Whether it shows and where follow the user
 // with the look (sync.js). A to-do is written in the field at the top (Enter adds it, first in the list), ticked by
 // its box, changed in place (Enter or leaving it keeps the change; emptied, it goes) and dragged by its grip to another
-// place in the list. Those done fold away under the list, the one done last first.
+// place in the list. One with a due date (its calendar button, or the one in the field for the next one) goes in a part
+// of the list by when: gone by, today, tomorrow, later, soonest first; those with none follow in the user's order, and
+// only they are dragged. Those done fold away under the list, the one done last first.
 // ponytail: a to-do being changed when the tab closes keeps its old text.
 const todoCard = $('#todo');
 const todoById = (id) => state.todos.find((x) => x.id === id);
@@ -1137,7 +1367,7 @@ const placeTodo = (x, y) => { todoCard.style.setProperty('--x', x); todoCard.sty
 const editingTodo = () => document.activeElement?.matches('.todo-list .text');
 let draggedTodo = null;
 // What the list on screen shows; it is drawn again only when that changes, so a click on it isn't lost to a redraw.
-const todosNow = () => state.todos.map((x) => x.rev).join();
+const todosNow = () => `${dayOf(new Date())} ${state.todos.map((x) => x.rev + sectionOf(x.due)).join()}`;
 let todosDrawn = '';
 
 function drawTodos() {
@@ -1146,16 +1376,63 @@ function drawTodos() {
   $('#open-todo').setAttribute('aria-pressed', String(on));
   if (!on) return;
   if (!todoCard.classList.contains('moving')) placeTodo(...(state.settings.todoAt || [1, 0.15])); // at first: right, under the header
+  clearClock();
   if (editingTodo() || todosNow() === todosDrawn) return; // while one is changed: drawn again once the change is kept
   todosDrawn = todosNow();
   const done = finished(state.todos);
-  $('#todo-list').replaceChildren(...pending(state.todos).map(todoItem));
+  const list = pending(state.todos);
+  const parts = SECTIONS.map((part) => [part, list.filter((x) => sectionOf(x.due) === part).sort(byDue)]).filter(([, xs]) => xs.length);
+  $('#todo-dated').replaceChildren(...parts.map(([part, xs]) => {
+    const box = Object.assign(document.createElement('section'), { className: 'todo-part' });
+    box.dataset.part = part;
+    const ul = Object.assign(document.createElement('ul'), { className: 'todo-list' });
+    ul.append(...xs.map((x) => todoItem(x, part)));
+    box.append(Object.assign(document.createElement('h3'), { className: 'todo-head', textContent: partName(part) }), ul);
+    return box;
+  }));
+  const undated = list.filter((x) => !x.due);
+  $('#todo-undated').hidden = !parts.length || !undated.length;
+  $('#todo-list').replaceChildren(...undated.map((x) => todoItem(x)));
   $('#todo-done').hidden = !done.length;
   $('#todo-done summary').textContent = t('doneTodos', done.length);
   $('#todo-done-list').replaceChildren(...done.map(todoItem));
 }
 
-function todoItem({ id, text: words, done }) {
+// In a narrow window the card can come over the clock and date: then it steps aside, if the window has the room.
+function clearClock() {
+  todoCard.style.removeProperty('--dx');
+  if (todoCard.hidden || todoCard.classList.contains('moving')) return;
+  const words = ['#clock', '#date'].map((id) => { const r = document.createRange(); r.selectNodeContents($(id)); return r.getBoundingClientRect(); });
+  const text = { left: Math.min(...words.map((r) => r.left)), right: Math.max(...words.map((r) => r.right)), top: words[0].top, bottom: words[1].bottom };
+  const card = todoCard.getBoundingClientRect();
+  if (card.bottom <= text.top || card.top >= text.bottom || card.right <= text.left || card.left >= text.right) return;
+  const right = card.left + card.width / 2 > innerWidth / 2;
+  const dx = right ? text.right + 12 - card.left : text.left - 12 - card.right;
+  if (right ? card.right + dx <= innerWidth - 8 : card.left + dx >= 8) todoCard.style.setProperty('--dx', `${dx}px`);
+}
+
+// A due date as the list shows it: today, tomorrow or yesterday by name, else the day; then the time, if there is one.
+// In the part for today or tomorrow, the day goes without saying.
+const relativeDay = new Intl.RelativeTimeFormat(uiLanguage(), { numeric: 'auto' });
+const dayName = (days) => relativeDay.format(days, 'day').replace(/^./, (c) => c.toUpperCase());
+const partName = (part) => ({ over: t('todoOverdue'), today: dayName(0), tomorrow: dayName(1), later: t('todoLater') })[part];
+function dueLabel(due, part) {
+  const now = new Date();
+  const at = new Date(due.includes('T') ? due : `${due}T00:00`);
+  const days = (Date.UTC(at.getFullYear(), at.getMonth(), at.getDate()) - Date.UTC(now.getFullYear(), now.getMonth(), now.getDate())) / 864e5;
+  const day = ['today', 'tomorrow'].includes(part) ? '' : Math.abs(days) <= 1 ? dayName(days)
+    : at.toLocaleDateString(uiLanguage(), { month: 'short', day: 'numeric', ...(at.getFullYear() !== now.getFullYear() && { year: 'numeric' }) });
+  const time = due.includes('T') ? at.toLocaleTimeString(uiLanguage(), { hour: 'numeric', minute: '2-digit' }) : '';
+  return [day, time].filter(Boolean).join(' ');
+}
+function showDue(button, due, part) {
+  const label = due ? dueLabel(due, part) : '';
+  button.querySelector('span').textContent = label;
+  button.setAttribute('aria-label', due ? `${t('dueDate')}: ${dueLabel(due)}` : t('dueDate'));
+  button.title = button.getAttribute('aria-label');
+}
+
+function todoItem({ id, text: words, done, due: when }, part) {
   const li = document.createElement('li');
   li.dataset.id = id;
   const box = Object.assign(document.createElement('input'), { type: 'checkbox', checked: done });
@@ -1190,7 +1467,13 @@ function todoItem({ id, text: words, done }) {
     saveAndRender();
   });
   if (done) li.append(box, text, remove);
-  else {
+  else if (when) {
+    const due = Object.assign(document.createElement('button'), { type: 'button', className: 'icon-btn due' });
+    due.append(icon('i-calendar'), document.createElement('span'));
+    due.addEventListener('click', () => openDue(due, id));
+    showDue(due, when, part);
+    li.append(box, text, due, remove);
+  } else {
     const grip = icon('i-grip');
     grip.classList.add('grip');
     grip.addEventListener('pointerdown', () => { li.draggable = true; }); // by its grip only: the text is for writing in
@@ -1206,7 +1489,11 @@ function todoItem({ id, text: words, done }) {
       li.classList.remove('dragging');
       for (const x of $('#todo-list').querySelectorAll('[data-drop]')) delete x.dataset.drop;
     });
-    li.append(grip, box, text, remove);
+    const due = Object.assign(document.createElement('button'), { type: 'button', className: 'icon-btn due' });
+    due.append(icon('i-calendar'), document.createElement('span'));
+    due.addEventListener('click', () => openDue(due, id));
+    showDue(due, '');
+    li.append(grip, box, text, due, remove);
   }
   return li;
 }
@@ -1236,6 +1523,70 @@ $('#todo-list').addEventListener('drop', (e) => {
   saveAndRender();
 });
 
+// A to-do's due date, in a menu by its calendar button: today, tomorrow, next Monday, a day picked, a time. The one in
+// the field sets it for the to-do written next. With a time, the background worker reminds the user then
+// (background.js) in a notification: that permission is asked for by "Add time", and kept.
+const dueMenu = $('#due-menu');
+let dueFor = null; // the to-do's id, or null for the one written next
+let nextDue = '';
+const dueNow = () => (dueFor ? todoById(dueFor)?.due || '' : nextDue);
+function setDue(due) {
+  if (!dueFor) {
+    nextDue = due;
+    showDue($('#todo-new-due'), due);
+    return;
+  }
+  const todo = todoById(dueFor);
+  if (!todo || due === (todo.due || '')) return;
+  change(todo, { due });
+  saveAndRender();
+}
+function openDue(button, id = null) {
+  dueFor = id;
+  const [day, time = ''] = dueNow().split('T');
+  const now = new Date();
+  const toMonday = (8 - now.getDay()) % 7 || 7;
+  for (const b of dueMenu.querySelectorAll('[data-days]')) {
+    const days = b.dataset.days === 'week' ? toMonday : Number(b.dataset.days);
+    b.dataset.day = dayOf(now, days);
+    if (b.dataset.days !== 'week') b.querySelector('span').textContent = dayName(days);
+    b.querySelector('small').textContent = new Date(`${b.dataset.day}T00:00`).toLocaleDateString(uiLanguage(), days < 2 ? { weekday: 'short' } : { month: 'short', day: 'numeric' });
+  }
+  $('#due-day').value = day;
+  $('#due-time').value = time;
+  $('#due-time-row').hidden = $('#due-hint').hidden = !time;
+  $('#due-add-time').hidden = Boolean(time);
+  $('#due-remove').hidden = !day;
+  dueMenu.showPopover();
+  // under the button, its right edge with the button's, kept inside the window
+  const r = button.getBoundingClientRect();
+  const [w, h] = [dueMenu.offsetWidth, dueMenu.offsetHeight];
+  dueMenu.style.left = `${Math.max(8, Math.min(r.right - w, innerWidth - w - 8))}px`;
+  dueMenu.style.top = `${r.bottom + 4 + h > innerHeight - 8 ? Math.max(8, r.top - 4 - h) : r.bottom + 4}px`;
+  dueMenu.querySelector('button').focus();
+}
+const withTime = (day) => [day, dueNow().split('T')[1]].filter(Boolean).join('T');
+for (const b of dueMenu.querySelectorAll('[data-days]')) {
+  b.addEventListener('click', () => { setDue(withTime(b.dataset.day)); dueMenu.hidePopover(); });
+}
+// Typing a day fires change at each part of it: the menu stays until the user leaves it.
+$('#due-day').addEventListener('change', (e) => { if (e.target.value) setDue(withTime(e.target.value)); });
+$('#due-add-time').addEventListener('click', () => {
+  chrome.permissions.request({ permissions: ['notifications'] }).catch(() => {}); // first: within the click
+  $('#due-add-time').hidden = true;
+  $('#due-time-row').hidden = $('#due-hint').hidden = false;
+  $('#due-time').focus();
+});
+$('#due-time').addEventListener('change', (e) => {
+  const day = dueNow().split('T')[0] || dayOf(new Date());
+  setDue(e.target.value ? `${day}T${e.target.value}` : day);
+  $('#due-day').value = day;
+  $('#due-remove').hidden = false;
+});
+$('#due-remove').addEventListener('click', () => { setDue(''); dueMenu.hidePopover(); });
+$('#todo-new-due').addEventListener('click', (e) => openDue(e.currentTarget));
+showDue($('#todo-new-due'), '');
+
 $('#open-todo').addEventListener('click', () => {
   state.settings.todoOn = state.settings.todoOn !== true;
   saveAndRender();
@@ -1249,8 +1600,9 @@ $('#todo-add').addEventListener('submit', (e) => {
   e.preventDefault();
   const words = $('#todo-new').value.replace(/\s+/g, ' ').trim();
   if (!words) return;
-  state.todos.push(newTodo(words, posBefore(state.todos, pending(state.todos)[0])));
+  state.todos.push({ ...newTodo(words, posBefore(state.todos, pending(state.todos)[0])), due: nextDue });
   $('#todo-new').value = '';
+  showDue($('#todo-new-due'), nextDue = '');
   saveAndRender();
 });
 $('#todo-clear').addEventListener('click', () => {
@@ -1268,7 +1620,10 @@ $('.todo-bar').addEventListener('pointerdown', (e) => {
   const [dx, dy] = [e.clientX - left, e.clientY - top];
   const share = (n, room) => Math.round(Math.min(1, Math.max(0, n / room || 0)) * 1000) / 1000;
   let spot = null;
-  const move = (ev) => placeTodo(...(spot = [share(ev.clientX - dx, innerWidth - width), share(ev.clientY - dy, innerHeight - height)]));
+  const move = (ev) => {
+    todoCard.style.removeProperty('--dx'); // stepped aside from the clock (clearClock): where it is held is where it goes
+    placeTodo(...(spot = [share(ev.clientX - dx, innerWidth - width), share(ev.clientY - dy, innerHeight - height)]));
+  };
   todoCard.classList.add('moving');
   bar.setPointerCapture(e.pointerId);
   bar.addEventListener('pointermove', move);
@@ -1282,6 +1637,9 @@ $('.todo-bar').addEventListener('pointerdown', (e) => {
 });
 
 // ---------- sort (paid) ----------
+// Its button says, before it is clicked, that Sort needs the unlock.
+const labelSort = async () => $('#sort-group').setAttribute('aria-label', (await isPaid()) ? t('sortGroup') : `${t('sortGroup')} · ${t('unlockFor')}`);
+labelSort();
 // Suggests a better group for each dial of the group on screen, and moves the ones the user keeps checked.
 const sortDialog = $('#sort-dialog');
 let sortingGroup = null;
@@ -2018,6 +2376,7 @@ chrome.storage.onChanged.addListener(async (changes, area) => {
     }
     return;
   }
+  if (area === 'local' && changes.paid) labelSort();
   if (area === 'local' && (changes.paid || changes.drive) && settingsDialog.open) showPlus(); // e.g. the daily backup ran
   if (area !== 'local' || !changes.tabdial) return;
   if (changes.tabdial.newValue?.rev === state.rev) return; // our own save
@@ -2051,6 +2410,7 @@ $('#jump-tip').addEventListener('toggle', (e) => { if (e.newState === 'closed') 
 
 render();
 tick();
+document.fonts.ready.then(clearClock); // the clock's width in the font picked in Settings
 askForRating().then((asked) => asked || showJumpTip());
 recheckPaid();
 const teamsReady = refreshTeams(state).then((changed) => changed && saveAndRender(), () => {}).then(teamPictures);

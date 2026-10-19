@@ -304,9 +304,9 @@ export async function pushNotes(state, kind = 'notes') {
 //
 // The three rules above hold here too. The site stores a write only if it is based on the version it has; told that
 // another browser wrote first, pushSite() merges that list into this one and sends the result, so here the last writer
-// doesn't win. What is encrypted is { v, list, look, notes, todos }, v being the version the write makes: the site
+// doesn't win. What is encrypted is { v, list, look, notes, todos, dues }, v being the version the write makes: the site
 // can't pass an old list off as a newer one (team.js opened). `look` is the look as above, `notes` the notes, `todos`
-// the to-dos; a list written by 0.4 has none of them, and then nothing is known of them (none is taken for deleted).
+// the to-dos and `dues` their due dates (todos.js forSite); a list written by 0.4 has none of them, and then nothing is known of them (none is taken for deleted).
 const SITE = 'https://nexuscortex.dev/api/tabdial/sync';
 // The join page hands the code to Tabdial in Chrome and Edge (background.js), as it does an invite link.
 export const codeLink = (code) => `https://nexuscortex.dev/tabdial/join/#${code}`;
@@ -359,7 +359,7 @@ export async function startSync(state) {
   const look = lookOf(state.settings);
   const { index: notes, bodies } = await siteNotes(state, key);
   const todo = todos.synced(state.todos);
-  const { version, missing = [] } = await ask('write', { credential, version: 0, payload: await seal(key, { v: 1, list, look, notes, todos: todo }), pictures: named(list, notes, bodies) }, SITE);
+  const { version, missing = [] } = await ask('write', { credential, version: 0, payload: await seal(key, { v: 1, list, look, notes, ...todos.forSite(todo) }), pictures: named(list, notes, bodies) }, SITE);
   // The time too: this page hears of its own new code (newtab.js) and needn't ask the site for what it just sent.
   await chrome.storage.local.set({ syncSeen: { space: credential, version, list, look: { theirs: look, mine: look }, notes, todos: todo }, syncCheckedAt: Date.now(), syncError: '', syncWanted: missing });
   await chrome.storage.sync.set({ syncCode: code });
@@ -407,7 +407,8 @@ export async function pullSite(state, now = false) {
     return {};
   });
   if (!answer.payload) return null;
-  const { list, look, notes, todos: todo } = await opened(key, answer);
+  const { list, look, notes, todos: rows, dues } = await opened(key, answer);
+  const todo = todos.fromSite(rows, dues);
   // Read again: while the site was answering, a save may have sent this browser's list, or been given this very one.
   const seen = viaSite((await chrome.storage.local.get('syncSeen')).syncSeen, credential);
   if (seen?.version >= answer.version) return null;
@@ -442,14 +443,15 @@ async function pushSite(state, code, withLook = false) {
       if (list === seen.list && !Object.keys(changed).length && JSON.stringify(notes) === JSON.stringify(seen.notes) && JSON.stringify(todo) === JSON.stringify(seen.todos)) break;
       const look = lookOf({ ...seen.look?.theirs, ...changed });
       const pictures = named(list, notes, bodies); // this browser's bodies too, so the site keeps what a later write names
-      const answer = await ask('write', { credential, version: seen.version, payload: await seal(key, { v: seen.version + 1, list, look, ...(notes && { notes }), ...(todo && { todos: todo }) }), pictures }, SITE).catch((err) => {
+      const answer = await ask('write', { credential, version: seen.version, payload: await seal(key, { v: seen.version + 1, list, look, ...(notes && { notes }), ...(todo && todos.forSite(todo)) }), pictures }, SITE).catch((err) => {
         if (err.code === 'conflict') return err.answer;
         if (err.code === 'none') return { version: 0 }; // the site has lost the list: store it again
         return stopped(err);
       });
       if (answer.version === 0) seen = { space: credential, version: 0, list: '', look: seen.look, notes: seen.notes, todos: seen.todos };
       else if (answer.payload) {
-        const { list: theirs, look: theirLook, notes: theirNotes, todos: theirTodos } = await opened(key, answer);
+        const { list: theirs, look: theirLook, notes: theirNotes, todos: theirRows, dues } = await opened(key, answer);
+        const theirTodos = todos.fromSite(theirRows, dues);
         const have = await picturesOf(ownGroups(state.groups), key, state.notes);
         mergeList(state, theirs, have);
         merged = true;
@@ -482,7 +484,7 @@ export async function usage(state) {
   const { index: notes, bodies } = await siteNotes(state, key);
   const have = await picturesOf(ownGroups(state.groups), key, state.notes);
   const pictures = named(list, notes, bodies).reduce((sum, id) => sum + (have.has(id) ? sealedLength(JSON.stringify(have.get(id)).length) : 0), 0);
-  const text = sealedLength(new TextEncoder().encode(JSON.stringify({ v: 1, list, look: lookOf(state.settings), notes, todos: todos.synced(state.todos) })).length);
+  const text = sealedLength(new TextEncoder().encode(JSON.stringify({ v: 1, list, look: lookOf(state.settings), notes, ...todos.forSite(todos.synced(state.todos)) })).length);
   return { text, textMost: SITE_TEXT, pictures, picturesMost: SITE_PICTURES };
 }
 

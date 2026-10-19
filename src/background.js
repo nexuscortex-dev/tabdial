@@ -5,6 +5,7 @@ import { dialsOf, sameUrl } from './merge.js';
 import { backUpIfDue, scheduleDrive } from './drive.js';
 import { jumpList, matching, jump, open } from './jump.js';
 import { t } from './i18n.js';
+import { pending, remindAt } from './todos.js';
 
 // Toolbar button: add the current page to the group picked in its popup (popup.js), with a screenshot of it as the
 // thumbnail. A page the group already has, in a folder too, gets a fresh screenshot instead of a second dial.
@@ -49,6 +50,7 @@ chrome.runtime.onInstalled.addListener(async () => {
     const { installedAt } = await chrome.storage.local.get('installedAt');
     if (!installedAt) await chrome.storage.local.set({ installedAt: Date.now() });
     await chrome.runtime.setUninstallURL(`https://nexuscortex.dev/tabdial/bye/?v=${chrome.runtime.getManifest().version}`);
+    await planReminders(); // an update drops the alarms
   } catch (err) {
     console.error('Tabdial setup failed', err);
   }
@@ -57,8 +59,40 @@ chrome.runtime.onInstalled.addListener(async () => {
 // The daily Google Drive backup (drive.js). The alarm only exists while Drive is connected.
 chrome.alarms.onAlarm.addListener((alarm) => {
   if (alarm.name === 'drive') backUpIfDue().catch((err) => console.error('Drive backup failed', err));
+  if (alarm.name.startsWith(REMIND)) remind(alarm.name).catch((err) => console.error('To-do reminder failed', err));
 });
-chrome.runtime.onStartup.addListener(() => scheduleDrive().catch(() => {}));
+chrome.runtime.onStartup.addListener(() => {
+  scheduleDrive().catch(() => {});
+  planReminders().catch(() => {});
+});
+
+// To-do reminders (todos.js): a to-do not done with a due time has an alarm, `todo:<id>|<due>`, made again whenever
+// the to-dos change, here or synced in. When it goes off, a notification says it, if the user allowed them (the new tab
+// page asks: newtab.js openDue). One whose time went by while the browser was closed has none: the list shows it red.
+const REMIND = 'todo:';
+const storedTodos = async () => (await chrome.storage.local.get('tabdial')).tabdial?.todos || [];
+async function planReminders(todos) {
+  todos ??= await storedTodos();
+  const want = new Map(pending(todos).filter((x) => remindAt(x.due) > Date.now()).map((x) => [`${REMIND}${x.id}|${x.due}`, remindAt(x.due)]));
+  const have = (await chrome.alarms.getAll()).filter((a) => a.name.startsWith(REMIND)).map((a) => a.name);
+  await Promise.all([...have.filter((name) => !want.has(name)).map((name) => chrome.alarms.clear(name)),
+    ...[...want].filter(([name]) => !have.includes(name)).map(([name, when]) => chrome.alarms.create(name, { when }))]);
+}
+async function remind(name) {
+  const [id, due] = name.slice(REMIND.length).split('|');
+  const todo = (await storedTodos()).find((x) => x.id === id);
+  if (!todo || todo.done || todo.due !== due || !chrome.notifications) return;
+  await chrome.notifications.create(name, { type: 'basic', iconUrl: chrome.runtime.getURL('icons/128.png'), title: t('todos'), message: todo.text });
+}
+chrome.storage.onChanged.addListener((changes, area) => {
+  if (area === 'local' && changes.tabdial) planReminders(changes.tabdial.newValue?.todos || []).catch(() => {});
+});
+// A click opens a new tab, which is Tabdial's page with the list. The API is there only once the permission is.
+chrome.notifications?.onClicked.addListener((name) => {
+  if (!name.startsWith(REMIND)) return;
+  chrome.notifications.clear(name);
+  chrome.tabs.create({});
+});
 
 // Jump (jump.js): the address bar's suggestions for `z …`. The best match is the default one (Enter), then the next
 // ones. Until the user allows the browsing history, the last row offers it, unless they once said no: picking it opens

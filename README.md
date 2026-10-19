@@ -53,10 +53,11 @@ Only if you use it:
 | Jump with browsing history | Read on your computer; it goes nowhere. | `jump.js` |
 | The bookmarks and history drawer | The browser's bookmarks and the last week's history, once you click Allow there: read on your computer; they go nowhere. | `newtab.js` |
 | Importing an Infinity New Tab backup | Each site's icon is fetched once from Infinity's servers, from the links in the backup file, and kept in the dial. Nothing of yours is sent. | `newtab.js` (`fetchIcons`) |
+| To-do reminders | A to-do with a due time: at that time the browser shows a notification with its text, once you allowed notifications at "Add a time". Nothing is sent. | `background.js`, `todos.js` |
 
 The [privacy policy](https://nexuscortex.dev/tabdial/privacy/) says what the site keeps of each.
 
-**Permissions.** `manifest.json` asks at install only for what asks you nothing: `storage`, `unlimitedStorage`, `favicon` (Chrome, Edge), `activeTab`, `alarms`, `search` and `fontSettings` (Chrome, Edge: the list of installed fonts for Settings > Appearance > Font; Tabdial changes no font setting). `topSites`, `identity`, `history` and `bookmarks` are optional: requested when you click the feature that needs them, and given back when you turn it off.
+**Permissions.** `manifest.json` asks at install only for what asks you nothing: `storage`, `unlimitedStorage`, `favicon` (Chrome, Edge), `activeTab`, `alarms`, `search` and `fontSettings` (Chrome, Edge: the list of installed fonts for Settings > Appearance > Font; Tabdial changes no font setting). `topSites`, `identity`, `history`, `bookmarks` and `notifications` are optional: requested when you click the feature that needs them, and given back when you turn it off.
 
 ## What is not here
 
@@ -106,11 +107,12 @@ Tabdial 是 Chrome、Edge、Firefox 的新标签页扩展：把常用网站排�
   - 解锁：一个随机的购买号、许可密钥，或用 Google 登录解锁时的 Google ID token，发给 nexuscortex.dev；付款在 Stripe 上完成。
   - Jump 读浏览记录：只在本机读，不发出去。
   - 书签和浏览记录抽屉：你在抽屉里点“允许”后，读浏览器的书签和最近一周的浏览记录，只在本机读，不发出去。
+  - 待办提醒：给待办设了截止时间后，到时间浏览器弹出通知（在“加时间”时允许通知）；什么也不发出去。
   - 导入 Infinity 新标签页的备份：按备份文件里的链接，从 Infinity 的服务器取一次每个网站的图标，存进网站卡片；不发送你的任何东西。
 
 网站对每一项保留什么，见[隐私政策](https://nexuscortex.dev/tabdial/zh-cn/privacy/)。
 
-**权限。** 安装时只要不需要你确认的权限：`storage`、`unlimitedStorage`、`favicon`（Chrome、Edge）、`activeTab`、`alarms`、`search` 和 `fontSettings`（Chrome、Edge：为“设置 > 外观 > 字体”列出电脑上装的字体，不改任何字体设置）。`topSites`、`identity`、`history`、`bookmarks` 是可选权限：点到需要它的功能时才申请，关掉功能就交还。
+**权限。** 安装时只要不需要你确认的权限：`storage`、`unlimitedStorage`、`favicon`（Chrome、Edge）、`activeTab`、`alarms`、`search` 和 `fontSettings`（Chrome、Edge：为“设置 > 外观 > 字体”列出电脑上装的字体，不改任何字体设置）。`topSites`、`identity`、`history`、`bookmarks`、`notifications` 是可选权限：点到需要它的功能时才申请，关掉功能就交还。
 
 **这里没有什么。** nexuscortex.dev 的服务端（同步码、团队、Sort、购买）不在这个仓库里。它能收到的，就是这里的代码发出去的。
 

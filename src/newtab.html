@@ -35,19 +35,22 @@
   <symbol id="i-eraser" viewBox="0 0 24 24"><path d="M7 20h13M4.5 15.5 14 6l5 5-7.5 7.5a2 2 0 0 1-2.8 0l-4.2-4.2a1 1 0 0 1 0-1.4z"/><path d="m9 11 5 5"/></symbol>
   <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13M10 11v6M14 11v6"/></symbol>
   <symbol id="i-grip" viewBox="0 0 24 24"><path d="M9 6h.01M9 12h.01M9 18h.01M15 6h.01M15 12h.01M15 18h.01" stroke-width="3"/></symbol>
+  <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></symbol>
+  <symbol id="i-select" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="m8 12 3 3 5-6"/></symbol>
   <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="13" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></symbol>
 </svg>
 
 <header class="bar wrap">
-  <button id="open-drawer" class="icon-btn" data-i18n-title="bookmarksAndHistory" data-i18n-aria="bookmarksAndHistory"><svg class="i" aria-hidden="true"><use href="#i-bookmark"/></svg></button>
+  <button id="open-drawer" class="icon-btn" data-i18n-aria="bookmarksAndHistory"><svg class="i" aria-hidden="true"><use href="#i-bookmark"/></svg></button>
   <div class="group-bar">
     <nav id="groups" class="groups" data-i18n-aria="groups"></nav>
-    <button id="add-group" class="icon-btn" data-i18n-title="newGroup" data-i18n-aria="newGroup"><svg class="i" aria-hidden="true"><use href="#i-plus"/></svg></button>
-    <button id="sort-group" class="icon-btn" data-i18n-title="sortGroup" data-i18n-aria="sortGroup" hidden><svg class="i" aria-hidden="true"><use href="#i-sort"/></svg></button>
+    <button id="add-group" class="icon-btn" data-i18n-aria="newGroup"><svg class="i" aria-hidden="true"><use href="#i-plus"/></svg></button>
+    <button id="sort-group" class="icon-btn" data-i18n-aria="sortGroup" hidden><svg class="i" aria-hidden="true"><use href="#i-sort"/></svg></button>
+    <button id="select" class="icon-btn select-btn" aria-pressed="false" data-i18n-aria="select" data-i18n-title="selectHint" hidden><svg class="i" aria-hidden="true"><use href="#i-select"/></svg></button>
   </div>
-  <button id="open-todo" class="icon-btn" aria-pressed="false" data-i18n-title="todos" data-i18n-aria="todos"><svg class="i" aria-hidden="true"><use href="#i-checklist"/></svg></button>
-  <button id="open-notes" class="icon-btn" data-i18n-title="notes" data-i18n-aria="notes"><svg class="i" aria-hidden="true"><use href="#i-note"/></svg></button>
-  <button id="open-settings" class="icon-btn" data-i18n-title="settings" data-i18n-aria="settings"><svg class="i" aria-hidden="true"><use href="#i-settings"/></svg></button>
+  <button id="open-todo" class="icon-btn" aria-pressed="false" data-i18n-aria="todos"><svg class="i" aria-hidden="true"><use href="#i-checklist"/></svg></button>
+  <button id="open-notes" class="icon-btn" data-i18n-aria="notes"><svg class="i" aria-hidden="true"><use href="#i-note"/></svg></button>
+  <button id="open-settings" class="icon-btn" data-i18n-aria="settings"><svg class="i" aria-hidden="true"><use href="#i-settings"/></svg></button>
 </header>
 
 <main class="wrap">
@@ -68,14 +71,34 @@
     <h2 id="todo-heading" data-i18n="todos"></h2>
     <button type="button" id="todo-close" class="icon-btn" data-i18n-title="hideTodos" data-i18n-aria="hideTodos"><svg class="i" aria-hidden="true"><use href="#i-close"/></svg></button>
   </div>
-  <form id="todo-add" class="todo-add"><input id="todo-new" data-i18n-placeholder="addTodo" data-i18n-aria="addTodo" maxlength="500" autocomplete="off"></form>
-  <ul id="todo-list" class="todo-list"></ul>
+  <form id="todo-add" class="todo-add">
+    <input id="todo-new" data-i18n-placeholder="addTodo" data-i18n-aria="addTodo" maxlength="500" autocomplete="off">
+    <button type="button" id="todo-new-due" class="icon-btn due"><svg class="i" aria-hidden="true"><use href="#i-calendar"/></svg><span></span></button>
+  </form>
+  <!-- not done: by due date (newtab.js drawTodos), then those with none, in the user's order -->
+  <div class="todo-scroll">
+    <div id="todo-dated"></div>
+    <h3 id="todo-undated" class="todo-head" data-i18n="todoNoDate" hidden></h3>
+    <ul id="todo-list" class="todo-list"></ul>
+  </div>
   <details id="todo-done" class="todo-done" hidden>
     <summary></summary>
     <ul id="todo-done-list" class="todo-list"></ul>
     <button type="button" id="todo-clear" class="link-btn" data-i18n="clearDone"></button>
   </details>
 </section>
+
+<!-- a to-do's due date: quick days, a day picked, a time (newtab.js openDue) -->
+<div id="due-menu" class="menu due-menu" popover="auto" data-i18n-aria="dueDate">
+  <button type="button" data-days="0"><span></span><small></small></button>
+  <button type="button" data-days="1"><span></span><small></small></button>
+  <button type="button" data-days="week"><span data-i18n="dueNextWeek"></span><small></small></button>
+  <label class="due-row"><span data-i18n="duePick"></span><input id="due-day" type="date"></label>
+  <button type="button" id="due-add-time"><span data-i18n="dueAddTime"></span></button>
+  <label class="due-row" id="due-time-row" hidden><span data-i18n="dueTime"></span><input id="due-time" type="time"></label>
+  <p id="due-hint" class="hint" data-i18n="dueHint" hidden></p>
+  <button type="button" id="due-remove" class="danger" data-i18n="removeDue"></button>
+</div>
 
 <aside id="rate" class="tip" popover="manual" data-i18n-aria="rateTabdial">
   <p data-i18n="ratePrompt"></p>
@@ -156,6 +179,7 @@
   <form method="dialog" id="dial-form">
     <h2 id="dial-heading"></h2>
     <label class="field"><span data-i18n="address"></span><input name="url" type="text" required placeholder="example.com" autocomplete="off"></label>
+    <button type="button" id="dial-from-drawer" class="link-btn" data-i18n="addFromDrawer"></button>
     <label class="field"><span data-i18n="title"></span><input name="title" type="text" data-i18n-placeholder="optional" autocomplete="off"></label>
     <fieldset class="field">
       <legend data-i18n="thumbnail"></legend>
@@ -181,7 +205,10 @@
 
 <dialog id="folder-dialog" closedby="any" data-i18n-aria="folder">
   <button id="folder-up" class="link-btn" type="button" hidden>‹ <span id="folder-up-name"></span></button>
-  <input id="folder-name" type="text" data-i18n-aria="folderName" autocomplete="off">
+  <div class="folder-head">
+    <input id="folder-name" type="text" data-i18n-aria="folderName" autocomplete="off">
+    <button id="folder-select" class="icon-btn select-btn" type="button" aria-pressed="false" data-i18n-aria="select" data-i18n-title="selectHint" hidden><svg class="i" aria-hidden="true"><use href="#i-select"/></svg></button>
+  </div>
   <ol id="folder-grid" class="grid" tabindex="-1" autofocus></ol>
 </dialog>
 
@@ -226,7 +253,7 @@
   </form>
 </dialog>
 
-<dialog id="settings-dialog" class="wide" closedby="any" aria-labelledby="settings-heading">
+<dialog id="settings-dialog" class="drawer right settings" closedby="any" aria-labelledby="settings-heading">
   <form method="dialog">
     <h2 id="settings-heading" data-i18n="settings"></h2>
     <div id="settings-tabs" class="tabs" role="radiogroup" aria-labelledby="settings-heading">
@@ -402,6 +429,17 @@
     <div class="actions"><a class="hint" data-web="guide/" target="_blank" data-i18n="howToUse"></a><span class="spacer"></span><button value="close" class="btn" autofocus data-i18n="done"></button></div>
   </form>
 </dialog>
+<!-- Selection (newtab.js): over the page, or inside the open folder while it is the folder's -->
+<div id="select-bar" class="select-bar" role="toolbar" data-i18n-aria="select" hidden>
+  <span id="select-count" class="count" aria-live="polite"></span>
+  <button id="select-all" type="button" class="link-btn"></button>
+  <select id="select-move" class="act" data-i18n-aria="moveTo"></select>
+  <select id="select-folder" class="act" data-i18n-aria="putInFolder"></select>
+  <button id="select-out" type="button" class="btn secondary act" data-i18n="takeOutOfFolder"></button>
+  <button id="select-delete" type="button" class="btn danger act" data-i18n="delete"></button>
+  <button id="select-done" type="button" class="btn" data-i18n="done"></button>
+</div>
+<div id="undo-bar" class="error note undo-bar" role="status" hidden><span></span><button type="button" class="link-btn" data-i18n="undo"></button></div>
 <p id="error" class="error" role="alert" hidden></p>
 </body>
 </html>

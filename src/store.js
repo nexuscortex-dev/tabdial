@@ -228,10 +228,18 @@ export async function restoreBackup(state, day) {
 }
 
 // ---------- dials ----------
+// "(3) Inbox" counts what is unread, and "Loading…" is what a page says before its title: neither names the site, so
+// a title is taken without the count, and a loading one not at all (the tile then shows the address).
+const COUNT = /^[([]\d+\+?[)\]]\s*/;
+const LOADING = /^(loading|加载中|載入中|読み込み中|wird geladen|chargement|cargando|carregando|caricamento)\W*$/i;
+export function tidyTitle(title) {
+  const t = String(title || '').trim().replace(COUNT, '');
+  return LOADING.test(t) ? '' : t;
+}
 // "Article name - Site name | Tagline" is too long for a tile label; keep the part before the first separator.
 // Short titles fit the tile, so they stay whole.
 export function shortTitle(title) {
-  const t = String(title || '').trim();
+  const t = tidyTitle(title);
   if (t.length <= 24) return t;
   return t.split(/\s[-–—|·]\s/)[0].trim() || t;
 }

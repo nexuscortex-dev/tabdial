@@ -28,7 +28,7 @@
     "description": "Dialog title."
   },
   "renameHint": {
-    "message": "ダブルクリックで名前を変更",
+    "message": "ダブルクリックで名前を変更、右クリックでその他の操作",
     "description": "Tooltip on a group tab."
   },
   "settings": {
@@ -90,6 +90,9 @@
   "address": {
     "message": "アドレス",
     "description": "Field label: the web address of a dial."
+  },
+  "addFromDrawer": {
+    "message": "ブックマークや履歴から追加することもできます"
   },
   "title": {
     "message": "タイトル",
@@ -922,6 +925,16 @@
   "clearDone": { "message": "完了を消去" },
   "confirmClearDone": { "message": "完了した ToDo をすべて削除しますか？" },
   "deleteTodo": { "message": "ToDo を削除" },
+  "dueDate": { "message": "期限" },
+  "dueTime": { "message": "時刻" },
+  "dueNextWeek": { "message": "来週" },
+  "duePick": { "message": "日付を選ぶ" },
+  "dueAddTime": { "message": "時刻を追加" },
+  "todoOverdue": { "message": "期限切れ" },
+  "todoLater": { "message": "今後" },
+  "todoNoDate": { "message": "期限なし" },
+  "dueHint": { "message": "ブラウザが開いていれば、その時刻に Tabdial が通知でお知らせします。" },
+  "removeDue": { "message": "期限を削除" },
   "todosTooLong": { "message": "ToDo が多すぎてブラウザの同期に入りません。同期コードならすべて同期できます。" },
   "importedTodos": { "message": "ToDo も一緒に取り込みました：$1（右上の ToDo ボタン）。" },
   "nTodos_one": { "message": "$1 件の ToDo" },
@@ -935,5 +948,24 @@
   "nNotes_other": { "message": "$1 件のメモ" },
   "picturesFull": { "message": "メモと画像の容量がいっぱいです。新しい内容はこのパソコンにだけ保存されます。メモや画像、サムネイルを減らすと同期が再開します。" },
   "syncUsageBrowser": { "message": "ブラウザの同期：$1 / $2 使用中（メモの画像は含まれません）。" },
-  "syncUsageCode": { "message": "同期コードの容量：サイト一覧 $1 使用、メモと画像 $2 / $3。" }
+  "syncUsageCode": { "message": "同期コードの容量：サイト一覧 $1 使用、メモと画像 $2 / $3。" },
+  "select": { "message": "選択" },
+  "selectHint": { "message": "複数を選んで削除・移動" },
+  "selectAll": { "message": "すべて選択" },
+  "selectNone": { "message": "選択を解除" },
+  "nItems_one": { "message": "$1 件" },
+  "nItems_other": { "message": "$1 件" },
+  "nSelected_one": { "message": "$1 件選択中" },
+  "nSelected_other": { "message": "$1 件選択中" },
+  "moveTo": { "message": "移動先…" },
+  "newGroupDots": { "message": "新しいグループ…" },
+  "putInFolder": { "message": "フォルダに入れる…" },
+  "takeOutOfFolder": { "message": "フォルダから出す" },
+  "undo": { "message": "元に戻す" },
+  "deletedItems": { "message": "$1 を削除しました。" },
+  "deletedNamed": { "message": "「$1」を削除しました。" },
+  "movedItems": { "message": "$1 を「$2」に移動しました。" },
+  "keptItems": { "message": "「$2」にすでにあるため、そのままにしました：$1。" },
+  "putIntoFolder": { "message": "$1 を「$2」に入れました。" },
+  "tookOutOfFolder": { "message": "$1 を「$2」から出しました。" }
 }

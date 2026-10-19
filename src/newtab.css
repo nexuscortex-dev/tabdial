@@ -45,7 +45,7 @@ svg[hidden] { display: none; } /* the icon sprite; [hidden] alone doesn't hide S
 .wrap { width: 100%; max-width: calc(var(--cols, 6) * var(--tile) + 64px); margin-inline: auto; padding-inline: 32px; }
 @media (max-width: 640px) { .wrap { padding-inline: 16px; } }
 
-.bar { display: flex; align-items: center; gap: 12px; padding-top: 24px; }
+.bar { position: relative; z-index: 6; display: flex; align-items: center; gap: 12px; padding-top: 24px; } /* over the to-do card, for its buttons' names */
 .group-bar {
   display: flex; align-items: center; gap: 2px; min-width: 0; margin-right: auto; padding: 4px; border-radius: 999px;
   background: var(--glass); backdrop-filter: blur(16px) saturate(1.4); box-shadow: var(--shadow);
@@ -68,6 +68,16 @@ svg[hidden] { display: none; } /* the icon sprite; [hidden] alone doesn't hide S
 .group-bar .icon-btn, .tip .icon-btn { width: 32px; height: 32px; background: transparent; backdrop-filter: none; box-shadow: none; }
 .group-bar .icon-btn:hover, .tip .icon-btn:hover { background: rgb(127 127 127 / .12); }
 .icon-btn[hidden] { display: none; }
+/* the header's icon buttons say what they are, under them, as soon as they are pointed at */
+.bar .icon-btn { position: relative; }
+.bar .icon-btn::after {
+  content: attr(aria-label); position: absolute; top: calc(100% + 8px); left: 50%; translate: -50% 0;
+  padding: 5px 10px; border-radius: 8px; font-size: 12px; font-weight: 500; white-space: nowrap; pointer-events: none;
+  background: var(--ink); color: var(--surface); box-shadow: var(--shadow); opacity: 0; transition: opacity .12s;
+}
+.bar .icon-btn:hover::after, .bar .icon-btn:focus-visible::after { opacity: 1; transition-delay: .2s; }
+.bar > .icon-btn:last-child::after { left: auto; right: 0; translate: none; } /* kept inside the window */
+.bar > .icon-btn:first-child::after { left: 0; translate: none; }
 
 /* one-time prompts (rating, Jump tip): a glass pill at the bottom, like the header controls */
 .tip {
@@ -88,25 +98,24 @@ svg[hidden] { display: none; } /* the icon sprite; [hidden] alone doesn't hide S
 main { padding-top: clamp(8px, 4vh, 40px); padding-bottom: 64px; }
 .hero { margin-bottom: clamp(28px, 6vh, 56px); text-align: center; color: var(--ink); }
 .clock { margin: 0; font-size: clamp(56px, 8vw, 104px); font-weight: 250; line-height: 1; letter-spacing: -.04em; font-variant-numeric: tabular-nums; }
-.date { margin: 10px 0 0; font-size: 15px; font-weight: 500; letter-spacing: .01em; opacity: .72; }
+.date { margin: 10px 0 0; font-size: 15px; font-weight: 600; letter-spacing: .01em; opacity: .8; }
 /* over a background the user picked: dark text on light ones, light text on dark ones and photos */
 body[data-tone="light"] .hero { color: #111827; }
 body[data-tone="dark"] .hero { color: #fff; text-shadow: 0 1px 3px rgb(0 0 0 / .35), 0 2px 12px rgb(0 0 0 / .3), 0 4px 40px rgb(0 0 0 / .45); }
-body[data-tone="dark"] .date { opacity: .88; }
+body[data-tone="dark"] .date { opacity: 1; text-shadow: 0 1px 2px rgb(0 0 0 / .55), 0 0 10px rgb(0 0 0 / .45); } /* small text: a tighter shadow than the clock's */
 .search { width: min(100%, 560px); margin: 24px auto 0; }
 .search input {
   width: 100%; font: inherit; font-size: 15px; color: var(--ink); text-shadow: none;
-  background: var(--glass); backdrop-filter: blur(12px); border: 0; border-radius: 999px; padding: 12px 22px;
-  box-shadow: var(--shadow);
+  background: light-dark(rgb(255 255 255 / .86), rgb(22 26 34 / .8)); backdrop-filter: blur(12px); border: 0; border-radius: 999px;
+  padding: 12px 22px; box-shadow: var(--shadow);
 }
-.search input::placeholder { color: var(--ink-3); }
+.search input::placeholder { color: var(--ink-2); }
 .search input:focus-visible { outline: none; background: var(--surface); box-shadow: var(--shadow), 0 0 0 3px color-mix(in srgb, var(--accent) 30%, transparent); }
 .grid {
   list-style: none; margin: 0; padding: 0; display: grid; gap: calc(var(--gap) * 4 / 3) var(--gap);
-  /* full-width columns, but a group shorter than a row (--n of them) sits centered under the clock */
-  grid-template-columns: repeat(var(--n, 6), calc((100% - (var(--cols, 6) - 1) * var(--gap)) / var(--cols, 6))); justify-content: center;
+  /* --c full-width columns (newtab.js fitGrid), but a group shorter than a row (--n of them) sits centered under the clock */
+  grid-template-columns: repeat(var(--n, 6), calc((100% - (var(--c, 6) - 1) * var(--gap)) / var(--c, 6))); justify-content: center;
 }
-@media (max-width: 900px) { .grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); } }
 .grid li { position: relative; }
 .grid li.dragging { opacity: .4; }
 .grid li.drop-before::before {
@@ -286,33 +295,30 @@ dialog input[type=text]:focus-visible, dialog input[type=url]:focus-visible, dia
 .btn.danger:hover { filter: none; background: color-mix(in srgb, var(--danger) 10%, transparent); }
 .file-btn:has(input:focus-visible) { outline: 2px solid var(--accent); outline-offset: 2px; }
 .link-btn { all: unset; justify-self: start; font-size: 13px; font-weight: 500; color: var(--accent); cursor: pointer; }
+.link-btn[hidden] { display: none; }
 .link-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
 
 /* settings */
-/* tabs down the left, the chosen tab's section on the right; the dialog keeps one size whatever the tab */
-dialog.wide { width: min(720px, calc(100vw - 32px)); height: min(780px, calc(100vh - 48px)); }
-#settings-dialog { font-family: var(--sys); } /* Settings stay readable whatever font was picked there */
-dialog.wide form { height: 100%; grid-template: auto minmax(0, 1fr) auto / 150px minmax(0, 1fr); column-gap: 24px; }
-dialog.wide h2, dialog.wide .actions { grid-column: 1 / -1; }
+/* a drawer down the right side (the page stays in view beside it), its tabs over the chosen tab's section */
+#settings-dialog { width: min(460px, 100vw); padding: 24px 20px 16px; font-family: var(--sys); } /* readable whatever font was picked there */
+#settings-dialog form { flex: 1; min-height: 0; grid-template-rows: auto auto minmax(0, 1fr) auto; }
+#settings-dialog .tabs { flex-wrap: wrap; padding-inline: 0; }
+/* Appearance: no veil over the page, so each change is seen as it is made */
+#settings-dialog:has([value="look"]:checked)::backdrop { background-color: transparent; backdrop-filter: none; }
 .tabs { display: grid; align-content: start; gap: 2px; }
 .tabs label { padding: 8px 12px; border-radius: 10px; font-size: 14px; font-weight: 500; color: var(--ink-2); cursor: pointer; }
 .tabs label:hover, .tabs label:has(:checked) { background: var(--surface-2); color: var(--ink); }
 .tabs label:has(:checked) { font-weight: 600; }
 .tabs label:has(:focus-visible) { outline: 2px solid var(--accent); outline-offset: 2px; }
 /* the padding leaves room for focus rings, which the scrolling would clip */
-.section { display: grid; align-content: start; gap: 10px; grid-area: 2 / 2; margin: -4px; padding: 4px; overflow: auto; overscroll-behavior: contain; }
+.section { display: grid; align-content: start; gap: 10px; margin: -4px; padding: 4px; overflow: auto; overscroll-behavior: contain; }
 .section[hidden] { display: none; }
 .swatches + .range { margin-top: 10px; }
 .section .field select { width: auto; justify-self: start; }
-@media (max-width: 640px) {
-  dialog.wide form { grid-template: auto auto minmax(0, 1fr) auto / minmax(0, 1fr); }
-  .tabs { display: flex; flex-wrap: wrap; }
-  .section { grid-area: auto; }
-}
 .section h3 { margin: 0; font-size: 13px; font-weight: 600; }
-.swatches { display: flex; flex-wrap: wrap; gap: 10px; }
+.swatches { display: flex; flex-wrap: wrap; gap: 8px; }
 .swatch {
-  position: relative; display: grid; place-items: center; width: 46px; height: 46px; padding: 0; border: 0; border-radius: 12px; cursor: pointer;
+  position: relative; display: grid; place-items: center; width: 44px; height: 44px; padding: 0; border: 0; border-radius: 12px; cursor: pointer;
   background: var(--bg) center / cover; color: var(--ink-2); box-shadow: inset 0 0 0 1px rgb(127 127 127 / .25);
 }
 .swatch[aria-pressed="true"], .swatch.on {
@@ -369,8 +375,10 @@ details textarea { resize: vertical; font: 12px/1.4 ui-monospace, monospace; mar
 .teams .backups { margin-top: 2px; }
 .teams input[readonly] { flex: 1; min-width: 12em; width: auto; font-family: ui-monospace, monospace; font-size: 12px; }
 #invite-link, #team-name, #team-me { flex: 1; min-width: 10em; width: auto; }
+/* the messages and the Selection bar sit above a tip at the foot of the page while one shows */
+:root:has(.tip:popover-open) { --foot: 56px; }
 .error {
-  position: fixed; left: 50%; bottom: 24px; z-index: 10; translate: -50% 0; max-width: calc(100vw - 32px); margin: 0;
+  position: fixed; left: 50%; bottom: calc(24px + var(--foot, 0px)); z-index: 10; translate: -50% 0; max-width: calc(100vw - 32px); margin: 0;
   padding: 10px 16px; border-radius: 10px; background: var(--danger); color: light-dark(#fff, #1a0505); font-size: 13px; font-weight: 500; box-shadow: var(--shadow);
 }
 .error.note { background: var(--ink); color: var(--surface); }
@@ -488,7 +496,8 @@ details textarea { resize: vertical; font: 12px/1.4 ui-monospace, monospace; mar
 /* --x and --y (0 to 1) place the card in the room the window leaves around it */
 .todo {
   position: fixed; z-index: 5; left: calc(var(--x) * 100%); top: calc(var(--y) * 100%); translate: calc(var(--x) * -100%) calc(var(--y) * -100%);
-  display: flex; flex-direction: column; width: min(300px, 100vw - 16px); max-height: 70vh;
+  margin-left: var(--dx, 0px); /* stepped aside from the clock (newtab.js clearClock) */
+  display: flex; flex-direction: column; width: min(clamp(240px, 50vw - 120px, 300px), 100vw - 16px); max-height: 70vh;
   border-radius: 16px; background: var(--surface); color: var(--ink); box-shadow: var(--shadow-hover); font-size: 14px;
 }
 .todo[hidden] { display: none; }
@@ -499,7 +508,7 @@ details textarea { resize: vertical; font: 12px/1.4 ui-monospace, monospace; mar
 .todo .icon-btn { width: 26px; height: 26px; flex: none; background: transparent; backdrop-filter: none; box-shadow: none; color: var(--ink-3); }
 .todo .icon-btn:hover { background: rgb(127 127 127 / .12); color: var(--ink); }
 .todo .icon-btn .i { width: 15px; height: 15px; }
-.todo-add { padding: 6px 12px; }
+.todo-add { position: relative; padding: 6px 12px; }
 .todo-add input {
   width: 100%; box-sizing: border-box; padding: 7px 10px; border: 1px solid var(--rule); border-radius: 10px;
   font: inherit; color: var(--ink); background: var(--surface-2);
@@ -518,6 +527,33 @@ details textarea { resize: vertical; font: 12px/1.4 ui-monospace, monospace; mar
 .todo-list .text:focus { background: var(--surface); box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 30%, transparent); }
 .todo-list li .icon-btn { width: 22px; height: 22px; opacity: 0; }
 .todo-list li:hover .icon-btn, .todo-list li .icon-btn:focus-visible { opacity: 1; }
+/* a to-do's due date: its button shows when once there is one, else the calendar only on hover, as delete does */
+.todo .due { display: flex; align-items: center; width: auto; min-width: 22px; padding: 0 5px; border-radius: 6px; font-size: 12px; white-space: nowrap; }
+.todo .due .i { width: 14px; height: 14px; }
+.todo .due:has(span:not(:empty)) .i { display: none; }
+.todo-list li .due:has(span:not(:empty)) { opacity: 1; }
+#todo-new-due { position: absolute; right: 16px; top: 50%; translate: 0 -50%; }
+#todo-new-due:has(span:not(:empty)) { color: var(--accent); background: color-mix(in srgb, var(--accent) 12%, transparent); }
+.todo-add:has(#todo-new-due span:not(:empty)) input { padding-right: 104px; }
+/* the parts of the list by due date: gone by in red, today in the accent, on a tint of it */
+.todo-scroll { min-height: 0; overflow: auto; overscroll-behavior: contain; }
+.todo-part { margin: 2px 6px 6px; border-radius: 10px; }
+.todo-part .todo-list { padding: 0 0 2px; overflow: visible; }
+.todo-head { margin: 0; padding: 6px 10px 2px 24px; font-size: 12px; font-weight: 600; color: var(--ink-3); }
+#todo-undated { padding: 4px 10px 2px 30px; }
+.todo-part .todo-list li { padding-left: 24px; } /* in line with those that have a grip */
+.todo-part[data-part=over] { background: color-mix(in srgb, var(--danger) 8%, transparent); }
+.todo-part[data-part=today] { background: color-mix(in srgb, var(--accent) 8%, transparent); }
+[data-part=over] .todo-head, [data-part=over] .due { color: var(--danger); }
+[data-part=today] .todo-head, [data-part=today] .due { color: var(--accent); }
+.todo-part .todo-list li:hover { background: rgb(127 127 127 / .08); }
+/* its menu */
+.due-menu { min-width: 210px; }
+.due-menu button { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; }
+.due-menu small { font-size: 12px; color: var(--ink-3); }
+.due-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 6px 6px 6px 12px; font-size: 14px; }
+.due-row input { font: inherit; font-size: 13px; color: var(--ink); background: var(--surface-2); border: 1px solid var(--rule); border-radius: 8px; padding: 4px 6px; }
+#due-hint { max-width: 220px; margin: 0; padding: 0 12px 6px; font-size: 12px; }
 @media (hover: none) { .todo-list .grip, .todo-list li .icon-btn { opacity: 1; } }
 .todo-done { padding: 4px 6px 10px; border-top: 1px solid var(--rule); margin-top: 4px; }
 .todo-done[hidden] { display: none; }
@@ -526,3 +562,41 @@ details textarea { resize: vertical; font: 12px/1.4 ui-monospace, monospace; mar
 .todo-done .todo-list { max-height: 30vh; }
 .todo-done .link-btn { display: inline-block; margin: 6px 8px 0; font-size: 12px; }
 #open-todo[aria-pressed=true] { color: var(--accent); }
+
+/* ---------- Selection: a box to tick on each tile, and a bar of what to do with the ticked ones ---------- */
+.select-btn[aria-pressed=true] { color: var(--accent); }
+.folder-head { display: flex; align-items: center; gap: 8px; margin-bottom: 18px; }
+.folder-head #folder-name { flex: 1; margin-bottom: 0; }
+.selecting .edit, .selecting .add { display: none; }
+.selecting .tile { cursor: default; }
+.selecting .tile:hover { transform: none; }
+.selecting li::after {
+  content: ""; position: absolute; top: 8px; left: 8px; width: 22px; height: 22px; border-radius: 7px; pointer-events: none;
+  border: 2px solid #fff; background: rgb(17 24 39 / .35); box-shadow: 0 1px 4px rgb(0 0 0 / .35);
+}
+.selecting li.picked::after {
+  border-color: var(--accent); background: var(--accent) no-repeat center / 14px
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m5 12 5 5 9-10'/%3E%3C/svg%3E");
+}
+.selecting li.picked .tile { outline: 3px solid var(--accent); outline-offset: 3px; }
+.selecting li.empty::after { display: none; }
+.select-bar {
+  position: fixed; left: 50%; bottom: calc(24px + var(--foot, 0px)); z-index: 10; translate: -50% 0; max-width: calc(100vw - 32px); box-sizing: border-box;
+  display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 8px 8px 8px 16px;
+  border-radius: 14px; background: var(--surface); color: var(--ink); box-shadow: 0 0 0 1px var(--rule), var(--shadow-hover); font-size: 14px;
+}
+.select-bar[hidden] { display: none; }
+.select-bar .count { margin: 0 4px 0 0; font-size: 14px; font-weight: 600; color: var(--ink); }
+.select-bar .btn { padding: 7px 12px; font-size: 13px; }
+.select-bar select {
+  width: auto; padding: 7px 10px; border: 1px solid var(--rule); border-radius: 10px; background: var(--surface); color: var(--ink);
+  font: inherit; font-size: 13px; font-weight: 600; cursor: pointer;
+}
+.select-bar :disabled { opacity: .45; cursor: default; }
+/* in an open folder the bar sits at the foot of the folder, inside it */
+dialog .select-bar { position: sticky; left: auto; bottom: -28px; translate: none; margin: 18px -28px -28px; max-width: none; border-radius: 0; box-shadow: 0 -1px 0 var(--rule); }
+.undo-bar { display: flex; align-items: center; gap: 14px; }
+.undo-bar[hidden] { display: none; }
+.undo-bar .link-btn { color: inherit; font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
+.undo-bar:not([hidden]) ~ .error { bottom: calc(76px + var(--foot, 0px)); }
+dialog .undo-bar { position: sticky; bottom: 0; left: auto; translate: none; width: fit-content; margin: 16px auto 0; }

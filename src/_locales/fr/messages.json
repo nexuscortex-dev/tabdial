@@ -28,7 +28,7 @@
     "description": "Dialog title."
   },
   "renameHint": {
-    "message": "Double-cliquez pour renommer",
+    "message": "Double-cliquez pour renommer, clic droit pour plus d'options",
     "description": "Tooltip on a group tab."
   },
   "settings": {
@@ -90,6 +90,9 @@
   "address": {
     "message": "Adresse",
     "description": "Field label: the web address of a dial."
+  },
+  "addFromDrawer": {
+    "message": "Ou ajouter depuis les favoris et l'historique"
   },
   "title": {
     "message": "Titre",
@@ -922,6 +925,16 @@
   "clearDone": { "message": "Effacer les tâches faites" },
   "confirmClearDone": { "message": "Supprimer toutes les tâches faites ?" },
   "deleteTodo": { "message": "Supprimer la tâche" },
+  "dueDate": { "message": "Échéance" },
+  "dueTime": { "message": "Heure" },
+  "dueNextWeek": { "message": "La semaine prochaine" },
+  "duePick": { "message": "Choisir un jour" },
+  "dueAddTime": { "message": "Ajouter une heure" },
+  "todoOverdue": { "message": "En retard" },
+  "todoLater": { "message": "Plus tard" },
+  "todoNoDate": { "message": "Sans date" },
+  "dueHint": { "message": "Tabdial vous le rappelle à cette heure par une notification, tant que le navigateur est ouvert." },
+  "removeDue": { "message": "Retirer l’échéance" },
   "todosTooLong": { "message": "Vos tâches sont trop longues pour la synchronisation du navigateur. Un code de synchronisation les emporte toutes." },
   "importedTodos": { "message": "Vos tâches ont suivi aussi : $1 (bouton des tâches, en haut à droite)." },
   "nTodos_one": { "message": "$1 tâche" },
@@ -935,5 +948,24 @@
   "nNotes_other": { "message": "$1 notes" },
   "picturesFull": { "message": "L'espace pour les notes et les images est plein : le nouveau reste sur cet ordinateur. Retirez des notes, images ou miniatures pour synchroniser à nouveau." },
   "syncUsageBrowser": { "message": "Synchronisation du navigateur : $1 utilisés sur $2 (les images des notes n'y passent pas)." },
-  "syncUsageCode": { "message": "Espace du code : liste $1 utilisée, notes et images $2 sur $3." }
+  "syncUsageCode": { "message": "Espace du code : liste $1 utilisée, notes et images $2 sur $3." },
+  "select": { "message": "Sélectionner" },
+  "selectHint": { "message": "Sélectionner plusieurs éléments pour les supprimer ou les déplacer" },
+  "selectAll": { "message": "Tout sélectionner" },
+  "selectNone": { "message": "Ne rien sélectionner" },
+  "nItems_one": { "message": "$1 élément" },
+  "nItems_other": { "message": "$1 éléments" },
+  "nSelected_one": { "message": "$1 sélectionné" },
+  "nSelected_other": { "message": "$1 sélectionnés" },
+  "moveTo": { "message": "Déplacer vers…" },
+  "newGroupDots": { "message": "Nouveau groupe…" },
+  "putInFolder": { "message": "Mettre dans un dossier…" },
+  "takeOutOfFolder": { "message": "Sortir du dossier" },
+  "undo": { "message": "Annuler" },
+  "deletedItems": { "message": "Supprimé : $1." },
+  "deletedNamed": { "message": "« $1 » supprimé." },
+  "movedItems": { "message": "Déplacé vers « $2 » : $1." },
+  "keptItems": { "message": "Déjà dans « $2 », laissé en place : $1." },
+  "putIntoFolder": { "message": "Mis dans « $2 » : $1." },
+  "tookOutOfFolder": { "message": "Sorti de « $2 » : $1." }
 }
