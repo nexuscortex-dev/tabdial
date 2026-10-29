@@ -4,7 +4,7 @@
     "description": "Store and browser name, max 75 characters. Keep the brand Tabdial."
   },
   "appDesc": {
-    "message": "新しいタブ用のスピードダイヤル。サイトをグループとフォルダにまとめ、毎日バックアップ。スポンサー枠なし、アカウント不要、サブスクなし。",
+    "message": "新しいタブ用のスピードダイヤル。サイトをグループとフォルダにまとめ、メモと ToDo もすぐ横に。毎日バックアップ、スポンサー枠なし、アカウント不要、サブスクなし。",
     "description": "Short store description, max 132 characters."
   },
   "actionTitle": {
@@ -314,6 +314,30 @@
   },
   "themeDark": {
     "message": "ダーク"
+  },
+  "layout": {
+    "message": "レイアウト"
+  },
+  "layoutGrid": {
+    "message": "グリッド"
+  },
+  "layoutBoard": {
+    "message": "ボード"
+  },
+  "layoutHint": {
+    "message": "ボード：グループの各フォルダを開いたカードで表示し、フォルダ外のサイトは 1 枚のカードにまとめます。"
+  },
+  "showAsIcons": {
+    "message": "アイコン"
+  },
+  "showAsList": {
+    "message": "リスト"
+  },
+  "openFolder": {
+    "message": "フォルダを開く"
+  },
+  "cardOptions": {
+    "message": "$1 のオプション"
   },
   "sync": {
     "message": "同期"

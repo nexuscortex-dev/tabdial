@@ -63,6 +63,8 @@
   </div>
   <p id="team-note" class="team-note" hidden></p>
   <ol id="grid" class="grid" data-i18n-aria="speedDials"></ol>
+  <!-- Settings › Layout › Board: the group's folders as open cards (newtab.js) -->
+  <div id="board" class="board" hidden></div>
 </main>
 
 <!-- the to-dos, in a card the user drags anywhere on the page (newtab.js) -->
@@ -117,6 +119,12 @@
   <button type="button" id="menu-left" data-i18n="moveLeft"></button>
   <button type="button" id="menu-right" data-i18n="moveRight"></button>
   <div id="menu-teams" class="menu-more"></div>
+</div>
+<!-- a card's ⋮ on the board: its dials as icons or as a list; a folder's card also opens the folder -->
+<div id="card-menu" class="menu" popover="manual">
+  <button type="button" id="card-icons" role="menuitemradio" data-i18n="showAsIcons"></button>
+  <button type="button" id="card-list" role="menuitemradio" data-i18n="showAsList"></button>
+  <button type="button" id="card-open" data-i18n="openFolder"></button>
 </div>
 
 <!-- the browser's bookmarks and history, down the left side; each list once its permission is allowed -->
@@ -288,6 +296,13 @@
         <button type="button" class="swatch" data-bg="photos/aurora.webp" data-tone="dark" data-i18n-title="bgAurora" data-i18n-aria="bgAurora"></button>
         <button type="button" class="swatch" data-bg="photos/stars.webp" data-tone="dark" data-i18n-title="bgStars" data-i18n-aria="bgStars"></button>
       </div>
+      <label class="field"><span data-i18n="layout"></span>
+        <select id="layout">
+          <option value="grid" data-i18n="layoutGrid"></option>
+          <option value="board" data-i18n="layoutBoard"></option>
+        </select>
+      </label>
+      <p class="hint" data-i18n="layoutHint"></p>
       <label class="range">
         <span class="range-head"><span data-i18n="dialsPerRow"></span><output id="columns-out"></output></span>
         <input id="columns" type="range" min="3" max="12">

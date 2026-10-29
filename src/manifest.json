@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "__MSG_appName__",
   "short_name": "Tabdial",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "__MSG_appDesc__",
   "default_locale": "en",
   "chrome_url_overrides": { "newtab": "newtab.html" },

@@ -600,3 +600,78 @@ dialog .select-bar { position: sticky; left: auto; bottom: -28px; translate: non
 .undo-bar .link-btn { color: inherit; font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
 .undo-bar:not([hidden]) ~ .error { bottom: calc(76px + var(--foot, 0px)); }
 dialog .undo-bar { position: sticky; bottom: 0; left: auto; translate: none; width: fit-content; margin: 16px auto 0; }
+
+/* ---------- board (Settings › Layout › Board, newtab.js boardCard) ---------- */
+/* the cards in columns, each as tall as its dials, one under another */
+.board { columns: var(--board-cols, 4); column-gap: var(--gap); }
+.board.few { display: flex; justify-content: center; align-items: flex-start; gap: var(--gap); }
+.board.few .card { flex: none; width: var(--card-w); margin-bottom: 0; }
+.board[hidden] { display: none; }
+.grid[hidden] { display: none; }
+.card {
+  break-inside: avoid; margin-bottom: var(--gap); padding: 12px 14px 14px; border-radius: var(--radius);
+  background: var(--glass); backdrop-filter: blur(16px) saturate(1.4); box-shadow: var(--shadow);
+}
+.card.dragging { opacity: .4; }
+.card.drop-into { outline: 3px solid var(--accent); outline-offset: 2px; }
+.card.drop-before { box-shadow: var(--shadow), 0 -4px 0 var(--accent); }
+.card-head { display: flex; align-items: center; gap: 6px; margin: 0 -4px 10px 0; }
+.card-head[draggable="true"] { cursor: grab; }
+.card-name {
+  flex: 1; min-width: 0; margin: 0; padding: 0; border: 0; background: none; color: var(--ink); text-align: left;
+  font: inherit; font-size: 14px; font-weight: 650; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+button.card-name { cursor: pointer; }
+button.card-name:hover { text-decoration: underline; text-underline-offset: 3px; }
+.card-more {
+  flex: none; width: 26px; height: 26px; border: 0; border-radius: 8px; padding: 0; cursor: pointer;
+  background: transparent; color: var(--ink-3); font-size: 16px; line-height: 1;
+}
+.card-more:hover, .card-more:focus-visible { background: rgb(127 127 127 / .14); color: var(--ink); }
+.card ol { list-style: none; margin: 0; padding: 0; }
+.card li { position: relative; }
+.card li.dragging { opacity: .4; }
+.item {
+  display: flex; align-items: center; gap: 10px; width: 100%; min-width: 0; padding: 5px 6px; border: 0; border-radius: 8px;
+  color: inherit; text-decoration: none; background: transparent; font: inherit; text-align: left; cursor: pointer;
+}
+.item:hover { background: rgb(127 127 127 / .12); }
+.ico { flex: none; display: grid; place-items: center; width: 20px; height: 20px; border-radius: 5px; overflow: hidden; }
+.ico img { width: 16px; height: 16px; }
+.ico .i { width: 16px; height: 16px; color: var(--ink-2); }
+.ico .letter {
+  display: grid; place-items: center; width: 100%; height: 100%; font-size: 11px; font-weight: 700; color: #fff;
+  background: linear-gradient(135deg, hsl(var(--hue) 70% 58%), hsl(calc(var(--hue) + 30) 68% 46%));
+}
+.card .label { font-size: var(--text); }
+.card .edit { top: 50%; right: 4px; width: 24px; height: 24px; translate: 0 -50%; }
+.card .edit .i { width: 12px; height: 12px; }
+.card li:hover .edit { transform: none; }
+.card-list li.drop-before::before { content: ""; position: absolute; left: 4px; right: 4px; top: -2px; height: 3px; border-radius: 2px; background: var(--accent); }
+.card li.drop-into .item { outline: 2px solid var(--accent); outline-offset: -2px; }
+/* as icons: a grid of the sites' icons on white tiles, the names left to the pointer */
+.card-icons { display: grid; grid-template-columns: repeat(auto-fill, minmax(calc(var(--ico) + 12px), 1fr)); gap: 6px; }
+.card-icons .item { flex-direction: column; justify-content: center; padding: 6px; }
+.card-icons .ico { width: var(--ico); height: var(--ico); border-radius: calc(var(--ico) * .26); background: #fff; box-shadow: 0 0 0 1px rgb(17 24 39 / .06); }
+.card-icons .ico img { width: 62%; height: 62%; }
+.card-icons .ico .i { width: calc(var(--ico) * .42); height: calc(var(--ico) * .42); color: #4b5563; }
+.card-icons .ico .letter { font-size: calc(var(--ico) * .42); }
+.card-icons .ico-add { background: transparent; box-shadow: none; border: 1.5px dashed color-mix(in srgb, var(--ink-3) 45%, transparent); }
+.card-icons .ico-add .i { color: var(--ink-2); }
+/* a folder in a folder: as a list, its sign; as icons, its first four sites in small */
+.ico.sub .mini { display: none; }
+.card-icons .ico.sub { background: rgb(127 127 127 / .22); box-shadow: none; }
+.card-icons .ico.sub > .i { display: none; }
+.card-icons .ico.sub .mini { display: grid; grid-template: 1fr 1fr / 1fr 1fr; gap: 3px; width: 72%; height: 72%; }
+.card-icons .mini .ico { width: 100%; height: 100%; border-radius: 22%; background: #fff; box-shadow: none; }
+.card-icons .mini .ico img { width: 70%; height: 70%; }
+.card-icons .mini .ico .letter { font-size: calc(var(--ico) * .16); }
+.card-icons .label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.card-icons .edit { top: 0; right: 0; translate: none; width: 20px; height: 20px; }
+.card-icons .edit .i { width: 10px; height: 10px; }
+.card-icons li.drop-before::before { content: ""; position: absolute; left: -4px; top: 10%; bottom: 10%; width: 3px; border-radius: 2px; background: var(--accent); }
+.card-list .ico-add { color: var(--ink-2); }
+.card-list .add .label { color: var(--ink-2); }
+.card-list .item { padding-right: 32px; } /* room for the edit button */
+/* the card menu's choice ticked */
+.menu [role="menuitemradio"][aria-checked="true"]::after { content: " ✓"; color: var(--accent); }

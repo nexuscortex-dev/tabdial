@@ -247,6 +247,7 @@ function render() {
   document.documentElement.style.setProperty('--text', `${text}px`);
   document.documentElement.style.setProperty('--font', font && `"${font}"`); // '' = the usual one
   document.documentElement.style.setProperty('--radius', `${radius}px`);
+  document.documentElement.style.setProperty('--ico', `${Math.round(48 * size / 100)}px`); // an icon on the board
   for (const sw of document.querySelectorAll('.swatch[data-bg]')) sw.setAttribute('aria-pressed', String(sw.dataset.bg === background));
   $('.swatch.custom').classList.toggle('on', kind === 'color');
   $('.swatch.custom').style.backgroundColor = kind === 'color' ? background : '';
@@ -297,9 +298,15 @@ function render() {
   $('#select').hidden = fixed || Boolean(found) || !group.dials.length;
   $('#select').setAttribute('aria-pressed', String(Boolean(picking && !picking.folder)));
 
+  // The board shows the group as it is: not search results, not while ticking, not an empty group's welcome.
+  const board = state.settings.layout === 'board' && !found && !picking && group.dials.length > 0;
+  $('#grid').hidden = board;
+  $('#board').hidden = !board;
+  $('#board').replaceChildren(...(board ? boardCards(group, fixed) : []));
   gridCount = dials.length ? dials.length + (found || fixed ? 0 : 1) : 0;
   fitGrid();
-  if (found) $('#grid').replaceChildren(...items, ...(found.length ? [] : [noMatch()]));
+  if (board) $('#grid').replaceChildren();
+  else if (found) $('#grid').replaceChildren(...items, ...(found.length ? [] : [noMatch()]));
   else if (fixed) $('#grid').replaceChildren(...items, ...(group.dials.length ? [] : [noMatch(t('teamGroupEmpty'))]));
   else $('#grid').replaceChildren(...items, group.dials.length || group.team ? addTile() : welcome());
   markPicked($('#grid'), picking && !picking.folder);
@@ -310,6 +317,7 @@ function render() {
 // As many columns as Settings asks, but fewer when the window is too narrow for dials MIN_DIAL wide (a title in a
 // narrower dial is cut to a few letters), or as wide as Settings makes them when that is less.
 const MIN_DIAL = 140;
+const MIN_CARD = 248; // the board's (below)
 let gridCount = 0; // the tiles in the grid, the add tile included
 function fitGrid() {
   const { columns, gap, size } = look();
@@ -318,6 +326,14 @@ function fitGrid() {
   const cols = Math.max(1, Math.min(columns, Math.floor((grid.clientWidth + gap) / (least + gap))));
   grid.style.setProperty('--c', cols);
   grid.style.setProperty('--n', gridCount ? Math.min(gridCount, cols) : cols);
+  // The board: as many columns as cards MIN_CARD wide fit. Fewer cards than that sit in one row, centered, each as wide
+  // as a column would be (in columns, short cards would stack under one another and leave columns empty).
+  const board = $('#board');
+  if (board.hidden) return;
+  const fit = Math.max(1, Math.floor((board.clientWidth + gap) / (MIN_CARD + gap)));
+  board.style.setProperty('--board-cols', fit);
+  board.style.setProperty('--card-w', `${(board.clientWidth - (fit - 1) * gap) / fit}px`);
+  board.classList.toggle('few', board.children.length <= fit);
 }
 addEventListener('resize', () => { fitGrid(); clearClock(); });
 
@@ -381,6 +397,200 @@ function folderTile(folder, movable) {
   if (movable) wireDrag(li);
   return li;
 }
+
+// ---------- board ----------
+// Settings › Layout › Board: the group's folders side by side as open cards, and its dials outside folders in a card
+// of their own, named after the group, with the add button. Each card shows its dials as icons or as a list
+// (`settings.lists`: the ids of the folders and groups shown as a list; it follows the user with the look, sync.js). A
+// folder in a folder is a line in its card that opens it. While the Search box has words in it, during Selection and
+// in an empty group, the page is the grid as usual. Dragging: a dial goes before the one it is dropped on, or at the
+// end of the card it is dropped on (into that folder, or out of folders); a card is dragged by its name, before
+// another card.
+const lists = () => state.settings.lists || [];
+function boardCards(group, fixed) {
+  const loose = group.dials.filter((d) => !d.dials);
+  return [...(loose.length || !fixed ? [boardCard(group, loose, fixed, true)] : []),
+    ...group.dials.filter((d) => d.dials).map((f) => boardCard(f, f.dials, fixed))];
+}
+function boardCard(owner, items, fixed, ofGroup = false) {
+  const card = document.createElement('section');
+  card.className = 'card';
+  card.dataset.id = owner.id;
+  card.setAttribute('aria-label', owner.name);
+  const head = document.createElement('div');
+  head.className = 'card-head';
+  const name = document.createElement(ofGroup ? 'h2' : 'button');
+  name.className = 'card-name';
+  name.textContent = owner.name;
+  if (!ofGroup) {
+    name.type = 'button';
+    name.title = t('openFolder');
+    name.addEventListener('click', () => openFolder(owner.id));
+  }
+  const more = document.createElement('button');
+  more.type = 'button';
+  more.className = 'card-more';
+  more.textContent = '⋮';
+  more.setAttribute('aria-label', t('cardOptions', owner.name));
+  more.addEventListener('click', (e) => openCardMenu(e, owner.id, ofGroup));
+  head.append(name, more);
+  const list = document.createElement('ol');
+  list.className = lists().includes(owner.id) ? 'card-list' : 'card-icons';
+  list.append(...items.map((d) => (d.dials ? boardFolder(d, !fixed) : boardDial(d, !fixed, fixed))));
+  if (ofGroup && !fixed) list.append(boardAdd());
+  card.append(head, list);
+  if (fixed) return card;
+  if (!ofGroup) { // a card is moved by its name
+    head.draggable = true;
+    head.addEventListener('dragstart', (e) => {
+      dragId = owner.id;
+      card.classList.add('dragging');
+      e.dataTransfer.effectAllowed = 'move';
+      e.dataTransfer.setData('text/plain', dragId);
+    });
+    head.addEventListener('dragend', endDrag);
+  }
+  const takes = (e) => (dragId || dragNew) && !inDragged(owner.id) && !(isCard(dragId) ? ofGroup : e.target.closest('li'));
+  card.addEventListener('dragover', (e) => {
+    if (!takes(e)) return;
+    e.preventDefault();
+    document.querySelectorAll('.drop-before, .drop-into').forEach((n) => n.classList.remove('drop-before', 'drop-into'));
+    card.classList.add(isCard(dragId) ? 'drop-before' : 'drop-into');
+  });
+  card.addEventListener('dragleave', (e) => { if (!card.contains(e.relatedTarget)) card.classList.remove('drop-before', 'drop-into'); });
+  card.addEventListener('drop', (e) => {
+    if (!takes(e)) return;
+    e.preventDefault();
+    e.stopPropagation();
+    adopt();
+    if (!listOf(dragId) || inDragged(owner.id)) return endDrag();
+    if (isCard(dragId)) placeBefore(dragId, owner.id);
+    else owner.dials.push(take(dragId));
+    saveAndRender();
+  });
+  return card;
+}
+// A folder of the group itself: one with a card of its own.
+const isCard = (id) => activeGroup().dials.some((d) => d.id === id && d.dials);
+
+// A site's icon on the board: the browser's, else its first letter (as in thumbEl).
+function siteIcon(url, title) {
+  const box = document.createElement('span');
+  box.className = 'ico';
+  const fill = (rgb) => {
+    if (rgb) {
+      const img = new Image();
+      img.alt = '';
+      img.src = faviconUrl(url, 64);
+      return box.replaceChildren(img);
+    }
+    const host = hostOf(url);
+    box.style.setProperty('--hue', hueOf(host));
+    box.replaceChildren(Object.assign(document.createElement('span'), { className: 'letter', textContent: (title || host).charAt(0).toUpperCase() }));
+  };
+  const shown = icons[url] || null;
+  fill(shown);
+  findIcon(url).then((rgb) => { if (String(rgb) !== String(shown)) fill(rgb); });
+  return box;
+}
+function boardDial(d, movable, copy) {
+  const li = document.createElement('li');
+  li.dataset.id = d.id;
+  li.dataset.flat = '';
+  li.draggable = movable;
+  const a = document.createElement('a');
+  a.className = 'item';
+  a.href = d.url;
+  a.draggable = false;
+  const label = document.createElement('span');
+  label.className = 'label';
+  label.textContent = tidyTitle(d.title) || hostOf(d.url);
+  a.title = label.textContent;
+  a.append(siteIcon(d.url, d.title), label);
+  const edit = document.createElement('button');
+  edit.type = 'button';
+  edit.className = 'edit';
+  edit.append(icon(copy ? 'i-copy' : 'i-edit'));
+  edit.title = t(copy ? 'copyToMyGroup' : 'edit');
+  edit.setAttribute('aria-label', t(copy ? 'copyNamed' : 'editNamed', label.textContent));
+  edit.addEventListener('click', () => openDialDialog(d, copy));
+  a.addEventListener('contextmenu', (e) => { e.preventDefault(); openDialDialog(d, copy); });
+  li.append(a, edit);
+  if (movable) wireDrag(li);
+  return li;
+}
+function boardFolder(folder, movable) {
+  const li = document.createElement('li');
+  li.dataset.id = folder.id;
+  li.dataset.flat = '';
+  li.draggable = movable;
+  const b = document.createElement('button');
+  b.type = 'button';
+  b.className = 'item sub';
+  b.draggable = false;
+  b.title = `${folder.name} · ${plural(dialsOf(folder).length, 'nDials')}`;
+  // as a list, a folder sign before its name; as icons, its first four sites in small
+  const ico = document.createElement('span');
+  ico.className = 'ico sub';
+  const mini = document.createElement('span');
+  mini.className = 'mini';
+  mini.append(...dialsOf(folder).slice(0, 4).map((d) => siteIcon(d.url, d.title)));
+  ico.append(icon('i-folder'), mini);
+  const label = document.createElement('span');
+  label.className = 'label';
+  label.textContent = folder.name;
+  b.append(ico, label);
+  b.addEventListener('click', () => openFolder(folder.id));
+  li.append(b);
+  if (movable) wireDrag(li);
+  return li;
+}
+function boardAdd() {
+  const li = document.createElement('li');
+  li.className = 'add';
+  const b = document.createElement('button');
+  b.type = 'button';
+  b.className = 'item';
+  b.title = t('addSite');
+  const ico = document.createElement('span');
+  ico.className = 'ico ico-add';
+  ico.append(icon('i-plus'));
+  const label = document.createElement('span');
+  label.className = 'label';
+  label.textContent = t('addSite');
+  b.append(ico, label);
+  b.addEventListener('click', () => openDialDialog(null));
+  li.append(b);
+  return li;
+}
+
+// The ⋮ on a card: its dials as icons or as a list; a folder's card also opens the folder (to rename it, tick its dials).
+const cardMenu = $('#card-menu');
+let menuCardId = null;
+function openCardMenu(e, id, ofGroup) {
+  menuCardId = id;
+  const asList = lists().includes(id);
+  $('#card-icons').setAttribute('aria-checked', String(!asList));
+  $('#card-list').setAttribute('aria-checked', String(asList));
+  $('#card-open').hidden = ofGroup;
+  const r = e.currentTarget.getBoundingClientRect();
+  cardMenu.style.left = `${Math.min(r.left, innerWidth - 180)}px`;
+  cardMenu.style.top = `${r.bottom + 4}px`;
+  cardMenu.showPopover();
+  cardMenu.querySelector('[aria-checked=true]')?.focus();
+}
+// Only ids still in some group are kept, so the setting doesn't grow with folders long gone.
+function showAsList(id, on) {
+  const known = new Set(state.groups.flatMap((g) => [g.id, ...itemsIn(g).filter((d) => d.dials).map((d) => d.id)]));
+  state.settings.lists = [...lists().filter((x) => x !== id && known.has(x)), ...(on ? [id] : [])];
+  cardMenu.hidePopover();
+  saveAndRender();
+}
+$('#card-icons').addEventListener('click', () => showAsList(menuCardId, false));
+$('#card-list').addEventListener('click', () => showAsList(menuCardId, true));
+$('#card-open').addEventListener('click', () => { cardMenu.hidePopover(); openFolder(menuCardId); });
+addEventListener('pointerdown', (e) => { if (!cardMenu.contains(e.target) && !e.target.closest('.card-more')) cardMenu.hidePopover(); });
+addEventListener('keydown', (e) => { if (e.key === 'Escape') cardMenu.hidePopover(); });
 
 // ---------- folder ----------
 // An open folder: its dials and folders over the page, its name to change at the top. A folder in it opens in its
@@ -719,6 +929,7 @@ function endDrag() {
 
 const dropsInto = (li, e) => {
   const r = li.getBoundingClientRect();
+  if ('flat' in li.dataset && !findFolder(li.dataset.id)) return false; // a dial on the board only ever goes before it
   return Boolean(dragNew || findDial(dragId) || findFolder(li.dataset.id)) && e.clientX - r.left > r.width * .3;
 };
 // Whether `id` is the folder being dragged or inside it: what it can't be dropped on.
@@ -750,13 +961,16 @@ function wireDrag(li) {
     e.dataTransfer.setData('text/plain', dragId);
   });
   li.addEventListener('dragend', endDrag);
+  // a card dragged on the board goes before a card, never among a card's dials (boardCard)
+  const card = () => 'flat' in li.dataset && isCard(dragId);
   li.addEventListener('dragover', (e) => {
-    if (!dragId || inDragged(li.dataset.id)) return;
+    if (!dragId || inDragged(li.dataset.id) || card()) return;
     e.preventDefault();
     document.querySelectorAll('.drop-before, .drop-into').forEach((n) => n.classList.remove('drop-before', 'drop-into'));
     li.classList.add(dropsInto(li, e) ? 'drop-into' : 'drop-before');
   });
   li.addEventListener('drop', (e) => {
+    if (card()) return;
     e.preventDefault();
     adopt();
     if (inDragged(li.dataset.id) || !listOf(dragId) || !listOf(li.dataset.id)) return; // or gone meanwhile
@@ -1722,6 +1936,7 @@ $('#open-settings').addEventListener('click', () => {
   }
   $('#titles-on').checked = state.settings.titles !== false;
   $('#theme').value = look().theme;
+  $('#layout').value = state.settings.layout || 'grid';
   $('#font').value = look().font;
   $('#bg-color').value = backgroundKind(state.settings.background) === 'color' ? state.settings.background : '#f1f3f6';
   $('#import-status').textContent = '';
@@ -2233,6 +2448,7 @@ for (const [name, shown] of Object.entries(sliders)) {
 }
 $('#titles-on').addEventListener('change', (e) => { state.settings.titles = e.target.checked; saveAndRender(); });
 $('#theme').addEventListener('change', (e) => { state.settings.theme = e.target.value; saveAndRender(); });
+$('#layout').addEventListener('change', (e) => { state.settings.layout = e.target.value; saveAndRender(); });
 $('#font').addEventListener('input', (e) => { state.settings.font = e.target.value.trim().replace(/["\\]/g, ''); saveAndRender(); });
 // The fonts on this computer, to pick from, each under the name the browser shows for it: asked of the browser when the
 // field is first entered (chrome.fontSettings, which names families only and so answers at once; queryLocalFonts took

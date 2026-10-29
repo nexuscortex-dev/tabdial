@@ -315,6 +315,30 @@
   "themeDark": {
     "message": "Sombre"
   },
+  "layout": {
+    "message": "Disposition"
+  },
+  "layoutGrid": {
+    "message": "Grille"
+  },
+  "layoutBoard": {
+    "message": "Tableau"
+  },
+  "layoutHint": {
+    "message": "Tableau : chaque dossier du groupe s’affiche ouvert, en carte, et les sites hors dossier dans une carte à part."
+  },
+  "showAsIcons": {
+    "message": "Icônes"
+  },
+  "showAsList": {
+    "message": "Liste"
+  },
+  "openFolder": {
+    "message": "Ouvrir le dossier"
+  },
+  "cardOptions": {
+    "message": "Options de $1"
+  },
   "sync": {
     "message": "Synchronisation"
   },

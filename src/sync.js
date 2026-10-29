@@ -186,6 +186,8 @@ const LOOK = {
   theme: (v) => ['', 'light', 'dark'].includes(v),
   todoOn: (v) => typeof v === 'boolean', // the to-do card shown (newtab.js)
   todoAt: (v) => Array.isArray(v) && v.length === 2 && v.every((n) => typeof n === 'number' && n >= 0 && n <= 1), // where: 0 to 1 across the room the window leaves
+  layout: (v) => ['grid', 'board'].includes(v), // the board: a group's folders as open cards (newtab.js)
+  lists: (v) => Array.isArray(v) && v.length <= 1000 && v.every((id) => typeof id === 'string' && id.length <= 64), // the board's cards shown as a list, by id
 };
 // Those of these settings that `settings` has, each only as Tabdial writes it: whoever can write to the user's sync
 // could put anything there, and a background could then name a picture on a server of theirs.
