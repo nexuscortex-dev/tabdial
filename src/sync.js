@@ -192,7 +192,12 @@ const LOOK = {
 // Those of these settings that `settings` has, each only as Tabdial writes it: whoever can write to the user's sync
 // could put anything there, and a background could then name a picture on a server of theirs.
 export const lookOf = (settings) => Object.fromEntries(Object.keys(LOOK).filter((name) => LOOK[name](settings?.[name])).map((name) => [name, settings[name]]));
-const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
+// The browser's storage hands objects back with their keys in another order (Chrome sorts them), so two values are
+// compared by their keys, not by the order they were written in. Comparing JSON as written made a stored look never
+// equal the synced one: every load saved, every save made each open page load again, and the pages never stopped.
+const canon = (v) => (Array.isArray(v) ? v.map(canon)
+  : v && typeof v === 'object' ? Object.fromEntries(Object.keys(v).sort().map((k) => [k, canon(v[k])])) : v);
+const same = (a, b) => JSON.stringify(canon(a)) === JSON.stringify(canon(b));
 const readLook = async () => [(await chrome.storage.sync.get('look')).look, (await chrome.storage.local.get('lookSeen')).lookSeen];
 
 // Take into the settings what the synced look (`theirs`) changed since this computer last saw it, and return the
@@ -280,7 +285,7 @@ export async function pushNotes(state, kind = 'notes') {
   if (meta && meta.rev !== seen?.rev) return; // not taken in yet
   const notes = await out(state);
   const text = JSON.stringify(notes);
-  if (text === JSON.stringify(seen?.notes || [])) return;
+  if (same(notes, seen?.notes || [])) return;
   const rev = newRev();
   const items = pack(text, rev, prefix, kind);
   try {
@@ -442,7 +447,7 @@ async function pushSite(state, code, withLook = false) {
       const { index, bodies } = await siteNotes(state, key);
       const notes = withLook ? index : seen.notes; // as the site last had them, else
       const todo = withLook ? todos.synced(state.todos) : seen.todos;
-      if (list === seen.list && !Object.keys(changed).length && JSON.stringify(notes) === JSON.stringify(seen.notes) && JSON.stringify(todo) === JSON.stringify(seen.todos)) break;
+      if (list === seen.list && !Object.keys(changed).length && same(notes, seen.notes) && same(todo, seen.todos)) break;
       const look = lookOf({ ...seen.look?.theirs, ...changed });
       const pictures = named(list, notes, bodies); // this browser's bodies too, so the site keeps what a later write names
       const answer = await ask('write', { credential, version: seen.version, payload: await seal(key, { v: seen.version + 1, list, look, ...(notes && { notes }), ...(todo && todos.forSite(todo)) }), pictures }, SITE).catch((err) => {

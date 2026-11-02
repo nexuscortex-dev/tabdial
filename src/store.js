@@ -43,9 +43,16 @@ export async function load() {
   }
   if (!state.groups.some((g) => g.id === state.activeGroup)) state.activeGroup = state.groups[0].id;
   remember(state);
-  await syncNow(state);
+  loading.add(state);
+  try { await syncNow(state); } finally { loading.delete(state); }
   return state;
 }
+// The saves a load() made (syncNow): the page that loaded holds that state already, so hearing of the save must not
+// make it load again, which would never stop if every load saved. Marked when written, as the browser may tell of the
+// change before load() is back.
+const loading = new WeakSet();
+const savedByLoad = new Set();
+export const loadSaved = (rev) => savedByLoad.has(rev);
 
 // Take in what the other computers synced: the list, and how the page looks. Each is marked as seen in the same write
 // that stores it.
@@ -134,6 +141,7 @@ async function store(state, alsoStore) {
 
 async function write(state, alsoStore) {
   state.rev = uid();
+  if (loading.has(state)) savedByLoad.add(state.rev);
   await chrome.storage.local.set({ [KEY]: state, savedRev: state.rev, ...alsoStore });
   remember(state);
 }

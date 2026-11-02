@@ -1,4 +1,4 @@
-import { load, save, sendLook, syncNow, syncSite, uid, normalizeUrl, addDial, targetGroup, listBackups, restoreBackup, addMostVisited, shortTitle, tidyTitle, BEFORE_RESTORE, COPIES, FULL_COPIES } from './store.js';
+import { load, save, loadSaved, sendLook, syncNow, syncSite, uid, normalizeUrl, addDial, targetGroup, listBackups, restoreBackup, addMostVisited, shortTitle, tidyTitle, BEFORE_RESTORE, COPIES, FULL_COPIES } from './store.js';
 import { parseImport, exportState, mergeImport, historyOn, permissionNote, infinityNotes, infinityTodos } from './import.js';
 import { countDials, dialsOf, itemsIn, sameUrl, hostOf, ownGroups } from './merge.js';
 import { syncCode, siteAllowed, parseCode, codeLink, startSync, useCode, stopSync, sendPictures, lookOf, usage, MAX_DATA, SYNC_DATA } from './sync.js';
@@ -2595,7 +2595,7 @@ chrome.storage.onChanged.addListener(async (changes, area) => {
   if (area === 'local' && changes.paid) labelSort();
   if (area === 'local' && (changes.paid || changes.drive) && settingsDialog.open) showPlus(); // e.g. the daily backup ran
   if (area !== 'local' || !changes.tabdial) return;
-  if (changes.tabdial.newValue?.rev === state.rev) return; // our own save
+  if (changes.tabdial.newValue?.rev === state.rev || loadSaved(changes.tabdial.newValue?.rev)) return; // our own save
   state = await load();
   render();
 });
