@@ -386,5 +386,12 @@
   "movedItems": { "message": "已将 $1 移到“$2”。" },
   "keptItems": { "message": "“$2”中已有，留在原处：$1。" },
   "putIntoFolder": { "message": "已将 $1 放进“$2”。" },
-  "tookOutOfFolder": { "message": "已将 $1 移出“$2”。" }
+  "tookOutOfFolder": { "message": "已将 $1 移出“$2”。" },
+  "installedTitle": { "message": "Tabdial 已安装" },
+  "installedText": { "message": "以后打开新标签页（按 $1）看到的就是 Tabdial，主页不变。" },
+  "installedAskTitle": { "message": "浏览器问要不要改回去时" },
+  "installedAskText": { "message": "第一次打开新标签页时，浏览器可能会问要不要把新标签页改回去。请选保留：改回去会关掉 Tabdial。" },
+  "openNewTab": { "message": "打开新标签页" },
+  "installedPrivateTitle": { "message": "隐私窗口" },
+  "installedPrivateText": { "message": "Firefox 的扩展要经你允许才会在隐私窗口中运行：about:addons > Tabdial >“在隐私窗口中运行”>“允许”。如果 Firefox 设置为“不记录历史”，所有窗口都是隐私窗口。" }
 }

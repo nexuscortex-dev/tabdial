@@ -991,5 +991,12 @@
   "movedItems": { "message": "$1 を「$2」に移動しました。" },
   "keptItems": { "message": "「$2」にすでにあるため、そのままにしました：$1。" },
   "putIntoFolder": { "message": "$1 を「$2」に入れました。" },
-  "tookOutOfFolder": { "message": "$1 を「$2」から出しました。" }
+  "tookOutOfFolder": { "message": "$1 を「$2」から出しました。" },
+  "installedTitle": { "message": "Tabdial をインストールしました" },
+  "installedText": { "message": "これからは新しいタブに Tabdial が表示されます（$1 で開けます）。ホームページはそのままです。" },
+  "installedAskTitle": { "message": "ブラウザに元に戻すか聞かれたら" },
+  "installedAskText": { "message": "最初に新しいタブを開いたとき、ブラウザが新しいタブのページを元に戻すか尋ねることがあります。そのままにしてください。元に戻すと Tabdial がオフになります。" },
+  "openNewTab": { "message": "新しいタブを開く" },
+  "installedPrivateTitle": { "message": "プライベートウィンドウ" },
+  "installedPrivateText": { "message": "Firefox の拡張機能は、許可したときだけプライベートウィンドウで動きます：about:addons > Tabdial >「プライベートウィンドウでの実行」>「許可する」。Firefox が「履歴を一切記憶させない」設定のときは、すべてのウィンドウがプライベートになります。" }
 }

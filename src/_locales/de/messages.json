@@ -386,5 +386,12 @@
   "movedItems": { "message": "$1 nach „$2“ verschoben." },
   "keptItems": { "message": "Schon in „$2“, daher nicht verschoben: $1." },
   "putIntoFolder": { "message": "$1 in „$2“ gelegt." },
-  "tookOutOfFolder": { "message": "$1 aus „$2“ genommen." }
+  "tookOutOfFolder": { "message": "$1 aus „$2“ genommen." },
+  "installedTitle": { "message": "Tabdial ist installiert" },
+  "installedText": { "message": "Tabdial ist jetzt Ihre Seite für neue Tabs: Drücken Sie $1, um einen zu öffnen. Ihre Startseite bleibt, wie sie ist." },
+  "installedAskTitle": { "message": "Wenn Ihr Browser fragt, ob er sie zurücksetzen soll" },
+  "installedAskText": { "message": "Beim ersten neuen Tab fragt Ihr Browser vielleicht, ob die Seite für neue Tabs zurückgesetzt werden soll. Behalten Sie sie: Zurücksetzen schaltet Tabdial aus." },
+  "openNewTab": { "message": "Neuen Tab öffnen" },
+  "installedPrivateTitle": { "message": "Private Fenster" },
+  "installedPrivateText": { "message": "Firefox führt Erweiterungen in privaten Fenstern nur aus, wenn Sie es erlauben: about:addons > Tabdial > „In privaten Fenstern ausführen“ > „Erlauben“. Steht Firefox auf „Chronik niemals anlegen“, ist jedes Fenster privat." }
 }

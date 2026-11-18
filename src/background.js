@@ -45,7 +45,9 @@ async function capture(tab) {
 
 // Remember when Tabdial arrived (existing installs count from this update) for the one-time rating prompt,
 // and point uninstalls at a short, optional feedback page. Chrome keeps the uninstall URL across restarts.
-chrome.runtime.onInstalled.addListener(async () => {
+// A new install also opens welcome.html, which says to keep the new tab page when the browser asks.
+chrome.runtime.onInstalled.addListener(async ({ reason } = {}) => {
+  if (reason === 'install') chrome.tabs.create({ url: 'welcome.html' }).catch(() => {}); // fails in a Firefox where every window is private
   try {
     const { installedAt } = await chrome.storage.local.get('installedAt');
     if (!installedAt) await chrome.storage.local.set({ installedAt: Date.now() });

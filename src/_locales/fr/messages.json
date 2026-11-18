@@ -991,5 +991,12 @@
   "movedItems": { "message": "Déplacé vers « $2 » : $1." },
   "keptItems": { "message": "Déjà dans « $2 », laissé en place : $1." },
   "putIntoFolder": { "message": "Mis dans « $2 » : $1." },
-  "tookOutOfFolder": { "message": "Sorti de « $2 » : $1." }
+  "tookOutOfFolder": { "message": "Sorti de « $2 » : $1." },
+  "installedTitle": { "message": "Tabdial est installé" },
+  "installedText": { "message": "Tabdial est maintenant votre page de nouvel onglet : appuyez sur $1 pour en ouvrir un. Votre page d’accueil ne change pas." },
+  "installedAskTitle": { "message": "Si votre navigateur propose de revenir en arrière" },
+  "installedAskText": { "message": "Au premier nouvel onglet, votre navigateur vous demandera peut-être s’il faut rétablir l’ancienne page de nouvel onglet. Gardez Tabdial : rétablir l’ancienne page le désactive." },
+  "openNewTab": { "message": "Ouvrir un nouvel onglet" },
+  "installedPrivateTitle": { "message": "Fenêtres privées" },
+  "installedPrivateText": { "message": "Firefox n’exécute les extensions dans les fenêtres privées que si vous les autorisez : about:addons > Tabdial > « Exécution dans les fenêtres privées » > « Autoriser ». Si Firefox est réglé sur « Ne jamais conserver l’historique », chaque fenêtre est privée." }
 }

@@ -386,5 +386,12 @@
   "movedItems": { "message": "Movido a «$2»: $1." },
   "keptItems": { "message": "Ya está en «$2», se quedó donde estaba: $1." },
   "putIntoFolder": { "message": "Puesto en «$2»: $1." },
-  "tookOutOfFolder": { "message": "Sacado de «$2»: $1." }
+  "tookOutOfFolder": { "message": "Sacado de «$2»: $1." },
+  "installedTitle": { "message": "Tabdial está instalado" },
+  "installedText": { "message": "Tabdial es ahora tu página de nueva pestaña: pulsa $1 para abrir una. Tu página de inicio no cambia." },
+  "installedAskTitle": { "message": "Si tu navegador pregunta si quieres volver atrás" },
+  "installedAskText": { "message": "En la primera pestaña nueva, tu navegador puede preguntarte si quieres restablecer la página de nueva pestaña. Consérvala: restablecerla desactiva Tabdial." },
+  "openNewTab": { "message": "Abrir una pestaña nueva" },
+  "installedPrivateTitle": { "message": "Ventanas privadas" },
+  "installedPrivateText": { "message": "Firefox solo ejecuta extensiones en ventanas privadas si lo permites: about:addons > Tabdial > «Ejecutar en ventana privada» > «Permitir». Si Firefox está configurado en «No recordar el historial», todas las ventanas son privadas." }
 }
