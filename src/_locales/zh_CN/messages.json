@@ -393,5 +393,6 @@
   "installedAskText": { "message": "第一次打开新标签页时，浏览器可能会问要不要把新标签页改回去。请选保留：改回去会关掉 Tabdial。" },
   "openNewTab": { "message": "打开新标签页" },
   "installedPrivateTitle": { "message": "隐私窗口" },
-  "installedPrivateText": { "message": "Firefox 的扩展要经你允许才会在隐私窗口中运行：about:addons > Tabdial >“在隐私窗口中运行”>“允许”。如果 Firefox 设置为“不记录历史”，所有窗口都是隐私窗口。" }
+  "installedPrivateText": { "message": "Firefox 的扩展要经你允许才会在隐私窗口中运行：about:addons > Tabdial >“在隐私窗口中运行”>“允许”。如果 Firefox 设置为“不记录历史”，所有窗口都是隐私窗口。" },
+  "textDirection": { "message": "ltr" }
 }

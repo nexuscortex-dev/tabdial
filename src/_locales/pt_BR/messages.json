@@ -393,5 +393,6 @@
   "installedAskText": { "message": "Na primeira nova guia, o navegador pode perguntar se você quer restaurar a página de nova guia. Mantenha: restaurar desativa o Tabdial." },
   "openNewTab": { "message": "Abrir uma nova guia" },
   "installedPrivateTitle": { "message": "Janelas privativas" },
-  "installedPrivateText": { "message": "O Firefox só executa extensões em janelas privativas se você permitir: about:addons > Tabdial > “Funcionar em janelas privativas” > “Permitir”. Se o Firefox estiver em “Nunca memorizar o histórico”, todas as janelas são privativas." }
+  "installedPrivateText": { "message": "O Firefox só executa extensões em janelas privativas se você permitir: about:addons > Tabdial > “Funcionar em janelas privativas” > “Permitir”. Se o Firefox estiver em “Nunca memorizar o histórico”, todas as janelas são privativas." },
+  "textDirection": { "message": "ltr" }
 }

@@ -393,5 +393,6 @@
   "installedAskText": { "message": "Beim ersten neuen Tab fragt Ihr Browser vielleicht, ob die Seite für neue Tabs zurückgesetzt werden soll. Behalten Sie sie: Zurücksetzen schaltet Tabdial aus." },
   "openNewTab": { "message": "Neuen Tab öffnen" },
   "installedPrivateTitle": { "message": "Private Fenster" },
-  "installedPrivateText": { "message": "Firefox führt Erweiterungen in privaten Fenstern nur aus, wenn Sie es erlauben: about:addons > Tabdial > „In privaten Fenstern ausführen“ > „Erlauben“. Steht Firefox auf „Chronik niemals anlegen“, ist jedes Fenster privat." }
+  "installedPrivateText": { "message": "Firefox führt Erweiterungen in privaten Fenstern nur aus, wenn Sie es erlauben: about:addons > Tabdial > „In privaten Fenstern ausführen“ > „Erlauben“. Steht Firefox auf „Chronik niemals anlegen“, ist jedes Fenster privat." },
+  "textDirection": { "message": "ltr" }
 }

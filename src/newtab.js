@@ -10,13 +10,15 @@ import { suggestMoves, loose } from './sort.js';
 import { remove, moveTo, putInFolder, takeOutOfFolder, undo, prune, hasAddress } from './select.js';
 import { jumpList, jump, matching, searchBoxList } from './jump.js';
 import { getDrive, connectDrive, backUpToDrive, readDriveBackup, disconnectDrive, signInNeeded, identity } from './drive.js';
-import { t, plural, uiLanguage } from './i18n.js';
+import { t, plural, uiLanguage, direction } from './i18n.js';
 
 const $ = (sel) => document.querySelector(sel);
 
 // The page's own text, in the browser's language: elements name their message in data-i18n (text), data-i18n-title,
 // data-i18n-aria (aria-label) or data-i18n-placeholder.
 document.documentElement.lang = uiLanguage();
+document.documentElement.dir = direction();
+const rtl = () => document.documentElement.dir === 'rtl';
 const setters = { i18n: (el, s) => { el.textContent = s; }, i18nTitle: (el, s) => { el.title = s; },
   i18nAria: (el, s) => el.setAttribute('aria-label', s), i18nPlaceholder: (el, s) => { el.placeholder = s; } };
 for (const [name, set] of Object.entries(setters)) {
@@ -930,7 +932,8 @@ function endDrag() {
 const dropsInto = (li, e) => {
   const r = li.getBoundingClientRect();
   if ('flat' in li.dataset && !findFolder(li.dataset.id)) return false; // a dial on the board only ever goes before it
-  return Boolean(dragNew || findDial(dragId) || findFolder(li.dataset.id)) && e.clientX - r.left > r.width * .3;
+  const fromStart = rtl() ? r.right - e.clientX : e.clientX - r.left; // the first 30% of a tile, from where its line starts, is 'before'
+  return Boolean(dragNew || findDial(dragId) || findFolder(li.dataset.id)) && fromStart > r.width * .3;
 };
 // Whether `id` is the folder being dragged or inside it: what it can't be dropped on.
 const inDragged = (id) => { const f = findFolder(dragId); return Boolean(f) && (id === f.id || itemsIn(f).some((d) => d.id === id)); };
@@ -1224,7 +1227,10 @@ const drawerTab = () => drawer.querySelector('[name=drawer-tab]:checked').value;
 $('#open-drawer').addEventListener('click', () => { drawer.showModal(); showDrawer(); });
 $('#drawer-tabs').addEventListener('change', showDrawer);
 $('#drawer-search').addEventListener('input', showDrawer);
-drawer.addEventListener('dragover', (e) => { if (dragNew && e.clientX > drawer.getBoundingClientRect().right) drawer.close(); });
+drawer.addEventListener('dragover', (e) => {
+  const r = drawer.getBoundingClientRect(); // out past its inner edge, onto the page
+  if (dragNew && (rtl() ? e.clientX < r.left : e.clientX > r.right)) drawer.close();
+});
 
 async function showDrawer() {
   const tab = drawerTab();
@@ -1556,7 +1562,8 @@ editor.addEventListener('keydown', (e) => {
 });
 editor.addEventListener('click', (e) => {
   const item = e.target.closest('ul[data-checklist] > li');
-  if (item && e.target === item && e.clientX - item.getBoundingClientRect().left < 24) {
+  const r = item?.getBoundingClientRect();
+  if (item && e.target === item && (rtl() ? r.right - e.clientX : e.clientX - r.left) < 24) {
     item.toggleAttribute('data-done');
     if (item.hasAttribute('data-done')) item.setAttribute('data-done', 'true');
     changed();

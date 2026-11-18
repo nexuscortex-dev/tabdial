@@ -1,11 +1,13 @@
 import { load, targetGroup } from './store.js';
 import { readOnly } from './team.js';
-import { t } from './i18n.js';
+import { t, uiLanguage, direction } from './i18n.js';
 
 // Toolbar button: asks which group the current page goes to, with the active group marked and under Enter. With only
 // one group to pick, it adds at once. The service worker does the adding (background.js), then this popup closes.
 const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
 const state = await load();
+document.documentElement.lang = uiLanguage();
+document.documentElement.dir = direction();
 document.documentElement.dataset.theme = state.settings.theme || ''; // light or dark as picked in Settings
 const groups = state.groups.filter((g) => !readOnly(state, g));
 function add(groupId) {

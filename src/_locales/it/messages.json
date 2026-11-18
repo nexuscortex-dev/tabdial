@@ -393,5 +393,6 @@
   "installedAskText": { "message": "Alla prima nuova scheda, il browser potrebbe chiederti se ripristinare la pagina Nuova scheda. Mantienila: ripristinarla disattiva Tabdial." },
   "openNewTab": { "message": "Apri una nuova scheda" },
   "installedPrivateTitle": { "message": "Finestre anonime" },
-  "installedPrivateText": { "message": "Firefox esegue le estensioni nelle finestre anonime solo se lo consenti: about:addons > Tabdial > “Funzionamento in finestre anonime” > “Consenti”. Se Firefox è impostato su “Non salvare la cronologia”, ogni finestra è anonima." }
+  "installedPrivateText": { "message": "Firefox esegue le estensioni nelle finestre anonime solo se lo consenti: about:addons > Tabdial > “Funzionamento in finestre anonime” > “Consenti”. Se Firefox è impostato su “Non salvare la cronologia”, ogni finestra è anonima." },
+  "textDirection": { "message": "ltr" }
 }

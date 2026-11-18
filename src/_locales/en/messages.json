@@ -394,5 +394,6 @@
   "installedAskText": { "message": "On your first new tab, your browser may ask whether to change the new tab page back. Keep it: changing it back turns Tabdial off.", "description": "Chrome, Edge and Firefox each ask once whether to change the new tab page back; that answer turns Tabdial off. Don't quote the browser's button names." },
   "openNewTab": { "message": "Open a new tab", "description": "Button on the install page." },
   "installedPrivateTitle": { "message": "Private windows", "description": "On the install page, Firefox only." },
-  "installedPrivateText": { "message": "Firefox runs add-ons in private windows only when you allow them: about:addons > Tabdial > Run in Private Windows > Allow. If Firefox is set to “Never remember history”, every window is private.", "description": "Firefox only. The menu names are Firefox's own, in this language (the Firefox language pack strings)." }
+  "installedPrivateText": { "message": "Firefox runs add-ons in private windows only when you allow them: about:addons > Tabdial > Run in Private Windows > Allow. If Firefox is set to “Never remember history”, every window is private.", "description": "Firefox only. The menu names are Firefox's own, in this language (the Firefox language pack strings)." },
+  "textDirection": { "message": "ltr", "description": "The direction of this language's text: ltr (left to right) or rtl (right to left, as Arabic). Not shown." }
 }

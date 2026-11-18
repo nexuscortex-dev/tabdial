@@ -998,5 +998,6 @@
   "installedAskText": { "message": "最初に新しいタブを開いたとき、ブラウザが新しいタブのページを元に戻すか尋ねることがあります。そのままにしてください。元に戻すと Tabdial がオフになります。" },
   "openNewTab": { "message": "新しいタブを開く" },
   "installedPrivateTitle": { "message": "プライベートウィンドウ" },
-  "installedPrivateText": { "message": "Firefox の拡張機能は、許可したときだけプライベートウィンドウで動きます：about:addons > Tabdial >「プライベートウィンドウでの実行」>「許可する」。Firefox が「履歴を一切記憶させない」設定のときは、すべてのウィンドウがプライベートになります。" }
+  "installedPrivateText": { "message": "Firefox の拡張機能は、許可したときだけプライベートウィンドウで動きます：about:addons > Tabdial >「プライベートウィンドウでの実行」>「許可する」。Firefox が「履歴を一切記憶させない」設定のときは、すべてのウィンドウがプライベートになります。" },
+  "textDirection": { "message": "ltr" }
 }

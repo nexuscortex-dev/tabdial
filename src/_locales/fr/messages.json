@@ -998,5 +998,6 @@
   "installedAskText": { "message": "Au premier nouvel onglet, votre navigateur vous demandera peut-être s’il faut rétablir l’ancienne page de nouvel onglet. Gardez Tabdial : rétablir l’ancienne page le désactive." },
   "openNewTab": { "message": "Ouvrir un nouvel onglet" },
   "installedPrivateTitle": { "message": "Fenêtres privées" },
-  "installedPrivateText": { "message": "Firefox n’exécute les extensions dans les fenêtres privées que si vous les autorisez : about:addons > Tabdial > « Exécution dans les fenêtres privées » > « Autoriser ». Si Firefox est réglé sur « Ne jamais conserver l’historique », chaque fenêtre est privée." }
+  "installedPrivateText": { "message": "Firefox n’exécute les extensions dans les fenêtres privées que si vous les autorisez : about:addons > Tabdial > « Exécution dans les fenêtres privées » > « Autoriser ». Si Firefox est réglé sur « Ne jamais conserver l’historique », chaque fenêtre est privée." },
+  "textDirection": { "message": "ltr" }
 }
