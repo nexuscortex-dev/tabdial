@@ -11,6 +11,7 @@
   "speedDials": { "message": "Situs" },
   "defaultGroup": { "message": "Beranda" },
   "importedGroup": { "message": "Diimpor" },
+  "importedPage": { "message": "Halaman $1" },
   "welcomeTitle": { "message": "Situs favorit Anda, sekali klik" },
   "welcomeText": { "message": "Mulailah dengan situs yang paling sering Anda kunjungi, tambahkan situs sendiri, atau bawa situs Anda dari speed dial lain." },
   "emptyGroupTitle": { "message": "Grup ini kosong" },

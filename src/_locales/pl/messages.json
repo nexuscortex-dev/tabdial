@@ -11,6 +11,7 @@
   "speedDials": { "message": "Strony" },
   "defaultGroup": { "message": "Start" },
   "importedGroup": { "message": "Zaimportowane" },
+  "importedPage": { "message": "Strona $1" },
   "welcomeTitle": { "message": "Ulubione strony na jedno kliknięcie" },
   "welcomeText": { "message": "Zacznij od najczęściej odwiedzanych stron, dodaj własne albo przenieś strony z innego szybkiego wybierania." },
   "emptyGroupTitle": { "message": "Ta grupa jest pusta" },

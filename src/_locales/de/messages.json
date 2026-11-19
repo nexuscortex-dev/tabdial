@@ -21,6 +21,7 @@
   "speedDials": { "message": "Schnellwahl", "description": "Screen reader name of the grid of sites." },
   "defaultGroup": { "message": "Start", "description": "Name of the first group, made on install." },
   "importedGroup": { "message": "Importiert", "description": "Name for an imported group that had no name." },
+  "importedPage": { "message": "Seite $1" },
 
   "welcomeTitle": { "message": "Ihre Lieblingswebsites, nur einen Klick entfernt", "description": "Heading on the empty new tab page right after install." },
   "welcomeText": { "message": "Beginnen Sie mit Ihren meistbesuchten Websites, fügen Sie eigene hinzu oder übernehmen Sie Ihre Kacheln aus einer anderen Speed-Dial-Erweiterung." },

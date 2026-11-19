@@ -21,6 +21,7 @@
   "speedDials": { "message": "Selezione rapida", "description": "Screen reader name of the grid of sites." },
   "defaultGroup": { "message": "Home", "description": "Name of the first group, made on install." },
   "importedGroup": { "message": "Importato", "description": "Name for an imported group that had no name." },
+  "importedPage": { "message": "Pagina $1" },
 
   "welcomeTitle": { "message": "I tuoi siti preferiti, a un clic di distanza", "description": "Heading on the empty new tab page right after install." },
   "welcomeText": { "message": "Inizia dai siti che visiti di più, aggiungine altri tu o porta qui le tue scorciatoie da un'altra selezione rapida." },

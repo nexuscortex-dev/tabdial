@@ -11,6 +11,7 @@
   "speedDials": { "message": "스피드 다이얼" },
   "defaultGroup": { "message": "홈" },
   "importedGroup": { "message": "가져온 항목" },
+  "importedPage": { "message": "$1페이지" },
   "welcomeTitle": { "message": "좋아하는 사이트를 클릭 한 번으로" },
   "welcomeText": { "message": "가장 자주 방문하는 사이트로 시작하거나, 직접 추가하거나, 다른 스피드 다이얼에서 사이트를 가져오세요." },
   "emptyGroupTitle": { "message": "이 그룹은 비어 있습니다" },

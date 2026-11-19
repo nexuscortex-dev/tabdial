@@ -11,6 +11,7 @@
   "speedDials": { "message": "المواقع" },
   "defaultGroup": { "message": "الرئيسية" },
   "importedGroup": { "message": "مستوردة" },
+  "importedPage": { "message": "الصفحة $1" },
   "welcomeTitle": { "message": "مواقعك المفضلة على بُعد نقرة" },
   "welcomeText": { "message": "ابدأ بالمواقع التي تزورها أكثر، أو أضف مواقعك، أو انقل مواقعك من أداة اتصال سريع أخرى." },
   "emptyGroupTitle": { "message": "هذه المجموعة فارغة" },

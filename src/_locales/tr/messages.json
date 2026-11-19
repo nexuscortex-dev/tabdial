@@ -11,6 +11,7 @@
   "speedDials": { "message": "Siteler" },
   "defaultGroup": { "message": "Ana sayfa" },
   "importedGroup": { "message": "İçe aktarılanlar" },
+  "importedPage": { "message": "Sayfa $1" },
   "welcomeTitle": { "message": "Sevdiğiniz siteler bir tık uzağınızda" },
   "welcomeText": { "message": "En çok ziyaret ettiğiniz sitelerle başlayın, kendi sitelerinizi ekleyin ya da sitelerinizi başka bir hızlı erişim eklentisinden getirin." },
   "emptyGroupTitle": { "message": "Bu grup boş" },

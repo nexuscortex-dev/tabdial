@@ -21,6 +21,7 @@
   "speedDials": { "message": "快速拨号", "description": "Screen reader name of the grid of sites." },
   "defaultGroup": { "message": "首页", "description": "Name of the first group, made on install." },
   "importedGroup": { "message": "已导入", "description": "Name for an imported group that had no name." },
+  "importedPage": { "message": "第 $1 页" },
 
   "welcomeTitle": { "message": "常用网站，一键直达", "description": "Heading on the empty new tab page right after install." },
   "welcomeText": { "message": "先从你最常访问的网站开始，也可以自己添加，或者把其他快速拨号里的网站搬过来。" },
@@ -163,8 +164,8 @@
   "copyGone": { "message": "该副本已不存在。" },
 
   "unlockPitch": { "message": "把一个分组里的网站整理到其他分组，还能创建团队，与同事共用分组。", "description": "Bold first sentence of the paid unlock offer." },
-  "unlockTerms": { "message": "一次性付费 $$9，无需订阅。不满意？30 天内发邮件给我们即可全额退款。", "description": "Follows unlockPitch. The price is in US dollars in every language: keep $$9 exactly (it shows as $9)." },
-  "unlockFor": { "message": "$$9 解锁", "description": "Button. Keep $$9 exactly (it shows as $9)." },
+  "unlockTerms": { "message": "一次性付费：人民币 ¥29（微信支付），或银行卡 $$9，无需订阅。不满意？30 天内发邮件给我们即可全额退款。", "description": "Follows unlockPitch. Chinese browsers get a choice of yuan (CN_PAY in wrangler.toml, ¥29, CNY_PRICE in purchases.js) or card ($9) when they pay; change this with either. $$9 shows as $9." },
+  "unlockFor": { "message": "¥29 解锁", "description": "Button. The yuan price (purchases.js CNY_PRICE); see unlockTerms." },
   "terms": { "message": "条款", "description": "Link to the purchase terms." },
   "alreadyPaid": { "message": "我已付款" },
   "alreadyPaidHint": { "message": "开启了 Chrome 同步的其他电脑会自动解锁。在其他地方，用你备份到的那个 Google 账号登录即可。" },
@@ -208,7 +209,7 @@
   "importFile": { "message": "导入文件" },
   "addMostVisited": { "message": "添加最常访问的网站" },
   "importFormatsHint": { "message": "支持导入 Tabdial 文件，以及 Speed Dial 2、Group Speed Dial、speed-dial.net、Yet Another Speed Dial 的导出文件，以及 Toby 导出的 JSON 文件、Infinity 新标签页的备份文件和浏览器导出的书签（HTML 文件）。", "description": "Keep the product names as they are." },
-  "guides": { "message": "分步指南：", "description": "Followed by links named Speed Dial 2 and FVD Speed Dial." },
+  "guides": { "message": "分步指南：", "description": "Followed by links named Infinity, Speed Dial 2, FVD Speed Dial, Group Speed Dial and speed-dial.net." },
   "fvdPaste": { "message": "从 FVD Speed Dial 迁移？粘贴它导出的文本" },
   "pastedText": { "message": "粘贴导出的文本" },
   "importPasted": { "message": "导入粘贴的文本" },

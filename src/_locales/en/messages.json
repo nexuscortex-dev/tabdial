@@ -21,6 +21,7 @@
   "speedDials": { "message": "Speed dials", "description": "Screen reader name of the grid of sites." },
   "defaultGroup": { "message": "Home", "description": "Name of the first group, made on install." },
   "importedGroup": { "message": "Imported", "description": "Name for an imported group that had no name." },
+  "importedPage": { "message": "Page $1", "description": "Name of a group made from the second, third… page of an imported Infinity New Tab backup (its first page goes into Home). $1 = the page number." },
 
   "welcomeTitle": { "message": "Your favorite sites, one click away", "description": "Heading on the empty new tab page right after install." },
   "welcomeText": { "message": "Start with the sites you visit most, add your own, or bring your dials over from another speed dial." },
@@ -208,7 +209,7 @@
   "importFile": { "message": "Import a file" },
   "addMostVisited": { "message": "Add most visited sites" },
   "importFormatsHint": { "message": "Import accepts Tabdial files and export files from Speed Dial 2, Group Speed Dial, speed-dial.net and Yet Another Speed Dial, plus Toby's JSON export, Infinity New Tab's backup file and the bookmarks your browser exports (an HTML file).", "description": "Keep the product names as they are." },
-  "guides": { "message": "Step-by-step guides:", "description": "Followed by links named Speed Dial 2, FVD Speed Dial, Group Speed Dial and speed-dial.net." },
+  "guides": { "message": "Step-by-step guides:", "description": "Followed by links named Infinity, Speed Dial 2, FVD Speed Dial, Group Speed Dial and speed-dial.net." },
   "fvdPaste": { "message": "Moving from FVD Speed Dial? Paste its export text" },
   "pastedText": { "message": "Paste exported text" },
   "importPasted": { "message": "Import pasted text" },

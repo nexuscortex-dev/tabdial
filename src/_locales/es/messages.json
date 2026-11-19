@@ -21,6 +21,7 @@
   "speedDials": { "message": "Marcación rápida", "description": "Screen reader name of the grid of sites." },
   "defaultGroup": { "message": "Inicio", "description": "Name of the first group, made on install." },
   "importedGroup": { "message": "Importado", "description": "Name for an imported group that had no name." },
+  "importedPage": { "message": "Página $1" },
 
   "welcomeTitle": { "message": "Tus sitios favoritos, a un clic", "description": "Heading on the empty new tab page right after install." },
   "welcomeText": { "message": "Empieza con los sitios que más visitas, añade los tuyos o trae tus accesos directos desde otra extensión de marcación rápida." },

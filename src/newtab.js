@@ -1817,6 +1817,13 @@ $('#todo-close').addEventListener('click', () => {
   state.settings.todoOn = false;
   saveAndRender();
 });
+// Escape in the card closes it like its close button; in a to-do being changed it only undoes the change (todoItem).
+todoCard.addEventListener('keydown', (e) => {
+  if (e.key !== 'Escape' || e.isComposing || e.target.matches('.todo-list .text')) return;
+  e.preventDefault();
+  $('#todo-close').click();
+  $('#open-todo').focus();
+});
 $('#todo-add').addEventListener('submit', (e) => {
   e.preventDefault();
   const words = $('#todo-new').value.replace(/\s+/g, ' ').trim();

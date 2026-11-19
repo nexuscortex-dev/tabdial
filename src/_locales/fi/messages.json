@@ -11,6 +11,7 @@
   "speedDials": { "message": "Sivustot" },
   "defaultGroup": { "message": "Koti" },
   "importedGroup": { "message": "Tuodut" },
+  "importedPage": { "message": "Sivu $1" },
   "welcomeTitle": { "message": "Suosikkisivustosi yhden napsautuksen päässä" },
   "welcomeText": { "message": "Aloita useimmin käyttämilläsi sivustoilla, lisää omiasi tai tuo sivustosi toisesta pikavalinnasta." },
   "emptyGroupTitle": { "message": "Tämä ryhmä on tyhjä" },

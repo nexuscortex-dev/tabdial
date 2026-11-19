@@ -11,6 +11,7 @@
   "speedDials": { "message": "Nettsteder" },
   "defaultGroup": { "message": "Start" },
   "importedGroup": { "message": "Importert" },
+  "importedPage": { "message": "Side $1" },
   "welcomeTitle": { "message": "Favorittnettstedene dine, ett klikk unna" },
   "welcomeText": { "message": "Start med nettstedene du besøker mest, legg til dine egne, eller ta med nettstedene dine fra et annet hurtigvalg." },
   "emptyGroupTitle": { "message": "Gruppen er tom" },

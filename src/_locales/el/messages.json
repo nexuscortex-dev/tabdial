@@ -11,6 +11,7 @@
   "speedDials": { "message": "Ιστότοποι" },
   "defaultGroup": { "message": "Αρχική" },
   "importedGroup": { "message": "Εισαγμένα" },
+  "importedPage": { "message": "Σελίδα $1" },
   "welcomeTitle": { "message": "Οι αγαπημένοι σας ιστότοποι με ένα κλικ" },
   "welcomeText": { "message": "Ξεκινήστε με τους ιστότοπους που επισκέπτεστε συχνότερα, προσθέστε δικούς σας ή φέρτε τους ιστότοπούς σας από άλλη υπηρεσία γρήγορης πρόσβασης." },
   "emptyGroupTitle": { "message": "Αυτή η ομάδα είναι κενή" },

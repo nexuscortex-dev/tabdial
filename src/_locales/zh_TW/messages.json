@@ -11,6 +11,7 @@
   "speedDials": { "message": "快速撥號" },
   "defaultGroup": { "message": "首頁" },
   "importedGroup": { "message": "已匯入" },
+  "importedPage": { "message": "第 $1 頁" },
   "welcomeTitle": { "message": "常用網站，一鍵直達" },
   "welcomeText": { "message": "先從你最常訪問的網站開始，也可以自己新增，或者把其他快速撥號裡的網站搬過來。" },
   "emptyGroupTitle": { "message": "這個分組是空的" },

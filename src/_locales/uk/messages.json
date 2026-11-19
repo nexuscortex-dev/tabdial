@@ -11,6 +11,7 @@
   "speedDials": { "message": "Сайти" },
   "defaultGroup": { "message": "Головна" },
   "importedGroup": { "message": "Імпортовані" },
+  "importedPage": { "message": "Сторінка $1" },
   "welcomeTitle": { "message": "Улюблені сайти — за одне клацання" },
   "welcomeText": { "message": "Почніть із сайтів, які відвідуєте найчастіше, додайте власні або перенесіть сайти з іншої експрес-панелі." },
   "emptyGroupTitle": { "message": "Ця група порожня" },

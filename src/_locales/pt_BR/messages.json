@@ -21,6 +21,7 @@
   "speedDials": { "message": "Discagem rápida", "description": "Screen reader name of the grid of sites." },
   "defaultGroup": { "message": "Início", "description": "Name of the first group, made on install." },
   "importedGroup": { "message": "Importados", "description": "Name for an imported group that had no name." },
+  "importedPage": { "message": "Página $1" },
 
   "welcomeTitle": { "message": "Seus sites favoritos a um clique", "description": "Heading on the empty new tab page right after install." },
   "welcomeText": { "message": "Comece pelos sites que você mais visita, adicione os seus próprios ou traga seus atalhos de outra extensão de discagem rápida." },

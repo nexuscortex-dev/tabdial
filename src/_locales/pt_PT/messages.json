@@ -11,6 +11,7 @@
   "speedDials": { "message": "Marcação rápida" },
   "defaultGroup": { "message": "Início" },
   "importedGroup": { "message": "Importados" },
+  "importedPage": { "message": "Página $1" },
   "welcomeTitle": { "message": "Os seus sites favoritos à distância de um clique" },
   "welcomeText": { "message": "Comece pelos sites que mais visita, adicione os seus ou traga os seus atalhos de outra extensão de marcação rápida." },
   "emptyGroupTitle": { "message": "Este grupo está vazio" },

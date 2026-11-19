@@ -11,6 +11,7 @@
   "speedDials": { "message": "Sites" },
   "defaultGroup": { "message": "Start" },
   "importedGroup": { "message": "Geïmporteerd" },
+  "importedPage": { "message": "Pagina $1" },
   "welcomeTitle": { "message": "Je favoriete sites, één klik verwijderd" },
   "welcomeText": { "message": "Begin met de sites die je het vaakst bezoekt, voeg je eigen toe of haal je sites over uit een andere speed dial." },
   "emptyGroupTitle": { "message": "Deze groep is leeg" },

@@ -11,6 +11,7 @@
   "speedDials": { "message": "เว็บไซต์" },
   "defaultGroup": { "message": "หน้าแรก" },
   "importedGroup": { "message": "ที่นำเข้า" },
+  "importedPage": { "message": "หน้า $1" },
   "welcomeTitle": { "message": "เว็บไซต์โปรดของคุณ เพียงคลิกเดียว" },
   "welcomeText": { "message": "เริ่มจากเว็บไซต์ที่คุณเข้าบ่อยที่สุด เพิ่มเว็บไซต์เอง หรือย้ายเว็บไซต์มาจากสปีดไดอัลอื่น" },
   "emptyGroupTitle": { "message": "กลุ่มนี้ยังว่าง" },

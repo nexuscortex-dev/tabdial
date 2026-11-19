@@ -11,6 +11,7 @@
   "speedDials": { "message": "Webbplatser" },
   "defaultGroup": { "message": "Start" },
   "importedGroup": { "message": "Importerade" },
+  "importedPage": { "message": "Sida $1" },
   "welcomeTitle": { "message": "Dina favoritsidor ett klick bort" },
   "welcomeText": { "message": "Börja med de webbplatser du besöker mest, lägg till egna eller ta med dina webbplatser från ett annat snabbval." },
   "emptyGroupTitle": { "message": "Den här gruppen är tom" },

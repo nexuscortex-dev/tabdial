@@ -46,6 +46,9 @@
     "message": "インポート済み",
     "description": "Name for an imported group that had no name."
   },
+  "importedPage": {
+    "message": "ページ $1"
+  },
   "welcomeTitle": {
     "message": "お気に入りのサイトに、ワンクリックで",
     "description": "Heading on the empty new tab page right after install."

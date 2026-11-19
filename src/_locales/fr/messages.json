@@ -46,6 +46,9 @@
     "message": "Importé",
     "description": "Name for an imported group that had no name."
   },
+  "importedPage": {
+    "message": "Page $1"
+  },
   "welcomeTitle": {
     "message": "Vos sites préférés, à un clic",
     "description": "Heading on the empty new tab page right after install."

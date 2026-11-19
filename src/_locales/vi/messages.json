@@ -11,6 +11,7 @@
   "speedDials": { "message": "Trang web" },
   "defaultGroup": { "message": "Trang chủ" },
   "importedGroup": { "message": "Đã nhập" },
+  "importedPage": { "message": "Trang $1" },
   "welcomeTitle": { "message": "Trang web yêu thích, chỉ một cú nhấp" },
   "welcomeText": { "message": "Bắt đầu với những trang bạn truy cập nhiều nhất, tự thêm trang hoặc mang trang web từ một công cụ quay số nhanh khác sang." },
   "emptyGroupTitle": { "message": "Nhóm này đang trống" },

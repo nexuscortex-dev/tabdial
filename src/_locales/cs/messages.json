@@ -11,6 +11,7 @@
   "speedDials": { "message": "Weby" },
   "defaultGroup": { "message": "Domů" },
   "importedGroup": { "message": "Importované" },
+  "importedPage": { "message": "Stránka $1" },
   "welcomeTitle": { "message": "Oblíbené weby na jedno kliknutí" },
   "welcomeText": { "message": "Začněte weby, které navštěvujete nejčastěji, přidejte vlastní nebo si přeneste weby z jiné rychlé volby." },
   "emptyGroupTitle": { "message": "Tato skupina je prázdná" },

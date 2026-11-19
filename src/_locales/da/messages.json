@@ -11,6 +11,7 @@
   "speedDials": { "message": "Websteder" },
   "defaultGroup": { "message": "Start" },
   "importedGroup": { "message": "Importeret" },
+  "importedPage": { "message": "Side $1" },
   "welcomeTitle": { "message": "Dine yndlingswebsteder, ét klik væk" },
   "welcomeText": { "message": "Start med de websteder, du besøger mest, tilføj dine egne, eller tag dine websteder med fra et andet hurtigopkald." },
   "emptyGroupTitle": { "message": "Gruppen er tom" },

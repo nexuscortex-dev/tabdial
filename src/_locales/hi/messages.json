@@ -11,6 +11,7 @@
   "speedDials": { "message": "साइटें" },
   "defaultGroup": { "message": "होम" },
   "importedGroup": { "message": "इंपोर्ट की गईं" },
+  "importedPage": { "message": "पेज $1" },
   "welcomeTitle": { "message": "आपकी पसंदीदा साइटें, बस एक क्लिक पर" },
   "welcomeText": { "message": "उन साइटों से शुरू करें जिन पर आप सबसे ज़्यादा जाते हैं, अपनी साइटें जोड़ें, या किसी दूसरे स्पीड डायल से अपनी साइटें ले आएं।" },
   "emptyGroupTitle": { "message": "यह ग्रुप खाली है" },

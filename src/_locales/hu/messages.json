@@ -11,6 +11,7 @@
   "speedDials": { "message": "Oldalak" },
   "defaultGroup": { "message": "Kezdőlap" },
   "importedGroup": { "message": "Importált" },
+  "importedPage": { "message": "$1. oldal" },
   "welcomeTitle": { "message": "Kedvenc oldalai egy kattintásnyira" },
   "welcomeText": { "message": "Kezdje a leggyakrabban látogatott oldalakkal, adjon hozzá sajátokat, vagy hozza át oldalait egy másik gyorstárcsázóból." },
   "emptyGroupTitle": { "message": "Ez a csoport üres" },

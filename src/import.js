@@ -142,17 +142,19 @@ function parseYasd(data) {
 
 // Infinity New Tab (infinityBackup-….infinity): {version: 'v2', data: {site: {sites: [[item, …], …]}}}, a list per page.
 // A site is {name, target}, a folder {name, children}; its widgets are sites whose target is infinity://…: left out.
-// Each page becomes a group (Home, Home 2, …), its folders folders. A site's icon is a link to Infinity's servers
-// (bgImage): it comes along as that link, for the page to fetch once.
+// The first page becomes the Home group, the others Page 2, Page 3…; its folders folders. A site's icon is a link to
+// Infinity's servers (bgImage): it comes along as that link, for the page to fetch once. Infinity's own sites (its
+// games, its home page) are left out: whoever imports is leaving it.
+const INFINITY_OWN = /(^|\.)(inftab|infinitytab|infinitynewtab)\.com$/i;
 function parseInfinity(data) {
   const pages = data?.data?.site?.sites;
   if (!Array.isArray(pages)) return null;
   const dials = (items) => items.filter((s) => /^https?:/i.test(s.target || '')).map((s) => ({
     url: plainAddress(s.target), title: s.name || '', image: '', ...(s.bgType === 'image' && /^https:/i.test(s.bgImage || '') && { icon: s.bgImage }),
-  }));
+  })).filter((d) => { try { return !INFINITY_OWN.test(new URL(d.url).hostname); } catch { return true; } });
   const items = (page) => page.flatMap((s) => (Array.isArray(s.children) ? [{ name: String(s.name || t('folder')), dials: dials(s.children) }] : dials([s])))
     .filter((d) => !d.dials || d.dials.length);
-  return pages.map((page, i) => ({ name: i ? `${t('defaultGroup')} ${i + 1}` : t('defaultGroup'), dials: items(page) })).filter((g) => g.dials.length);
+  return pages.map((page, i) => ({ name: i ? t('importedPage', i + 1) : t('defaultGroup'), dials: items(page) })).filter((g) => g.dials.length);
 }
 
 // Infinity's notes (data.note.list), each as a note: its title (plain text) as a heading over its content, which its
@@ -165,25 +167,38 @@ export function infinityNotes(text) {
   return list.map((n) => `${n.title?.trim() ? `<h2>${escape(n.title.trim())}</h2>` : ''}${typeof n.content === 'string' ? n.content : ''}`);
 }
 
-// Infinity's to-dos (data.todo.todoList), each { text, done }, oldest first.
+// Infinity's to-dos (data.todo.todoList), each { text, done }, oldest first. The sample one it starts with ("欢迎使用
+// Infinity新标签页，这是一条示例待办事项。") is left out.
+const INFINITY_SAMPLE_TODO = /Infinity.{0,12}(示例|範例|sample|example)/i;
 export function infinityTodos(text) {
   let list;
   try { list = JSON.parse(text)?.data?.todo?.todoList; } catch {}
   if (!Array.isArray(list)) return [];
-  return list.filter((x) => typeof x?.text === 'string' && x.text.trim()).sort((a, b) => (a.time || 0) - (b.time || 0))
+  return list.filter((x) => typeof x?.text === 'string' && x.text.trim() && !INFINITY_SAMPLE_TODO.test(x.text))
+    .sort((a, b) => (a.time || 0) - (b.time || 0))
     .map((x) => ({ text: x.text.trim(), done: x.done === true }));
 }
 
 // The sites Infinity starts with open affiliate links, and its file keeps no plain address beside them (FVD's does).
-// Only what a link says itself is undone: a tracker that names the address it goes on to, utm_ tags, and the tags on a
-// site's front page. A link that doesn't say where it leads (s.click.taobao.com/t?e=…) stays as it is, and so does
-// every address none of this applies to, to the letter.
+// Undone: a tracker that names the address it goes on to, utm_ tags, the tags on a site's front page, and the redirects
+// of Infinity's starting sites that don't say where they lead but were followed to it (FOLLOWED). Any other link that
+// doesn't say where it leads stays as it is, and so does every address none of this applies to, to the letter.
 // ponytail: the trackers and tags of the sites 11.0.41 starts with; Infinity's library has more. Add them as they show up.
 const CARRIERS = { 'c.duomai.com': 't', 'union.dangdang.com': 'backurl' };
 const TAGS = new Set(['tn', 'ie', 'allianceid', 'sid', 'vfm', 'fv', 'pid', 'pic']);
-function plainAddress(target) {
+const FOLLOWED = [
   // Infinity's own page for JD forwards to c.duomai.com with t=https://www.jd.com (read 2026-10-13)
-  if (/^https?:\/\/homepage\.inftab\.com\/jd\b/i.test(target)) return 'https://www.jd.com/';
+  [/^https?:\/\/homepage\.inftab\.com\/jd\b/i, 'https://www.jd.com/'],
+  // 天猫精选: Taobao's affiliate link, then s.click.tmall.com with tar=https://jx.tmall.com/ (followed 2026-11-20)
+  [/^https?:\/\/s\.click\.taobao\.com\/t\?e=m%3D2%26s%3DV5ucSP%2F1kT4cQipKwQzePCperVdZeJvi/i, 'https://jx.tmall.com/'],
+  // 唯品会: its url= is base64 of {"chan":"infinity",…}; it lands on www.vip.com (followed 2026-11-20)
+  [/^https?:\/\/click\.union\.vip\.com\/redirect\.php\?url=eyJjaGFuIjoiaW5maW5pdHki/i, 'https://www.vip.com/'],
+  // 稿定设计: /utms/<id> lands on the front page with Infinity's tags (followed 2026-11-20)
+  [/^https?:\/\/www\.gaoding\.com\/utms\/\w+\s*$/i, 'https://www.gaoding.com/'],
+];
+function plainAddress(target) {
+  const followed = FOLLOWED.find(([link]) => link.test(target.trim()));
+  if (followed) return followed[1];
   let url;
   try { url = new URL(target.trim().replace(/&(amp;)+/g, '&')); } catch { return target; } // its file has "&amp;amp;amp;" for "&"
   const carried = CARRIERS[url.hostname];

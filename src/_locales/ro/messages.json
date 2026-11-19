@@ -11,6 +11,7 @@
   "speedDials": { "message": "Site-uri" },
   "defaultGroup": { "message": "Acasă" },
   "importedGroup": { "message": "Importate" },
+  "importedPage": { "message": "Pagina $1" },
   "welcomeTitle": { "message": "Site-urile preferate, la un clic distanță" },
   "welcomeText": { "message": "Începe cu site-urile pe care le vizitezi cel mai des, adaugă-le pe ale tale sau adu-ți site-urile din altă aplicație de apelare rapidă." },
   "emptyGroupTitle": { "message": "Acest grup este gol" },
