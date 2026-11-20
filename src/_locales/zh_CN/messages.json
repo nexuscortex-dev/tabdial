@@ -395,5 +395,20 @@
   "openNewTab": { "message": "打开新标签页" },
   "installedPrivateTitle": { "message": "隐私窗口" },
   "installedPrivateText": { "message": "Firefox 的扩展要经你允许才会在隐私窗口中运行：about:addons > Tabdial >“在隐私窗口中运行”>“允许”。如果 Firefox 设置为“不记录历史”，所有窗口都是隐私窗口。" },
-  "textDirection": { "message": "ltr" }
+  "textDirection": { "message": "ltr" },
+
+  "bgDaily": { "message": "每日图片（维基共享资源）" },
+  "showWeather": { "message": "显示天气" },
+  "placePlaceholder": { "message": "城市或城镇" },
+  "placeFind": { "message": "搜索" },
+  "placeNow": { "message": "$1 的天气" },
+  "placeNone": { "message": "搜索你所在的城市或城镇，然后选中它。" },
+  "placeSearching": { "message": "正在搜索…" },
+  "placeNotFound": { "message": "没有找到这个名字的地方。" },
+  "placeFailed": { "message": "搜索没有成功。请检查网络后重试。" },
+  "tempUnit": { "message": "温度" },
+  "tempUnitAuto": { "message": "自动" },
+  "weatherHint": { "message": "你输入的文字，以及之后地点的位置，会发给 nexuscortex.dev，由它去问 OpenStreetMap 和 MET Norway。不会带上你的其他信息。" },
+  "weatherBy": { "message": "预报来自 MET Norway（yr.no）" },
+  "photoBy": { "message": "作者：$1" }
 }

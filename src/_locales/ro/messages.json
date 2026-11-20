@@ -382,5 +382,20 @@
   "openNewTab": { "message": "Deschide o filă nouă" },
   "installedPrivateTitle": { "message": "Ferestre private" },
   "installedPrivateText": { "message": "Firefox rulează suplimentele în ferestrele private doar dacă le permiți: about:addons > Tabdial > Rulează în ferestre private > Permite. Dacă Firefox este setat pe „Nu reține niciodată istoricul”, fiecare fereastră este privată." },
-  "textDirection": { "message": "ltr" }
+  "textDirection": { "message": "ltr" },
+
+  "bgDaily": { "message": "Fotografia zilei (Wikimedia Commons)" },
+  "showWeather": { "message": "Arată vremea" },
+  "placePlaceholder": { "message": "Oraș sau localitate" },
+  "placeFind": { "message": "Caută" },
+  "placeNow": { "message": "Vremea în $1" },
+  "placeNone": { "message": "Caută-ți orașul sau localitatea, apoi alege-o." },
+  "placeSearching": { "message": "Se caută…" },
+  "placeNotFound": { "message": "Niciun loc găsit cu acest nume." },
+  "placeFailed": { "message": "Căutarea nu a reușit. Verifică conexiunea și încearcă din nou." },
+  "tempUnit": { "message": "Temperatură" },
+  "tempUnitAuto": { "message": "Automat" },
+  "weatherHint": { "message": "Ce scrii, iar apoi poziția locului, ajung la nexuscortex.dev, care întreabă OpenStreetMap și MET Norway. Nimic altceva despre tine nu este trimis." },
+  "weatherBy": { "message": "Prognoză MET Norway pe yr.no" },
+  "photoBy": { "message": "de $1" }
 }

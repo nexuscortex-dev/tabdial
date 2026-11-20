@@ -373,5 +373,20 @@
   "openNewTab": { "message": "Åpne en ny fane" },
   "installedPrivateTitle": { "message": "Private vinduer" },
   "installedPrivateText": { "message": "Firefox kjører utvidelser i private vinduer bare hvis du tillater det: about:addons > Tabdial > Kjør i private vindu > Tillat. Hvis Firefox er satt til «Lagre aldri noe historikk», er alle vinduer private." },
-  "textDirection": { "message": "ltr" }
+  "textDirection": { "message": "ltr" },
+
+  "bgDaily": { "message": "Dagens bilde (Wikimedia Commons)" },
+  "showWeather": { "message": "Vis været" },
+  "placePlaceholder": { "message": "By eller sted" },
+  "placeFind": { "message": "Søk" },
+  "placeNow": { "message": "Været for $1" },
+  "placeNone": { "message": "Søk etter byen eller stedet ditt, og velg det." },
+  "placeSearching": { "message": "Søker…" },
+  "placeNotFound": { "message": "Fant ikke noe sted med det navnet." },
+  "placeFailed": { "message": "Søket virket ikke. Sjekk tilkoblingen og prøv igjen." },
+  "tempUnit": { "message": "Temperatur" },
+  "tempUnitAuto": { "message": "Automatisk" },
+  "weatherHint": { "message": "Det du skriver, og siden stedets posisjon, går til nexuscortex.dev, som spør OpenStreetMap og Meteorologisk institutt. Ingenting annet om deg sendes med." },
+  "weatherBy": { "message": "Varsel fra Meteorologisk institutt på yr.no" },
+  "photoBy": { "message": "av $1" }
 }

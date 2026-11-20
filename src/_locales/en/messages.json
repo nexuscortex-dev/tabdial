@@ -396,5 +396,20 @@
   "openNewTab": { "message": "Open a new tab", "description": "Button on the install page." },
   "installedPrivateTitle": { "message": "Private windows", "description": "On the install page, Firefox only." },
   "installedPrivateText": { "message": "Firefox runs add-ons in private windows only when you allow them: about:addons > Tabdial > Run in Private Windows > Allow. If Firefox is set to “Never remember history”, every window is private.", "description": "Firefox only. The menu names are Firefox's own, in this language (the Firefox language pack strings)." },
-  "textDirection": { "message": "ltr", "description": "The direction of this language's text: ltr (left to right) or rtl (right to left, as Arabic). Not shown." }
+  "textDirection": { "message": "ltr", "description": "The direction of this language's text: ltr (left to right) or rtl (right to left, as Arabic). Not shown." },
+
+  "bgDaily": { "message": "Photo of the day (Wikimedia Commons)", "description": "Background swatch in Settings: Wikimedia Commons' Picture of the Day, new each day." },
+  "showWeather": { "message": "Show the weather", "description": "Checkbox in Settings." },
+  "placePlaceholder": { "message": "City or town", "description": "Field in Settings to find the place for the weather." },
+  "placeFind": { "message": "Search", "description": "Button beside that field." },
+  "placeNow": { "message": "Weather for $1", "description": "In Settings. $1 = the place picked, e.g. \"Springfield, Illinois, United States\"." },
+  "placeNone": { "message": "Search for your city or town, then pick it.", "description": "In Settings before a place is picked." },
+  "placeSearching": { "message": "Searching…", "description": "While the place search runs." },
+  "placeNotFound": { "message": "No place found by that name.", "description": "The place search found nothing." },
+  "placeFailed": { "message": "The search didn't work. Check your connection and try again.", "description": "The place search failed." },
+  "tempUnit": { "message": "Temperature", "description": "Setting: °C or °F." },
+  "tempUnitAuto": { "message": "Automatic", "description": "Option: °C or °F by the browser's region." },
+  "weatherHint": { "message": "What you type, and later the place's position, go to nexuscortex.dev, which asks OpenStreetMap and MET Norway. Nothing else about you goes with them.", "description": "Under the weather settings." },
+  "weatherBy": { "message": "Forecast from MET Norway on yr.no", "description": "Tooltip of the weather under the date; it links to yr.no." },
+  "photoBy": { "message": "by $1", "description": "Under the photo of the day. $1 = its author." }
 }

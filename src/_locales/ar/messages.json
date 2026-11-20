@@ -400,5 +400,20 @@
   "openNewTab": { "message": "فتح علامة تبويب جديدة" },
   "installedPrivateTitle": { "message": "النوافذ الخاصة" },
   "installedPrivateText": { "message": "لا يشغّل Firefox الإضافات في النوافذ الخاصة إلا إذا سمحت بذلك: about:addons > Tabdial > تشغيله في النوافذ الخاصة > مسموح. إذا كان Firefox مضبوطًا على \"لا تتذكر التأريخ أبدًا\"، فكل نافذة خاصة." },
-  "textDirection": { "message": "rtl" }
+  "textDirection": { "message": "rtl" },
+
+  "bgDaily": { "message": "صورة اليوم (ويكيميديا كومنز)" },
+  "showWeather": { "message": "عرض الطقس" },
+  "placePlaceholder": { "message": "مدينة أو بلدة" },
+  "placeFind": { "message": "بحث" },
+  "placeNow": { "message": "الطقس في $1" },
+  "placeNone": { "message": "ابحث عن مدينتك ثم اخترها." },
+  "placeSearching": { "message": "جارٍ البحث…" },
+  "placeNotFound": { "message": "لم يُعثر على مكان بهذا الاسم." },
+  "placeFailed": { "message": "لم ينجح البحث. تحقق من الاتصال وحاول مرة أخرى." },
+  "tempUnit": { "message": "درجة الحرارة" },
+  "tempUnitAuto": { "message": "تلقائي" },
+  "weatherHint": { "message": "ما تكتبه، ثم موقع المكان، يُرسل إلى nexuscortex.dev الذي يسأل OpenStreetMap وMET Norway. لا يُرسل أي شيء آخر عنك." },
+  "weatherBy": { "message": "توقعات MET Norway على yr.no" },
+  "photoBy": { "message": "بعدسة $1" }
 }

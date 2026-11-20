@@ -373,5 +373,20 @@
   "openNewTab": { "message": "Yeni sekme aç" },
   "installedPrivateTitle": { "message": "Gizli pencereler" },
   "installedPrivateText": { "message": "Firefox eklentileri gizli pencerelerde yalnızca siz izin verirseniz çalıştırır: about:addons > Tabdial > Gizli pencerede çalışabilir > İzin ver. Firefox “Geçmişi asla hatırlama” olarak ayarlıysa her pencere gizlidir." },
-  "textDirection": { "message": "ltr" }
+  "textDirection": { "message": "ltr" },
+
+  "bgDaily": { "message": "Günün fotoğrafı (Wikimedia Commons)" },
+  "showWeather": { "message": "Hava durumunu göster" },
+  "placePlaceholder": { "message": "Şehir veya kasaba" },
+  "placeFind": { "message": "Ara" },
+  "placeNow": { "message": "$1 hava durumu" },
+  "placeNone": { "message": "Şehrini ara ve seç." },
+  "placeSearching": { "message": "Aranıyor…" },
+  "placeNotFound": { "message": "Bu adla bir yer bulunamadı." },
+  "placeFailed": { "message": "Arama başarısız oldu. Bağlantını kontrol edip tekrar dene." },
+  "tempUnit": { "message": "Sıcaklık" },
+  "tempUnitAuto": { "message": "Otomatik" },
+  "weatherHint": { "message": "Yazdığın metin ve sonra yerin konumu nexuscortex.dev'e gider; o da OpenStreetMap ve MET Norway'e sorar. Seninle ilgili başka bir şey gönderilmez." },
+  "weatherBy": { "message": "Tahmin: MET Norway, yr.no" },
+  "photoBy": { "message": "çeken: $1" }
 }

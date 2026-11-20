@@ -382,5 +382,20 @@
   "openNewTab": { "message": "Otevřít novou kartu" },
   "installedPrivateTitle": { "message": "Anonymní okna" },
   "installedPrivateText": { "message": "Firefox spouští doplňky v anonymních oknech, jen když to povolíte: about:addons > Tabdial > Povolit v anonymních oknech > Povolit. Pokud je Firefox nastavený na „Nikdy neukládat historii prohlížení“, je každé okno anonymní." },
-  "textDirection": { "message": "ltr" }
+  "textDirection": { "message": "ltr" },
+
+  "bgDaily": { "message": "Fotka dne (Wikimedia Commons)" },
+  "showWeather": { "message": "Zobrazovat počasí" },
+  "placePlaceholder": { "message": "Město nebo obec" },
+  "placeFind": { "message": "Hledat" },
+  "placeNow": { "message": "Počasí: $1" },
+  "placeNone": { "message": "Vyhledejte své město a vyberte ho." },
+  "placeSearching": { "message": "Hledám…" },
+  "placeNotFound": { "message": "Místo s tímto názvem nebylo nalezeno." },
+  "placeFailed": { "message": "Hledání se nepovedlo. Zkontrolujte připojení a zkuste to znovu." },
+  "tempUnit": { "message": "Teplota" },
+  "tempUnitAuto": { "message": "Automaticky" },
+  "weatherHint": { "message": "Co napíšete, a potom poloha místa, jde na nexuscortex.dev, který se ptá OpenStreetMap a MET Norway. Nic dalšího o vás se neposílá." },
+  "weatherBy": { "message": "Předpověď MET Norway na yr.no" },
+  "photoBy": { "message": "autor: $1" }
 }

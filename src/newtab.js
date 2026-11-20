@@ -11,6 +11,8 @@ import { remove, moveTo, putInFolder, takeOutOfFolder, undo, prune, hasAddress }
 import { jumpList, jump, matching, searchBoxList } from './jump.js';
 import { getDrive, connectDrive, backUpToDrive, readDriveBackup, disconnectDrive, signInNeeded, identity } from './drive.js';
 import { t, plural, uiLanguage, direction } from './i18n.js';
+import { findPlaces, WEATHER_DATA, keptForecast, refreshForecast, nowAndNext, unitOf, degrees, iconOf as weatherIcon } from './weather.js';
+import { keptPhoto, refreshPhoto } from './daily.js';
 
 const $ = (sel) => document.querySelector(sel);
 
@@ -76,9 +78,13 @@ function showError(message, note = false) {
 }
 
 // '' = default, '#rrggbb' = a color, 'linear-gradient(…)' = a built-in gradient, 'photos/….webp' = a built-in photo,
-// 'data:…' = an uploaded image.
-const backgroundKind = (bg) => (!bg ? 'default' : bg.startsWith('#') ? 'color' : bg.startsWith('data:') ? 'image'
+// 'data:…' = an uploaded image, 'daily' = the photo of the day (daily.js).
+const backgroundKind = (bg) => (!bg ? 'default' : bg === 'daily' ? 'daily' : bg.startsWith('#') ? 'color' : bg.startsWith('data:') ? 'image'
   : bg.startsWith('photos/') ? 'photo' : 'gradient');
+let dailyPhoto = null; // the kept photo of the day (daily.js), read once the page is up
+let photoAsked = false;
+let forecast = null; // the kept forecast of the place in Settings (weather.js)
+let weatherAsking = false;
 
 // Whether the clock over a picked background needs light or dark text: a color or gradient by the average brightness
 // of its colors, a built-in photo as its swatch says, an uploaded photo taken as dark (the light text gets a shadow).
@@ -86,7 +92,7 @@ const backgroundKind = (bg) => (!bg ? 'default' : bg.startsWith('#') ? 'color' :
 function toneOf(bg) {
   if (!bg) return '';
   if (bg.startsWith('photos/')) return document.querySelector(`.swatch[data-bg="${CSS.escape(bg)}"]`)?.dataset.tone || 'dark';
-  if (bg.startsWith('data:')) return 'dark';
+  if (bg.startsWith('data:') || bg === 'daily') return 'dark';
   const colors = (bg.match(/#[0-9a-f]{6}/gi) || []).map((hex) => parseInt(hex.slice(1), 16));
   const luma = colors.reduce((sum, n) => sum + .299 * (n >> 16) + .587 * (n >> 8 & 255) + .114 * (n & 255), 0) / colors.length;
   return luma < 140 ? 'dark' : 'light';
@@ -239,10 +245,14 @@ function render() {
   if (notesDialog.open) showNotes(); // e.g. changed on another computer
   drawTodos();
   document.body.style.backgroundColor = kind === 'color' ? background : '';
-  document.body.style.backgroundImage = { default: '', color: 'none', gradient: background, image: `url("${background}")`, photo: `url("${background}")` }[kind];
-  document.body.dataset.tone = toneOf(background);
+  document.body.style.backgroundImage = { default: '', color: 'none', gradient: background, image: `url("${background}")`, photo: `url("${background}")`,
+    daily: dailyPhoto?.image ? `url("${dailyPhoto.image}")` : '' }[kind];
+  document.body.dataset.tone = kind === 'daily' && !dailyPhoto?.image ? '' : toneOf(background);
   const { backgroundColor: color, backgroundImage: image } = document.body.style; // for paint.js
-  try { localStorage.setItem('paint', JSON.stringify({ theme, font, ...(kind !== 'image' && { color, image, tone: document.body.dataset.tone }) })); } catch {}
+  try { localStorage.setItem('paint', JSON.stringify({ theme, font, ...(kind !== 'image' && kind !== 'daily' && { color, image, tone: document.body.dataset.tone }) })); } catch {}
+  drawCredit(kind === 'daily');
+  if (kind === 'daily' && !photoAsked) freshPhoto(); // picked here or on another computer
+  drawWeather();
   document.documentElement.style.setProperty('--cols', columns);
   document.documentElement.style.setProperty('--tile', `${216 * size / 100 - 18 + gap}px`); // a wider gap moves the dials apart, it doesn't shrink them
   document.documentElement.style.setProperty('--gap', `${gap}px`);
@@ -255,6 +265,8 @@ function render() {
   $('.swatch.custom').style.backgroundColor = kind === 'color' ? background : '';
   $('.swatch.upload').classList.toggle('on', kind === 'image');
   $('.swatch.upload').style.backgroundImage = kind === 'image' ? `url("${background}")` : '';
+  $('.swatch.daily').classList.toggle('has-photo', !!dailyPhoto?.image);
+  $('.swatch.daily').style.backgroundImage = dailyPhoto?.image ? `url("${dailyPhoto.image}")` : '';
 
   const nav = $('#groups');
   nav.replaceChildren(...state.groups.map((g) => {
@@ -903,7 +915,65 @@ function tick() {
   $('#date').textContent = dateFormat.format(now);
   clearClock(); // the to-do card steps aside from the time as it is now
   drawTodos(); // a to-do due moves on to today, or gone by, when its day or time comes
+  if (now.getMinutes() % 15 === 0) freshWeather(); // the hour moves on; a forecast older than an hour is asked again
+  else drawWeather();
   setTimeout(tick, 60e3 - (now % 60e3));
+}
+
+// ---------- weather and the photo of the day ----------
+// Both are off until picked in Settings, and both are fetched after the page is drawn (weather.js, daily.js).
+function drawWeather() {
+  const box = $('#weather');
+  const at = state.settings.weatherOn && state.settings.weatherAt;
+  const here = forecast && at && forecast.at.lat === at.lat && forecast.at.lon === at.lon;
+  if (at && !here && !weatherAsking) { // turned on, or another place, maybe on another computer
+    weatherAsking = true;
+    freshWeather().finally(() => { weatherAsking = false; });
+  }
+  const shown = here && nowAndNext(forecast.points);
+  box.hidden = !shown;
+  if (!shown) return;
+  const unit = unitOf(state.settings.tempUnit);
+  const icon = weatherIcon(shown.sym);
+  box.querySelector('img').hidden = !icon;
+  if (icon) box.querySelector('img').src = icon;
+  box.querySelector('.w-temp').textContent = degrees(shown.temp, unit);
+  box.querySelector('.w-range').textContent = `${degrees(shown.max, unit)} / ${degrees(shown.min, unit)}`;
+  box.querySelector('.w-place').textContent = at.name;
+  box.href = `https://www.yr.no/en/forecast/daily-table/${at.lat},${at.lon}`;
+  box.title = t('weatherBy');
+}
+async function freshWeather() {
+  const at = state.settings.weatherOn && state.settings.weatherAt;
+  if (!at) return drawWeather();
+  forecast = await keptForecast(at);
+  drawWeather();
+  if (await refreshForecast(at)) {
+    forecast = await keptForecast(at);
+    drawWeather();
+  }
+}
+
+function drawCredit(on) {
+  const p = dailyPhoto;
+  $('#photo-credit').hidden = !(on && p?.image);
+  if ($('#photo-credit').hidden) return;
+  const link = $('#photo-link');
+  link.textContent = [p.title, p.artist && t('photoBy', p.artist)].filter(Boolean).join(' · ') || 'Wikimedia Commons';
+  link.href = p.page || 'https://commons.wikimedia.org/wiki/Commons:Picture_of_the_day';
+  link.title = link.textContent;
+  const lic = $('#photo-license');
+  lic.textContent = p.license || 'Wikimedia Commons';
+  lic.href = p.licenseUrl || link.href;
+}
+async function freshPhoto() {
+  photoAsked = true;
+  dailyPhoto = await keptPhoto();
+  render();
+  if (state.settings.background === 'daily' && await refreshPhoto()) {
+    dailyPhoto = await keptPhoto();
+    render();
+  }
 }
 
 // ---------- drag and drop ----------
@@ -1956,6 +2026,7 @@ $('#open-settings').addEventListener('click', () => {
   $('#import-status').textContent = '';
   $('#sync-on').checked = state.settings.sync !== false;
   $('#search-on').checked = state.settings.searchBox !== false;
+  showWeatherSettings();
   $('#backup-status').textContent = '';
   $('#unlock-status').textContent = '';
   showSyncStatus();
@@ -2477,10 +2548,72 @@ $('#search-on').addEventListener('change', (e) => {
   $('#search').value = query = '';
   saveAndRender();
 });
+function showWeatherSettings() {
+  const at = state.settings.weatherAt;
+  $('#weather-on').checked = !!state.settings.weatherOn;
+  $('#weather-set').hidden = !state.settings.weatherOn;
+  $('#place-now').textContent = at ? t('placeNow', [at.name, at.where].filter(Boolean).join(', ')) : t('placeNone');
+  $('#temp-unit').value = state.settings.tempUnit || '';
+}
+$('#weather-on').addEventListener('change', async (e) => {
+  const allowed = e.target.checked && askFirefox ? chrome.permissions.request(WEATHER_DATA) : true; // first: within the click
+  if (!(await allowed)) {
+    e.target.checked = false;
+    return;
+  }
+  state.settings.weatherOn = e.target.checked;
+  showWeatherSettings();
+  saveAndRender(); // render asks for the forecast (drawWeather)
+  if (e.target.checked && !state.settings.weatherAt) $('#place').focus();
+});
+$('#temp-unit').addEventListener('change', (e) => {
+  if (e.target.value) state.settings.tempUnit = e.target.value; else delete state.settings.tempUnit;
+  saveAndRender();
+});
+async function lookUpPlace() {
+  const query = $('#place').value.trim();
+  if (query.length < 2) return;
+  // Firefox: granted with the checkbox already (then this asks nothing), unless the setting came from another browser.
+  const allowed = askFirefox ? chrome.permissions.request(WEATHER_DATA) : true; // first: within the click
+  if (!(await allowed)) return;
+  $('#place-status').textContent = t('placeSearching');
+  $('#places').replaceChildren();
+  try {
+    const found = await findPlaces(query, uiLanguage());
+    $('#place-status').textContent = found.length ? '' : t('placeNotFound');
+    $('#places').replaceChildren(...found.map((p) => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      const small = document.createElement('small');
+      small.textContent = p.where;
+      b.append(p.name, ' ', small);
+      b.addEventListener('click', () => {
+        state.settings.weatherAt = { name: p.name, where: p.where, lat: p.lat, lon: p.lon };
+        $('#places').replaceChildren();
+        $('#place').value = '';
+        showWeatherSettings();
+        saveAndRender();
+      });
+      return b;
+    }));
+  } catch {
+    $('#place-status').textContent = t('placeFailed');
+  }
+}
+$('#place-find').addEventListener('click', lookUpPlace);
+$('#place').addEventListener('keydown', (e) => {
+  if (e.key !== 'Enter') return;
+  e.preventDefault(); // not the settings form's own Enter
+  lookUpPlace();
+});
 for (const sw of document.querySelectorAll('.swatch[data-bg]')) {
   const bg = sw.dataset.bg;
-  sw.style.backgroundImage = backgroundKind(bg) === 'photo' ? `url("${bg.replace('.webp', '-s.webp')}")` : bg; // a photo's small copy
-  sw.addEventListener('click', () => { state.settings.background = sw.dataset.bg; saveAndRender(); });
+  if (bg !== 'daily') sw.style.backgroundImage = backgroundKind(bg) === 'photo' ? `url("${bg.replace('.webp', '-s.webp')}")` : bg; // a photo's small copy
+  sw.addEventListener('click', () => {
+    state.settings.background = sw.dataset.bg;
+    saveAndRender();
+    if (bg === 'daily') freshPhoto();
+  });
 }
 $('#bg-color').addEventListener('input', (e) => { state.settings.background = e.target.value; saveAndRender(); });
 $('#bg-file').addEventListener('change', async (e) => {
@@ -2640,6 +2773,7 @@ $('#jump-tip').addEventListener('toggle', (e) => { if (e.newState === 'closed') 
 
 render();
 tick();
+if (!photoAsked) freshPhoto(); // the kept photo of the day for its swatch (render asks when it is the background)
 document.fonts.ready.then(clearClock); // the clock's width in the font picked in Settings
 askForRating().then((asked) => asked || showJumpTip());
 recheckPaid();

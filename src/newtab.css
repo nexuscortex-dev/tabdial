@@ -99,6 +99,21 @@ main { padding-top: clamp(8px, 4vh, 40px); padding-bottom: 64px; }
 .hero { margin-bottom: clamp(28px, 6vh, 56px); text-align: center; color: var(--ink); }
 .clock { margin: 0; font-size: clamp(56px, 8vw, 104px); font-weight: 250; line-height: 1; letter-spacing: -.04em; font-variant-numeric: tabular-nums; }
 .date { margin: 10px 0 0; font-size: 15px; font-weight: 600; letter-spacing: .01em; opacity: .8; }
+/* The weather under the date (weather.js): a link to the place's forecast on yr.no, MET Norway's own site. */
+.weather { display: inline-flex; align-items: center; gap: 8px; margin-top: 6px; color: inherit; text-decoration: none; font-size: 15px; font-weight: 600; opacity: .85; }
+.weather[hidden] { display: none; }
+.weather:hover { opacity: 1; }
+.weather img { width: 28px; height: 28px; }
+.weather .w-temp { font-size: 17px; }
+.weather .w-range, .weather .w-place { font-weight: 500; opacity: .85; }
+body[data-tone="dark"] .weather { opacity: 1; text-shadow: 0 1px 2px rgb(0 0 0 / .55), 0 0 10px rgb(0 0 0 / .45); }
+body[data-tone="dark"] .weather img { filter: drop-shadow(0 1px 2px rgb(0 0 0 / .45)); }
+/* Who made the photo of the day and under which license (daily.js), as the license asks. */
+.photo-credit { position: fixed; inset-inline-start: 12px; bottom: 8px; z-index: 1; max-width: min(60vw, 640px); margin: 0; overflow: hidden;
+  font-size: 11px; white-space: nowrap; text-overflow: ellipsis; color: #fff; opacity: .75; text-shadow: 0 1px 2px rgb(0 0 0 / .7); }
+.photo-credit:hover { opacity: 1; }
+.photo-credit a { color: inherit; text-decoration: none; }
+.photo-credit a:hover { text-decoration: underline; }
 /* over a background the user picked: dark text on light ones, light text on dark ones and photos */
 body[data-tone="light"] .hero { color: #111827; }
 body[data-tone="dark"] .hero { color: #fff; text-shadow: 0 1px 3px rgb(0 0 0 / .35), 0 2px 12px rgb(0 0 0 / .3), 0 4px 40px rgb(0 0 0 / .45); }
@@ -330,6 +345,15 @@ dialog input[type=text]:focus-visible, dialog input[type=url]:focus-visible, dia
 .swatch.custom.on { background-image: none; }
 .swatch.custom input { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
 .swatch.upload { background-color: var(--surface-2); }
+.swatch.daily { display: grid; place-items: center; background-color: var(--surface-2); background-size: cover; background-position: center; color: var(--ink-2); }
+.swatch.daily.has-photo .i { display: none; }
+.weather-set { display: grid; gap: 8px; margin-inline-start: 28px; }
+.weather-set #place { flex: 1; min-width: 0; }
+.places { display: grid; gap: 4px; }
+.places:empty { display: none; }
+.places button { padding: 6px 10px; border: 1px solid var(--rule); border-radius: 8px; background: var(--surface); color: var(--ink); font: inherit; font-size: 13px; text-align: start; cursor: pointer; }
+.places button:hover { background: var(--surface-2); }
+.places small { color: var(--ink-2); }
 .swatch.upload.on .i { display: none; }
 .range { display: grid; gap: 8px; }
 .range-head { display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; }

@@ -373,5 +373,20 @@
   "openNewTab": { "message": "Avaa uusi välilehti" },
   "installedPrivateTitle": { "message": "Yksityiset ikkunat" },
   "installedPrivateText": { "message": "Firefox suorittaa lisäosia yksityisissä ikkunoissa vain, jos sallit sen: about:addons > Tabdial > Suoritus yksityisissä ikkunoissa > Salli. Jos Firefoxin asetus on ”Älä koskaan muista sivuhistoriaa”, kaikki ikkunat ovat yksityisiä." },
-  "textDirection": { "message": "ltr" }
+  "textDirection": { "message": "ltr" },
+
+  "bgDaily": { "message": "Päivän kuva (Wikimedia Commons)" },
+  "showWeather": { "message": "Näytä sää" },
+  "placePlaceholder": { "message": "Kaupunki tai paikkakunta" },
+  "placeFind": { "message": "Hae" },
+  "placeNow": { "message": "Sää: $1" },
+  "placeNone": { "message": "Hae kaupunkisi tai paikkakuntasi ja valitse se." },
+  "placeSearching": { "message": "Haetaan…" },
+  "placeNotFound": { "message": "Tällä nimellä ei löytynyt paikkaa." },
+  "placeFailed": { "message": "Haku ei onnistunut. Tarkista yhteys ja yritä uudelleen." },
+  "tempUnit": { "message": "Lämpötila" },
+  "tempUnitAuto": { "message": "Automaattinen" },
+  "weatherHint": { "message": "Kirjoittamasi teksti ja myöhemmin paikan sijainti menevät nexuscortex.dev-palveluun, joka kysyy OpenStreetMapilta ja MET Norwaylta. Muuta sinusta ei lähetetä." },
+  "weatherBy": { "message": "Ennuste: MET Norway, yr.no" },
+  "photoBy": { "message": "kuvaaja: $1" }
 }

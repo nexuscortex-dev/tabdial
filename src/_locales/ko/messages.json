@@ -373,5 +373,20 @@
   "openNewTab": { "message": "새 탭 열기" },
   "installedPrivateTitle": { "message": "사생활 보호 창" },
   "installedPrivateText": { "message": "Firefox는 허용한 경우에만 사생활 보호 창에서 부가 기능을 실행합니다: about:addons > Tabdial > 사생활 보호 창에서 실행 > 허용. Firefox가 '기록을 기억 안 함'으로 설정되어 있으면 모든 창이 사생활 보호 창입니다." },
-  "textDirection": { "message": "ltr" }
+  "textDirection": { "message": "ltr" },
+
+  "bgDaily": { "message": "오늘의 사진 (위키미디어 공용)" },
+  "showWeather": { "message": "날씨 표시" },
+  "placePlaceholder": { "message": "도시 또는 지역" },
+  "placeFind": { "message": "검색" },
+  "placeNow": { "message": "$1 날씨" },
+  "placeNone": { "message": "도시나 지역을 검색한 뒤 선택하세요." },
+  "placeSearching": { "message": "검색 중…" },
+  "placeNotFound": { "message": "그 이름의 장소를 찾지 못했습니다." },
+  "placeFailed": { "message": "검색하지 못했습니다. 연결을 확인하고 다시 시도하세요." },
+  "tempUnit": { "message": "온도" },
+  "tempUnitAuto": { "message": "자동" },
+  "weatherHint": { "message": "입력한 내용과 이후 장소의 위치는 nexuscortex.dev로 전송되며, 여기서 OpenStreetMap과 MET Norway에 요청합니다. 그 밖의 정보는 함께 보내지 않습니다." },
+  "weatherBy": { "message": "MET Norway(yr.no) 예보" },
+  "photoBy": { "message": "촬영: $1" }
 }

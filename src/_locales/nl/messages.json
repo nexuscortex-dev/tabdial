@@ -373,5 +373,20 @@
   "openNewTab": { "message": "Nieuw tabblad openen" },
   "installedPrivateTitle": { "message": "Privévensters" },
   "installedPrivateText": { "message": "Firefox voert add-ons alleen in privévensters uit als je dat toestaat: about:addons > Tabdial > Uitvoeren in privévensters > Toestaan. Als Firefox is ingesteld op ‘Nooit geschiedenis onthouden’, is elk venster privé." },
-  "textDirection": { "message": "ltr" }
+  "textDirection": { "message": "ltr" },
+
+  "bgDaily": { "message": "Foto van de dag (Wikimedia Commons)" },
+  "showWeather": { "message": "Weer tonen" },
+  "placePlaceholder": { "message": "Stad of dorp" },
+  "placeFind": { "message": "Zoeken" },
+  "placeNow": { "message": "Weer in $1" },
+  "placeNone": { "message": "Zoek je stad of dorp en kies het." },
+  "placeSearching": { "message": "Zoeken…" },
+  "placeNotFound": { "message": "Geen plaats met die naam gevonden." },
+  "placeFailed": { "message": "Zoeken lukte niet. Controleer de verbinding en probeer het opnieuw." },
+  "tempUnit": { "message": "Temperatuur" },
+  "tempUnitAuto": { "message": "Automatisch" },
+  "weatherHint": { "message": "Wat je typt, en daarna de positie van de plaats, gaan naar nexuscortex.dev, dat OpenStreetMap en MET Norway raadpleegt. Verder gaat er niets over jou mee." },
+  "weatherBy": { "message": "Verwachting van MET Norway op yr.no" },
+  "photoBy": { "message": "door $1" }
 }

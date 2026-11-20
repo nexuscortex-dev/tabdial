@@ -373,5 +373,20 @@
   "openNewTab": { "message": "Άνοιγμα νέας καρτέλας" },
   "installedPrivateTitle": { "message": "Ιδιωτικά παράθυρα" },
   "installedPrivateText": { "message": "Το Firefox εκτελεί πρόσθετα σε ιδιωτικά παράθυρα μόνο αν το επιτρέψετε: about:addons > Tabdial > Εκτέλεση σε ιδιωτικά παράθυρα > Αποδοχή. Αν το Firefox έχει ρυθμιστεί σε «Διαγραφή ιστορικού», κάθε παράθυρο είναι ιδιωτικό." },
-  "textDirection": { "message": "ltr" }
+  "textDirection": { "message": "ltr" },
+
+  "bgDaily": { "message": "Φωτογραφία της ημέρας (Wikimedia Commons)" },
+  "showWeather": { "message": "Εμφάνιση καιρού" },
+  "placePlaceholder": { "message": "Πόλη ή χωριό" },
+  "placeFind": { "message": "Αναζήτηση" },
+  "placeNow": { "message": "Καιρός: $1" },
+  "placeNone": { "message": "Αναζητήστε την πόλη σας και επιλέξτε την." },
+  "placeSearching": { "message": "Αναζήτηση…" },
+  "placeNotFound": { "message": "Δεν βρέθηκε τόπος με αυτό το όνομα." },
+  "placeFailed": { "message": "Η αναζήτηση δεν πέτυχε. Ελέγξτε τη σύνδεση και δοκιμάστε ξανά." },
+  "tempUnit": { "message": "Θερμοκρασία" },
+  "tempUnitAuto": { "message": "Αυτόματα" },
+  "weatherHint": { "message": "Ό,τι πληκτρολογείτε, και μετά η θέση του τόπου, πηγαίνουν στο nexuscortex.dev, που ρωτά το OpenStreetMap και το MET Norway. Τίποτε άλλο για εσάς δεν στέλνεται." },
+  "weatherBy": { "message": "Πρόγνωση του MET Norway στο yr.no" },
+  "photoBy": { "message": "από $1" }
 }

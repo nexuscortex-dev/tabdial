@@ -373,5 +373,20 @@
   "openNewTab": { "message": "नया टैब खोलें" },
   "installedPrivateTitle": { "message": "निजी विंडो" },
   "installedPrivateText": { "message": "Firefox निजी विंडो में ऐड-ऑन तभी चलाता है जब आप अनुमति दें: about:addons > Tabdial > निजी विंडो में चलाएं > Allow. अगर Firefox “Never remember history” पर सेट है, तो हर विंडो निजी होती है।" },
-  "textDirection": { "message": "ltr" }
+  "textDirection": { "message": "ltr" },
+
+  "bgDaily": { "message": "आज की तस्वीर (विकिमीडिया कॉमन्स)" },
+  "showWeather": { "message": "मौसम दिखाएँ" },
+  "placePlaceholder": { "message": "शहर या कस्बा" },
+  "placeFind": { "message": "खोजें" },
+  "placeNow": { "message": "$1 का मौसम" },
+  "placeNone": { "message": "अपना शहर खोजें और चुनें।" },
+  "placeSearching": { "message": "खोज रहे हैं…" },
+  "placeNotFound": { "message": "इस नाम की कोई जगह नहीं मिली।" },
+  "placeFailed": { "message": "खोज नहीं हो पाई। कनेक्शन जाँचें और फिर कोशिश करें।" },
+  "tempUnit": { "message": "तापमान" },
+  "tempUnitAuto": { "message": "अपने आप" },
+  "weatherHint": { "message": "आप जो लिखते हैं, और बाद में जगह की स्थिति, nexuscortex.dev पर जाती है, जो OpenStreetMap और MET Norway से पूछता है। आपके बारे में और कुछ नहीं भेजा जाता।" },
+  "weatherBy": { "message": "पूर्वानुमान: MET Norway, yr.no" },
+  "photoBy": { "message": "$1 द्वारा" }
 }

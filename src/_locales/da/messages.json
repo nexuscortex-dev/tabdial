@@ -373,5 +373,20 @@
   "openNewTab": { "message": "Åbn en ny fane" },
   "installedPrivateTitle": { "message": "Private vinduer" },
   "installedPrivateText": { "message": "Firefox kører kun tilføjelser i private vinduer, hvis du tillader det: about:addons > Tabdial > Anvend i private vinduer > Tillad. Hvis Firefox er indstillet til \"Aldrig gemme historik\", er alle vinduer private." },
-  "textDirection": { "message": "ltr" }
+  "textDirection": { "message": "ltr" },
+
+  "bgDaily": { "message": "Dagens billede (Wikimedia Commons)" },
+  "showWeather": { "message": "Vis vejret" },
+  "placePlaceholder": { "message": "By" },
+  "placeFind": { "message": "Søg" },
+  "placeNow": { "message": "Vejret i $1" },
+  "placeNone": { "message": "Søg efter din by, og vælg den." },
+  "placeSearching": { "message": "Søger…" },
+  "placeNotFound": { "message": "Intet sted fundet med det navn." },
+  "placeFailed": { "message": "Søgningen virkede ikke. Tjek forbindelsen, og prøv igen." },
+  "tempUnit": { "message": "Temperatur" },
+  "tempUnitAuto": { "message": "Automatisk" },
+  "weatherHint": { "message": "Det, du skriver, og senere stedets position, sendes til nexuscortex.dev, som spørger OpenStreetMap og MET Norway. Intet andet om dig sendes med." },
+  "weatherBy": { "message": "Prognose fra MET Norway på yr.no" },
+  "photoBy": { "message": "af $1" }
 }

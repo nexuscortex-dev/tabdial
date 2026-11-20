@@ -382,5 +382,20 @@
   "openNewTab": { "message": "Відкрити нову вкладку" },
   "installedPrivateTitle": { "message": "Приватні вікна" },
   "installedPrivateText": { "message": "Firefox запускає додатки в приватних вікнах, лише якщо ви це дозволите: about:addons > Tabdial > Виконувати в приватних вікнах > Дозволити. Якщо у Firefox вибрано «Ніколи не пам'ятати історії», усі вікна приватні." },
-  "textDirection": { "message": "ltr" }
+  "textDirection": { "message": "ltr" },
+
+  "bgDaily": { "message": "Фото дня (Вікісховище)" },
+  "showWeather": { "message": "Показувати погоду" },
+  "placePlaceholder": { "message": "Місто чи селище" },
+  "placeFind": { "message": "Знайти" },
+  "placeNow": { "message": "Погода: $1" },
+  "placeNone": { "message": "Знайдіть своє місто й виберіть його." },
+  "placeSearching": { "message": "Пошук…" },
+  "placeNotFound": { "message": "Місце з такою назвою не знайдено." },
+  "placeFailed": { "message": "Пошук не вдався. Перевірте з'єднання й спробуйте ще раз." },
+  "tempUnit": { "message": "Температура" },
+  "tempUnitAuto": { "message": "Автоматично" },
+  "weatherHint": { "message": "Введений текст, а потім координати місця надсилаються на nexuscortex.dev, який звертається до OpenStreetMap і MET Norway. Нічого іншого про вас не передається." },
+  "weatherBy": { "message": "Прогноз MET Norway на yr.no" },
+  "photoBy": { "message": "автор: $1" }
 }

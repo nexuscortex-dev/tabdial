@@ -57,12 +57,14 @@
   <div class="hero">
     <p id="clock" class="clock"></p>
     <p id="date" class="date"></p>
+    <a id="weather" class="weather" target="_blank" hidden><img alt="" width="28" height="28"><span class="w-temp"></span><span class="w-range"></span><span class="w-place"></span></a>
     <form id="search-box" class="search" role="search">
       <input id="search" type="search" data-i18n-placeholder="searchPlaceholder" data-i18n-aria="searchPlaceholder" autocomplete="off" spellcheck="false">
     </form>
   </div>
   <p id="team-note" class="team-note" hidden></p>
   <ol id="grid" class="grid" data-i18n-aria="speedDials"></ol>
+  <p id="photo-credit" class="photo-credit" hidden><a id="photo-link" target="_blank"></a> · <a id="photo-license" target="_blank"></a></p>
   <!-- Settings › Layout › Board: the group's folders as open cards (newtab.js) -->
   <div id="board" class="board" hidden></div>
 </main>
@@ -283,6 +285,7 @@
         <button type="button" class="swatch" data-bg="linear-gradient(135deg, #1e3a8a, #0f766e)" data-i18n-title="bgOcean" data-i18n-aria="bgOcean"></button>
         <button type="button" class="swatch" data-bg="linear-gradient(160deg, #1f2937, #0b0f14)" data-i18n-title="bgNight" data-i18n-aria="bgNight"></button>
         <label class="swatch custom" data-i18n-title="pickColor"><input id="bg-color" type="color" data-i18n-aria="backgroundColor"></label>
+        <button type="button" class="swatch daily" data-bg="daily" data-i18n-title="bgDaily" data-i18n-aria="bgDaily"><svg class="i" aria-hidden="true"><use href="#i-calendar"/></svg></button>
         <label class="swatch upload" data-i18n-title="uploadBackground"><svg class="i" aria-hidden="true"><use href="#i-image"/></svg><input id="bg-file" type="file" accept="image/*" class="vh" data-i18n-aria="uploadBackground"></label>
       </div>
       <!-- Photos from Unsplash (docs/photos.md). data-tone: whether the clock goes dark (light) or light (dark) on it. -->
@@ -325,6 +328,24 @@
       </label>
       <label class="check"><input id="titles-on" type="checkbox"><span data-i18n="showTitles"></span></label>
       <label class="check"><input id="search-on" type="checkbox"><span data-i18n="showSearchBox"></span></label>
+      <label class="check"><input id="weather-on" type="checkbox"><span data-i18n="showWeather"></span></label>
+      <div id="weather-set" class="weather-set" hidden>
+        <p id="place-now" class="hint"></p>
+        <div class="row">
+          <input id="place" type="search" maxlength="100" data-i18n-placeholder="placePlaceholder" data-i18n-aria="placePlaceholder" autocomplete="off" spellcheck="false">
+          <button type="button" id="place-find" class="btn secondary" data-i18n="placeFind"></button>
+        </div>
+        <div id="places" class="places"></div>
+        <p id="place-status" class="status" role="status"></p>
+        <label class="field"><span data-i18n="tempUnit"></span>
+          <select id="temp-unit">
+            <option value="" data-i18n="tempUnitAuto"></option>
+            <option value="c">°C</option>
+            <option value="f">°F</option>
+          </select>
+        </label>
+        <p class="hint" data-i18n="weatherHint"></p>
+      </div>
       <label class="field"><span data-i18n="font"></span>
         <input id="font" type="text" list="fonts" maxlength="100" autocomplete="off" spellcheck="false">
         <datalist id="fonts"></datalist>

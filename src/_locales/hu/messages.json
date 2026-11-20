@@ -373,5 +373,20 @@
   "openNewTab": { "message": "Új lap megnyitása" },
   "installedPrivateTitle": { "message": "Privát ablakok" },
   "installedPrivateText": { "message": "A Firefox csak akkor futtat kiegészítőket privát ablakokban, ha engedélyezi: about:addons > Tabdial > Futtatás privát ablakokban > Engedélyezés. Ha a Firefox beállítása „Nem jegyzi meg az előzményeket”, minden ablak privát." },
-  "textDirection": { "message": "ltr" }
+  "textDirection": { "message": "ltr" },
+
+  "bgDaily": { "message": "A nap fotója (Wikimedia Commons)" },
+  "showWeather": { "message": "Időjárás megjelenítése" },
+  "placePlaceholder": { "message": "Város vagy település" },
+  "placeFind": { "message": "Keresés" },
+  "placeNow": { "message": "Időjárás: $1" },
+  "placeNone": { "message": "Keresd meg a településed, és válaszd ki." },
+  "placeSearching": { "message": "Keresés…" },
+  "placeNotFound": { "message": "Nincs ilyen nevű hely." },
+  "placeFailed": { "message": "A keresés nem sikerült. Ellenőrizd a kapcsolatot, és próbáld újra." },
+  "tempUnit": { "message": "Hőmérséklet" },
+  "tempUnitAuto": { "message": "Automatikus" },
+  "weatherHint": { "message": "Amit beírsz, majd a hely koordinátái a nexuscortex.dev-re kerülnek, amely az OpenStreetMaptől és a MET Norwaytől kérdez. Más adat rólad nem megy velük." },
+  "weatherBy": { "message": "Előrejelzés: MET Norway, yr.no" },
+  "photoBy": { "message": "készítette: $1" }
 }

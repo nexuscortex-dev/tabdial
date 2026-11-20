@@ -373,5 +373,20 @@
   "openNewTab": { "message": "Mở thẻ mới" },
   "installedPrivateTitle": { "message": "Cửa sổ riêng tư" },
   "installedPrivateText": { "message": "Firefox chỉ chạy tiện ích trong cửa sổ riêng tư khi bạn cho phép: about:addons > Tabdial > Chạy trong cửa sổ riêng tư > Cho phép. Nếu Firefox được đặt thành “Không bao giờ nhớ lịch sử”, mọi cửa sổ đều là riêng tư." },
-  "textDirection": { "message": "ltr" }
+  "textDirection": { "message": "ltr" },
+
+  "bgDaily": { "message": "Ảnh của ngày (Wikimedia Commons)" },
+  "showWeather": { "message": "Hiện thời tiết" },
+  "placePlaceholder": { "message": "Thành phố hoặc thị trấn" },
+  "placeFind": { "message": "Tìm" },
+  "placeNow": { "message": "Thời tiết tại $1" },
+  "placeNone": { "message": "Tìm thành phố của bạn rồi chọn." },
+  "placeSearching": { "message": "Đang tìm…" },
+  "placeNotFound": { "message": "Không tìm thấy nơi nào có tên này." },
+  "placeFailed": { "message": "Không tìm được. Hãy kiểm tra kết nối và thử lại." },
+  "tempUnit": { "message": "Nhiệt độ" },
+  "tempUnitAuto": { "message": "Tự động" },
+  "weatherHint": { "message": "Những gì bạn gõ, và sau đó là vị trí của nơi đó, được gửi đến nexuscortex.dev để hỏi OpenStreetMap và MET Norway. Không gửi kèm thông tin nào khác về bạn." },
+  "weatherBy": { "message": "Dự báo của MET Norway trên yr.no" },
+  "photoBy": { "message": "của $1" }
 }

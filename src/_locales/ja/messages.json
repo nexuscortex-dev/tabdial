@@ -1002,5 +1002,20 @@
   "openNewTab": { "message": "新しいタブを開く" },
   "installedPrivateTitle": { "message": "プライベートウィンドウ" },
   "installedPrivateText": { "message": "Firefox の拡張機能は、許可したときだけプライベートウィンドウで動きます：about:addons > Tabdial >「プライベートウィンドウでの実行」>「許可する」。Firefox が「履歴を一切記憶させない」設定のときは、すべてのウィンドウがプライベートになります。" },
-  "textDirection": { "message": "ltr" }
+  "textDirection": { "message": "ltr" },
+
+  "bgDaily": { "message": "今日の写真（ウィキメディア・コモンズ）" },
+  "showWeather": { "message": "天気を表示" },
+  "placePlaceholder": { "message": "市区町村" },
+  "placeFind": { "message": "検索" },
+  "placeNow": { "message": "$1 の天気" },
+  "placeNone": { "message": "市区町村を検索して選んでください。" },
+  "placeSearching": { "message": "検索中…" },
+  "placeNotFound": { "message": "その名前の場所は見つかりませんでした。" },
+  "placeFailed": { "message": "検索できませんでした。接続を確認してもう一度お試しください。" },
+  "tempUnit": { "message": "温度" },
+  "tempUnitAuto": { "message": "自動" },
+  "weatherHint": { "message": "入力した文字と、その後は場所の位置が nexuscortex.dev に送られ、そこから OpenStreetMap と MET Norway に問い合わせます。それ以外のあなたの情報は送られません。" },
+  "weatherBy": { "message": "予報：MET Norway（yr.no）" },
+  "photoBy": { "message": "撮影：$1" }
 }

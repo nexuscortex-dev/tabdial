@@ -17,6 +17,7 @@
 // (kept rather than lost). Per-dial merging would fix that if it matters.
 //
 // The pure helpers are unit-tested in Node; pull() and push() are tested there against a fake chrome.storage.
+import { validPlace } from './weather.js';
 import { addMissing, dialsOf, fillImages, normalizeUrl, ownGroups, pick, urlKey, withTeamGroups } from './merge.js';
 import { ask, opened, seal, unseal } from './team.js';
 import { fill, forSite, local, mergeNotes, namedBy, namedIn, picturesIn, readSynced, revsOf, synced } from './notes.js';
@@ -174,7 +175,7 @@ export async function push(state) {
 // over what sync holds, what changed there is taken, and of two computers changing the same setting one wins.
 export const NEW_LOOK = { background: 'photos/sunset.webp', columns: 6 }; // a new install opens on a photo (store.js)
 const LOOK = {
-  background: (v) => typeof v === 'string' && /^($|#[0-9a-f]{6}$|photos\/[\w-]+\.webp$|linear-gradient\([\w\s#,]+\)$)/i.test(v),
+  background: (v) => typeof v === 'string' && /^($|daily$|#[0-9a-f]{6}$|photos\/[\w-]+\.webp$|linear-gradient\([\w\s#,]+\)$)/i.test(v), // daily: the photo of the day (daily.js)
   columns: (v) => Number.isInteger(v) && v >= 3 && v <= 12,
   size: (v) => Number.isInteger(v) && v >= 60 && v <= 160,
   radius: (v) => Number.isInteger(v) && v >= 0 && v <= 32,
@@ -188,6 +189,9 @@ const LOOK = {
   todoAt: (v) => Array.isArray(v) && v.length === 2 && v.every((n) => typeof n === 'number' && n >= 0 && n <= 1), // where: 0 to 1 across the room the window leaves
   layout: (v) => ['grid', 'board'].includes(v), // the board: a group's folders as open cards (newtab.js)
   lists: (v) => Array.isArray(v) && v.length <= 1000 && v.every((id) => typeof id === 'string' && id.length <= 64), // the board's cards shown as a list, by id
+  weatherOn: (v) => typeof v === 'boolean', // the weather under the date (weather.js)
+  weatherAt: validPlace, // its place: { name, where, lat, lon }
+  tempUnit: (v) => ['c', 'f'].includes(v),
 };
 // Those of these settings that `settings` has, each only as Tabdial writes it: whoever can write to the user's sync
 // could put anything there, and a background could then name a picture on a server of theirs.

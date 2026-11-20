@@ -395,5 +395,20 @@
   "openNewTab": { "message": "Apri una nuova scheda" },
   "installedPrivateTitle": { "message": "Finestre anonime" },
   "installedPrivateText": { "message": "Firefox esegue le estensioni nelle finestre anonime solo se lo consenti: about:addons > Tabdial > “Funzionamento in finestre anonime” > “Consenti”. Se Firefox è impostato su “Non salvare la cronologia”, ogni finestra è anonima." },
-  "textDirection": { "message": "ltr" }
+  "textDirection": { "message": "ltr" },
+
+  "bgDaily": { "message": "Foto del giorno (Wikimedia Commons)" },
+  "showWeather": { "message": "Mostra il meteo" },
+  "placePlaceholder": { "message": "Città o paese" },
+  "placeFind": { "message": "Cerca" },
+  "placeNow": { "message": "Meteo per $1" },
+  "placeNone": { "message": "Cerca la tua città o il tuo paese, poi sceglilo." },
+  "placeSearching": { "message": "Ricerca in corso…" },
+  "placeNotFound": { "message": "Nessun luogo trovato con questo nome." },
+  "placeFailed": { "message": "La ricerca non è riuscita. Controlla la connessione e riprova." },
+  "tempUnit": { "message": "Temperatura" },
+  "tempUnitAuto": { "message": "Automatica" },
+  "weatherHint": { "message": "Ciò che scrivi, e poi la posizione del luogo, vanno a nexuscortex.dev, che interroga OpenStreetMap e MET Norway. Nient'altro su di te viene inviato." },
+  "weatherBy": { "message": "Previsioni di MET Norway su yr.no" },
+  "photoBy": { "message": "di $1" }
 }

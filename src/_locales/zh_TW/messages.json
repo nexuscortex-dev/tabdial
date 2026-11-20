@@ -373,5 +373,20 @@
   "openNewTab": { "message": "開啟新分頁" },
   "installedPrivateTitle": { "message": "隱私視窗" },
   "installedPrivateText": { "message": "Firefox 的附加元件要經你允許才會在隱私視窗中執行：about:addons > Tabdial >「於隱私視窗中執行」>「允許」。如果 Firefox 設定為「不保留歷史記錄」，所有視窗都是隱私視窗。" },
-  "textDirection": { "message": "ltr" }
+  "textDirection": { "message": "ltr" },
+
+  "bgDaily": { "message": "每日圖片（維基共享資源）" },
+  "showWeather": { "message": "顯示天氣" },
+  "placePlaceholder": { "message": "城市或鄉鎮" },
+  "placeFind": { "message": "搜尋" },
+  "placeNow": { "message": "$1 的天氣" },
+  "placeNone": { "message": "搜尋你所在的城市或鄉鎮，然後選取它。" },
+  "placeSearching": { "message": "正在搜尋…" },
+  "placeNotFound": { "message": "找不到這個名稱的地方。" },
+  "placeFailed": { "message": "搜尋沒有成功。請檢查網路後再試一次。" },
+  "tempUnit": { "message": "溫度" },
+  "tempUnitAuto": { "message": "自動" },
+  "weatherHint": { "message": "你輸入的文字，以及之後地點的位置，會傳給 nexuscortex.dev，由它詢問 OpenStreetMap 和 MET Norway。不會附上你的其他資訊。" },
+  "weatherBy": { "message": "預報來自 MET Norway（yr.no）" },
+  "photoBy": { "message": "作者：$1" }
 }

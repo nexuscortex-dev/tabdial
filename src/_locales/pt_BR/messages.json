@@ -395,5 +395,20 @@
   "openNewTab": { "message": "Abrir uma nova guia" },
   "installedPrivateTitle": { "message": "Janelas privativas" },
   "installedPrivateText": { "message": "O Firefox só executa extensões em janelas privativas se você permitir: about:addons > Tabdial > “Funcionar em janelas privativas” > “Permitir”. Se o Firefox estiver em “Nunca memorizar o histórico”, todas as janelas são privativas." },
-  "textDirection": { "message": "ltr" }
+  "textDirection": { "message": "ltr" },
+
+  "bgDaily": { "message": "Foto do dia (Wikimedia Commons)" },
+  "showWeather": { "message": "Mostrar o tempo" },
+  "placePlaceholder": { "message": "Cidade" },
+  "placeFind": { "message": "Buscar" },
+  "placeNow": { "message": "Tempo em $1" },
+  "placeNone": { "message": "Busque sua cidade e escolha-a." },
+  "placeSearching": { "message": "Buscando…" },
+  "placeNotFound": { "message": "Nenhum lugar encontrado com esse nome." },
+  "placeFailed": { "message": "A busca não funcionou. Verifique a conexão e tente de novo." },
+  "tempUnit": { "message": "Temperatura" },
+  "tempUnitAuto": { "message": "Automática" },
+  "weatherHint": { "message": "O que você digita, e depois a posição do lugar, vão para nexuscortex.dev, que consulta o OpenStreetMap e o MET Norway. Nada mais sobre você é enviado." },
+  "weatherBy": { "message": "Previsão do MET Norway no yr.no" },
+  "photoBy": { "message": "por $1" }
 }

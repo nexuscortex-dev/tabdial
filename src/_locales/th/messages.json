@@ -373,5 +373,20 @@
   "openNewTab": { "message": "เปิดแท็บใหม่" },
   "installedPrivateTitle": { "message": "หน้าต่างส่วนตัว" },
   "installedPrivateText": { "message": "Firefox จะเรียกใช้ส่วนเสริมในหน้าต่างส่วนตัวเฉพาะเมื่อคุณอนุญาต: about:addons > Tabdial > เรียกใช้ในหน้าต่างส่วนตัว > อนุญาต หาก Firefox ตั้งค่าเป็น “ไม่จดจำประวัติเสมอ” ทุกหน้าต่างจะเป็นหน้าต่างส่วนตัว" },
-  "textDirection": { "message": "ltr" }
+  "textDirection": { "message": "ltr" },
+
+  "bgDaily": { "message": "ภาพประจำวัน (วิกิมีเดียคอมมอนส์)" },
+  "showWeather": { "message": "แสดงสภาพอากาศ" },
+  "placePlaceholder": { "message": "เมืองหรืออำเภอ" },
+  "placeFind": { "message": "ค้นหา" },
+  "placeNow": { "message": "สภาพอากาศที่ $1" },
+  "placeNone": { "message": "ค้นหาเมืองของคุณ แล้วเลือก" },
+  "placeSearching": { "message": "กำลังค้นหา…" },
+  "placeNotFound": { "message": "ไม่พบสถานที่ชื่อนี้" },
+  "placeFailed": { "message": "ค้นหาไม่สำเร็จ ตรวจสอบการเชื่อมต่อแล้วลองอีกครั้ง" },
+  "tempUnit": { "message": "อุณหภูมิ" },
+  "tempUnitAuto": { "message": "อัตโนมัติ" },
+  "weatherHint": { "message": "ข้อความที่คุณพิมพ์ และตำแหน่งของสถานที่ในภายหลัง จะส่งไปที่ nexuscortex.dev ซึ่งจะถาม OpenStreetMap และ MET Norway ไม่มีข้อมูลอื่นของคุณส่งไปด้วย" },
+  "weatherBy": { "message": "พยากรณ์จาก MET Norway บน yr.no" },
+  "photoBy": { "message": "โดย $1" }
 }

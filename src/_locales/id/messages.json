@@ -373,5 +373,20 @@
   "openNewTab": { "message": "Buka tab baru" },
   "installedPrivateTitle": { "message": "Jendela pribadi" },
   "installedPrivateText": { "message": "Firefox menjalankan pengaya di jendela pribadi hanya jika Anda mengizinkannya: about:addons > Tabdial > Jalankan di Jendela Pribadi > Izinkan. Jika Firefox diatur ke “Never remember history”, setiap jendela bersifat pribadi." },
-  "textDirection": { "message": "ltr" }
+  "textDirection": { "message": "ltr" },
+
+  "bgDaily": { "message": "Foto hari ini (Wikimedia Commons)" },
+  "showWeather": { "message": "Tampilkan cuaca" },
+  "placePlaceholder": { "message": "Kota atau daerah" },
+  "placeFind": { "message": "Cari" },
+  "placeNow": { "message": "Cuaca di $1" },
+  "placeNone": { "message": "Cari kota atau daerahmu, lalu pilih." },
+  "placeSearching": { "message": "Mencari…" },
+  "placeNotFound": { "message": "Tidak ada tempat dengan nama itu." },
+  "placeFailed": { "message": "Pencarian gagal. Periksa koneksi lalu coba lagi." },
+  "tempUnit": { "message": "Suhu" },
+  "tempUnitAuto": { "message": "Otomatis" },
+  "weatherHint": { "message": "Teks yang kamu ketik, lalu posisi tempatnya, dikirim ke nexuscortex.dev, yang bertanya ke OpenStreetMap dan MET Norway. Tidak ada data lain tentangmu yang ikut dikirim." },
+  "weatherBy": { "message": "Prakiraan dari MET Norway di yr.no" },
+  "photoBy": { "message": "oleh $1" }
 }

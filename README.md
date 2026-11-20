@@ -49,6 +49,8 @@ Only if you use it:
 | Teams | A team's groups, their pictures, its name and its members' names go to nexuscortex.dev, encrypted with a key that travels in the invite link's `#` part, which browsers never send to a site. | `team.js` |
 | Google Drive backup | One file in your own Google Drive, between the browser and Google. The `drive.file` scope reaches only files Tabdial made. | `drive.js` |
 | Sort (comes with the unlock) | When you click Continue: the hostnames and titles of the dials in the group being sorted, and your other groups' names with a few of their hostnames, go to nexuscortex.dev, which passes them to an AI service (TypeSafe). | `sort.js` |
+| Weather (off until you turn it on) | The town name you type, then the picked place's coordinates, go to nexuscortex.dev, which asks OpenStreetMap (Nominatim) and MET Norway. In Firefox only after you allow location information. | `weather.js` |
+| Photo of the day (a background you can pick) | Once a day a request for Wikimedia Commons' Picture of the Day goes to nexuscortex.dev; nothing about you goes with it. | `daily.js` |
 | The unlock | A random purchase id, a license key or, if you unlock by signing in with Google, a Google ID token goes to nexuscortex.dev. The payment itself is on Stripe. | `pay.js` |
 | Jump with browsing history | Read on your computer; it goes nowhere. | `jump.js` |
 | The bookmarks and history drawer | The browser's bookmarks and the last week's history, once you click Allow there: read on your computer; they go nowhere. | `newtab.js` |
@@ -61,7 +63,7 @@ The [privacy policy](https://nexuscortex.dev/tabdial/privacy/) says what the sit
 
 ## What is not here
 
-The server side of nexuscortex.dev (sync codes, teams, Sort, purchases) is not in this repository. What it receives is what the code here sends.
+The server side of nexuscortex.dev (sync codes, teams, Sort, purchases, weather, photo of the day) is not in this repository. What it receives is what the code here sends.
 
 ## License
 
@@ -104,6 +106,8 @@ Tabdial 是 Chrome、Edge、Firefox 的新标签页扩展：把常用网站排�
   - 团队：团队的分组、图片、名称和成员名加密后存到 nexuscortex.dev，密钥在邀请链接的 `#` 后面，浏览器不会把这部分发给网站。
   - Google Drive 备份：存到你自己的 Drive，只在浏览器和 Google 之间。
   - Sort（付费解锁）：点“继续”时，把要整理的那个分组里网站的域名和标题、其他分组的名称和几个域名，经 nexuscortex.dev 交给一个 AI 服务（TypeSafe）。
+  - 天气（默认关）：你输入的城市名、之后选定地点的坐标，发给 nexuscortex.dev，由它去问 OpenStreetMap（Nominatim）和 MET Norway。Firefox 里要你先允许分享位置信息。
+  - 每日图片（可选的背景）：每天向 nexuscortex.dev 请求一次维基共享资源的每日图片，不带任何关于你的信息。
   - 解锁：一个随机的购买号、许可密钥，或用 Google 登录解锁时的 Google ID token，发给 nexuscortex.dev；付款在 Stripe 上完成。
   - Jump 读浏览记录：只在本机读，不发出去。
   - 书签和浏览记录抽屉：你在抽屉里点“允许”后，读浏览器的书签和最近一周的浏览记录，只在本机读，不发出去。
@@ -114,6 +118,6 @@ Tabdial 是 Chrome、Edge、Firefox 的新标签页扩展：把常用网站排�
 
 **权限。** 安装时只要不需要你确认的权限：`storage`、`unlimitedStorage`、`favicon`（Chrome、Edge）、`activeTab`、`alarms`、`search` 和 `fontSettings`（Chrome、Edge：为“设置 > 外观 > 字体”列出电脑上装的字体，不改任何字体设置）。`topSites`、`identity`、`history`、`bookmarks`、`notifications` 是可选权限：点到需要它的功能时才申请，关掉功能就交还。
 
-**这里没有什么。** nexuscortex.dev 的服务端（同步码、团队、Sort、购买）不在这个仓库里。它能收到的，就是这里的代码发出去的。
+**这里没有什么。** nexuscortex.dev 的服务端（同步码、团队、Sort、购买、天气、每日图片）不在这个仓库里。它能收到的，就是这里的代码发出去的。
 
 **许可。** 版权归 NEXUSCORTEX LLC 所有，代码以 [GPL-3.0](LICENSE) 发布。有两样不在其内：“Tabdial”这个名字和图标（改过的版本请换名字和图标再发布）；`src/photos/` 里的背景照片来自 Unsplash，适用 [Unsplash License](https://unsplash.com/license)，作者见上面的英文部分。
