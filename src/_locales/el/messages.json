@@ -388,5 +388,26 @@
   "tempUnitAuto": { "message": "Αυτόματα" },
   "weatherHint": { "message": "Ό,τι πληκτρολογείτε, και μετά η θέση του τόπου, πηγαίνουν στο nexuscortex.dev, που ρωτά το OpenStreetMap και το MET Norway. Τίποτε άλλο για εσάς δεν στέλνεται." },
   "weatherBy": { "message": "Πρόγνωση του MET Norway στο yr.no" },
-  "photoBy": { "message": "από $1" }
+  "photoBy": { "message": "από $1" },
+
+  "bgLiveClouds": { "message": "Σύννεφα πάνω από την έρημο" },
+  "bgLiveSky": { "message": "Σύννεφα που περνούν" },
+  "bgLiveOcean": { "message": "Φουρτουνιασμένη θάλασσα" },
+  "bgLiveBeach": { "message": "Κύματα σε μαύρη παραλία" },
+  "bgLiveFalls": { "message": "Καταρράκτης" },
+  "bgLiveAurora": { "message": "Σέλας" },
+  "liveHint": { "message": "Κινούμενα φόντα: κατεβαίνουν μία φορά και μετά παίζουν από αυτόν τον υπολογιστή. Καταναλώνουν λίγη περισσότερη μπαταρία· αν στο σύστημα είναι ενεργή η μείωση κίνησης, εμφανίζεται μόνο μια ακίνητη εικόνα." },
+  "uploadVideo": { "message": "Δικό σας βίντεο" },
+  "videoTooBig": { "message": "Το βίντεο είναι πολύ μεγάλο. Διαλέξτε ένα κάτω από 60 MB." },
+  "videoUnreadable": { "message": "Αυτό το βίντεο δεν παίζει εδώ. Δοκιμάστε αρχείο MP4 ή WebM." },
+  "liveFailed": { "message": "Δεν ήταν δυνατή η λήψη του κινούμενου φόντου. Ελέγξτε τη σύνδεση και διαλέξτε το ξανά." },
+  "extensions": { "message": "Επεκτάσεις" },
+  "extensionsAllow": { "message": "Για να εμφανίζονται εδώ οι άλλες επεκτάσεις σας και να μπορείτε να τις ενεργοποιείτε ή να τις απενεργοποιείτε, να ανοίγετε τις επιλογές τους ή να τις αφαιρείτε, το Tabdial χρειάζεται άδεια διαχείρισης επεκτάσεων. Η λίστα μένει σε αυτόν τον υπολογιστή." },
+  "extensionsOff": { "message": "Διακοπή διαχείρισης επεκτάσεων" },
+  "extensionOptions": { "message": "Επιλογές" },
+  "extensionOn": { "message": "Ενεργή" },
+  "extensionOff": { "message": "Ανενεργή" },
+  "extensionSwitch": { "message": "Ενεργοποίηση ή απενεργοποίηση" },
+  "extensionRemove": { "message": "Αφαίρεση" },
+  "extensionTheme": { "message": "θέμα" }
 }

@@ -397,5 +397,26 @@
   "tempUnitAuto": { "message": "Автоматично" },
   "weatherHint": { "message": "Введений текст, а потім координати місця надсилаються на nexuscortex.dev, який звертається до OpenStreetMap і MET Norway. Нічого іншого про вас не передається." },
   "weatherBy": { "message": "Прогноз MET Norway на yr.no" },
-  "photoBy": { "message": "автор: $1" }
+  "photoBy": { "message": "автор: $1" },
+
+  "bgLiveClouds": { "message": "Хмари над пустелею" },
+  "bgLiveSky": { "message": "Пливучі хмари" },
+  "bgLiveOcean": { "message": "Штормове море" },
+  "bgLiveBeach": { "message": "Хвилі на чорному пляжі" },
+  "bgLiveFalls": { "message": "Водоспад" },
+  "bgLiveAurora": { "message": "Північне сяйво" },
+  "liveHint": { "message": "Живі фони: завантажуються один раз, а потім відтворюються з цього комп'ютера. Витрачають трохи більше заряду; якщо в системі ввімкнено зменшення руху, показується лише нерухомий кадр." },
+  "uploadVideo": { "message": "Власне відео" },
+  "videoTooBig": { "message": "Відео завелике. Виберіть файл менший за 60 МБ." },
+  "videoUnreadable": { "message": "Це відео тут не відтворюється. Спробуйте файл MP4 або WebM." },
+  "liveFailed": { "message": "Не вдалося завантажити живий фон. Перевірте з'єднання й виберіть його знову." },
+  "extensions": { "message": "Розширення" },
+  "extensionsAllow": { "message": "Щоб показувати тут інші розширення, вмикати й вимикати їх, відкривати їхні налаштування чи видаляти, Tabdial потрібен дозвіл керувати розширеннями. Список лишається на цьому комп'ютері." },
+  "extensionsOff": { "message": "Більше не керувати розширеннями" },
+  "extensionOptions": { "message": "Налаштування" },
+  "extensionOn": { "message": "Увімкнено" },
+  "extensionOff": { "message": "Вимкнено" },
+  "extensionSwitch": { "message": "Увімкнути чи вимкнути" },
+  "extensionRemove": { "message": "Видалити" },
+  "extensionTheme": { "message": "тема" }
 }

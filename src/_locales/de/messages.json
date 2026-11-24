@@ -410,5 +410,26 @@
   "tempUnitAuto": { "message": "Automatisch" },
   "weatherHint": { "message": "Was du eingibst und später die Lage des Ortes gehen an nexuscortex.dev, das OpenStreetMap und MET Norway fragt. Sonst geht nichts über dich mit." },
   "weatherBy": { "message": "Vorhersage von MET Norway auf yr.no" },
-  "photoBy": { "message": "von $1" }
+  "photoBy": { "message": "von $1" },
+
+  "bgLiveClouds": { "message": "Wolken über der Wüste" },
+  "bgLiveSky": { "message": "Ziehende Wolken" },
+  "bgLiveOcean": { "message": "Stürmische See" },
+  "bgLiveBeach": { "message": "Wellen am schwarzen Strand" },
+  "bgLiveFalls": { "message": "Wasserfall" },
+  "bgLiveAurora": { "message": "Nordlichter" },
+  "liveHint": { "message": "Bewegte Hintergründe: einmal heruntergeladen, dann laufen sie von diesem Computer. Sie brauchen etwas mehr Akku; ist im System „Bewegung reduzieren“ an, erscheint nur ein Standbild." },
+  "uploadVideo": { "message": "Eigenes Video" },
+  "videoTooBig": { "message": "Das Video ist zu groß. Wählen Sie eines unter 60 MB." },
+  "videoUnreadable": { "message": "Dieses Video lässt sich hier nicht abspielen. Versuchen Sie eine MP4- oder WebM-Datei." },
+  "liveFailed": { "message": "Der bewegte Hintergrund konnte nicht geladen werden. Prüfen Sie die Verbindung und wählen Sie ihn erneut." },
+  "extensions": { "message": "Erweiterungen" },
+  "extensionsAllow": { "message": "Damit Ihre anderen Erweiterungen hier erscheinen und Sie sie ein- oder ausschalten, ihre Optionen öffnen oder sie entfernen können, braucht Tabdial die Erlaubnis, Erweiterungen zu verwalten. Die Liste bleibt auf diesem Computer." },
+  "extensionsOff": { "message": "Erweiterungen nicht mehr verwalten" },
+  "extensionOptions": { "message": "Optionen" },
+  "extensionOn": { "message": "An" },
+  "extensionOff": { "message": "Aus" },
+  "extensionSwitch": { "message": "An oder aus" },
+  "extensionRemove": { "message": "Entfernen" },
+  "extensionTheme": { "message": "Theme" }
 }

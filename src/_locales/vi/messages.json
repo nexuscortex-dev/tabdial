@@ -388,5 +388,26 @@
   "tempUnitAuto": { "message": "Tự động" },
   "weatherHint": { "message": "Những gì bạn gõ, và sau đó là vị trí của nơi đó, được gửi đến nexuscortex.dev để hỏi OpenStreetMap và MET Norway. Không gửi kèm thông tin nào khác về bạn." },
   "weatherBy": { "message": "Dự báo của MET Norway trên yr.no" },
-  "photoBy": { "message": "của $1" }
+  "photoBy": { "message": "của $1" },
+
+  "bgLiveClouds": { "message": "Mây trên sa mạc" },
+  "bgLiveSky": { "message": "Mây trôi" },
+  "bgLiveOcean": { "message": "Biển động" },
+  "bgLiveBeach": { "message": "Sóng trên bãi biển đen" },
+  "bgLiveFalls": { "message": "Thác nước" },
+  "bgLiveAurora": { "message": "Cực quang" },
+  "liveHint": { "message": "Hình nền động: tải về một lần, sau đó phát từ máy tính này. Tốn pin hơn một chút; nếu hệ thống bật giảm chuyển động thì chỉ hiện ảnh tĩnh." },
+  "uploadVideo": { "message": "Video của bạn" },
+  "videoTooBig": { "message": "Video quá lớn. Hãy chọn video dưới 60 MB." },
+  "videoUnreadable": { "message": "Không phát được video này ở đây. Hãy thử tệp MP4 hoặc WebM." },
+  "liveFailed": { "message": "Không tải được hình nền động. Hãy kiểm tra kết nối và chọn lại." },
+  "extensions": { "message": "Tiện ích" },
+  "extensionsAllow": { "message": "Để hiện các tiện ích khác của bạn ở đây, bật tắt, mở tùy chọn hoặc gỡ chúng, Tabdial cần bạn cho phép quản lý tiện ích. Danh sách chỉ ở trên máy tính này." },
+  "extensionsOff": { "message": "Ngừng quản lý tiện ích" },
+  "extensionOptions": { "message": "Tùy chọn" },
+  "extensionOn": { "message": "Bật" },
+  "extensionOff": { "message": "Tắt" },
+  "extensionSwitch": { "message": "Bật hoặc tắt" },
+  "extensionRemove": { "message": "Gỡ" },
+  "extensionTheme": { "message": "giao diện" }
 }

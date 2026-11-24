@@ -397,5 +397,26 @@
   "tempUnitAuto": { "message": "Automatycznie" },
   "weatherHint": { "message": "To, co wpiszesz, a potem położenie miejsca, trafia do nexuscortex.dev, które pyta OpenStreetMap i MET Norway. Nic więcej o Tobie nie jest wysyłane." },
   "weatherBy": { "message": "Prognoza MET Norway w yr.no" },
-  "photoBy": { "message": "autor: $1" }
+  "photoBy": { "message": "autor: $1" },
+
+  "bgLiveClouds": { "message": "Chmury nad pustynią" },
+  "bgLiveSky": { "message": "Płynące chmury" },
+  "bgLiveOcean": { "message": "Wzburzone morze" },
+  "bgLiveBeach": { "message": "Fale na czarnej plaży" },
+  "bgLiveFalls": { "message": "Wodospad" },
+  "bgLiveAurora": { "message": "Zorza polarna" },
+  "liveHint": { "message": "Ruchome tła: pobierane raz, potem odtwarzane z tego komputera. Zużywają trochę więcej baterii; gdy w systemie włączone jest ograniczenie ruchu, widać tylko nieruchomy obraz." },
+  "uploadVideo": { "message": "Własne wideo" },
+  "videoTooBig": { "message": "To wideo jest za duże. Wybierz plik poniżej 60 MB." },
+  "videoUnreadable": { "message": "Tego wideo nie da się tu odtworzyć. Spróbuj pliku MP4 lub WebM." },
+  "liveFailed": { "message": "Nie udało się pobrać ruchomego tła. Sprawdź połączenie i wybierz je ponownie." },
+  "extensions": { "message": "Rozszerzenia" },
+  "extensionsAllow": { "message": "Aby pokazywać tu inne rozszerzenia, włączać je i wyłączać, otwierać ich opcje lub je usuwać, Tabdial potrzebuje zgody na zarządzanie rozszerzeniami. Lista zostaje na tym komputerze." },
+  "extensionsOff": { "message": "Przestań zarządzać rozszerzeniami" },
+  "extensionOptions": { "message": "Opcje" },
+  "extensionOn": { "message": "Włączone" },
+  "extensionOff": { "message": "Wyłączone" },
+  "extensionSwitch": { "message": "Włącz lub wyłącz" },
+  "extensionRemove": { "message": "Usuń" },
+  "extensionTheme": { "message": "motyw" }
 }

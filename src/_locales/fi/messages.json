@@ -388,5 +388,26 @@
   "tempUnitAuto": { "message": "Automaattinen" },
   "weatherHint": { "message": "Kirjoittamasi teksti ja myöhemmin paikan sijainti menevät nexuscortex.dev-palveluun, joka kysyy OpenStreetMapilta ja MET Norwaylta. Muuta sinusta ei lähetetä." },
   "weatherBy": { "message": "Ennuste: MET Norway, yr.no" },
-  "photoBy": { "message": "kuvaaja: $1" }
+  "photoBy": { "message": "kuvaaja: $1" },
+
+  "bgLiveClouds": { "message": "Pilviä aavikon yllä" },
+  "bgLiveSky": { "message": "Ajelehtivia pilviä" },
+  "bgLiveOcean": { "message": "Myrskyinen meri" },
+  "bgLiveBeach": { "message": "Aaltoja mustalla rannalla" },
+  "bgLiveFalls": { "message": "Vesiputous" },
+  "bgLiveAurora": { "message": "Revontulet" },
+  "liveHint": { "message": "Liikkuvat taustat: ladataan kerran, sen jälkeen ne toistetaan tältä tietokoneelta. Ne kuluttavat hieman enemmän akkua; jos järjestelmässä on liikkeen vähentäminen päällä, näkyy vain pysäytyskuva." },
+  "uploadVideo": { "message": "Oma video" },
+  "videoTooBig": { "message": "Video on liian suuri. Valitse alle 60 Mt:n video." },
+  "videoUnreadable": { "message": "Tätä videota ei voi toistaa täällä. Kokeile MP4- tai WebM-tiedostoa." },
+  "liveFailed": { "message": "Liikkuvaa taustaa ei voitu ladata. Tarkista yhteys ja valitse se uudelleen." },
+  "extensions": { "message": "Laajennukset" },
+  "extensionsAllow": { "message": "Jotta muut laajennuksesi näkyvät täällä ja voit kytkeä niitä päälle tai pois, avata niiden asetukset tai poistaa niitä, Tabdial tarvitsee luvan hallita laajennuksia. Luettelo pysyy tällä tietokoneella." },
+  "extensionsOff": { "message": "Lopeta laajennusten hallinta" },
+  "extensionOptions": { "message": "Asetukset" },
+  "extensionOn": { "message": "Päällä" },
+  "extensionOff": { "message": "Pois" },
+  "extensionSwitch": { "message": "Päälle tai pois" },
+  "extensionRemove": { "message": "Poista" },
+  "extensionTheme": { "message": "teema" }
 }

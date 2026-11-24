@@ -388,5 +388,26 @@
   "tempUnitAuto": { "message": "Automatisk" },
   "weatherHint": { "message": "Det, du skriver, og senere stedets position, sendes til nexuscortex.dev, som spørger OpenStreetMap og MET Norway. Intet andet om dig sendes med." },
   "weatherBy": { "message": "Prognose fra MET Norway på yr.no" },
-  "photoBy": { "message": "af $1" }
+  "photoBy": { "message": "af $1" },
+
+  "bgLiveClouds": { "message": "Skyer over ørkenen" },
+  "bgLiveSky": { "message": "Drivende skyer" },
+  "bgLiveOcean": { "message": "Stormfuldt hav" },
+  "bgLiveBeach": { "message": "Bølger på en sort strand" },
+  "bgLiveFalls": { "message": "Vandfald" },
+  "bgLiveAurora": { "message": "Nordlys" },
+  "liveHint": { "message": "Levende baggrunde: hentes én gang og afspilles derefter fra denne computer. De bruger lidt mere strøm; med reduceret bevægelse slået til i systemet vises kun et stillbillede." },
+  "uploadVideo": { "message": "Din egen video" },
+  "videoTooBig": { "message": "Videoen er for stor. Vælg en under 60 MB." },
+  "videoUnreadable": { "message": "Videoen kan ikke afspilles her. Prøv en MP4- eller WebM-fil." },
+  "liveFailed": { "message": "Den levende baggrund kunne ikke hentes. Tjek forbindelsen, og vælg den igen." },
+  "extensions": { "message": "Udvidelser" },
+  "extensionsAllow": { "message": "For at vise dine andre udvidelser her, så du kan slå dem til eller fra, åbne deres indstillinger eller fjerne dem, skal Tabdial have tilladelse til at administrere udvidelser. Listen bliver på denne computer." },
+  "extensionsOff": { "message": "Stop med at administrere udvidelser" },
+  "extensionOptions": { "message": "Indstillinger" },
+  "extensionOn": { "message": "Til" },
+  "extensionOff": { "message": "Fra" },
+  "extensionSwitch": { "message": "Til eller fra" },
+  "extensionRemove": { "message": "Fjern" },
+  "extensionTheme": { "message": "tema" }
 }

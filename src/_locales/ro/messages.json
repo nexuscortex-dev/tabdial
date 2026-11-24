@@ -397,5 +397,26 @@
   "tempUnitAuto": { "message": "Automat" },
   "weatherHint": { "message": "Ce scrii, iar apoi poziția locului, ajung la nexuscortex.dev, care întreabă OpenStreetMap și MET Norway. Nimic altceva despre tine nu este trimis." },
   "weatherBy": { "message": "Prognoză MET Norway pe yr.no" },
-  "photoBy": { "message": "de $1" }
+  "photoBy": { "message": "de $1" },
+
+  "bgLiveClouds": { "message": "Nori deasupra deșertului" },
+  "bgLiveSky": { "message": "Nori în mișcare" },
+  "bgLiveOcean": { "message": "Mare furtunoasă" },
+  "bgLiveBeach": { "message": "Valuri pe o plajă neagră" },
+  "bgLiveFalls": { "message": "Cascadă" },
+  "bgLiveAurora": { "message": "Aurora boreală" },
+  "liveHint": { "message": "Fundaluri animate: se descarcă o dată, apoi rulează de pe acest computer. Consumă puțin mai multă baterie; cu reducerea mișcării activată în sistem, apare doar o imagine fixă." },
+  "uploadVideo": { "message": "Videoclipul tău" },
+  "videoTooBig": { "message": "Videoclipul e prea mare. Alege unul sub 60 MB." },
+  "videoUnreadable": { "message": "Videoclipul nu poate fi redat aici. Încearcă un fișier MP4 sau WebM." },
+  "liveFailed": { "message": "Fundalul animat nu a putut fi descărcat. Verifică conexiunea și alege-l din nou." },
+  "extensions": { "message": "Extensii" },
+  "extensionsAllow": { "message": "Pentru a afișa aici celelalte extensii, a le porni sau opri, a le deschide opțiunile sau a le elimina, Tabdial are nevoie de permisiunea de a gestiona extensiile. Lista rămâne pe acest computer." },
+  "extensionsOff": { "message": "Nu mai gestiona extensiile" },
+  "extensionOptions": { "message": "Opțiuni" },
+  "extensionOn": { "message": "Pornită" },
+  "extensionOff": { "message": "Oprită" },
+  "extensionSwitch": { "message": "Pornește sau oprește" },
+  "extensionRemove": { "message": "Elimină" },
+  "extensionTheme": { "message": "temă" }
 }

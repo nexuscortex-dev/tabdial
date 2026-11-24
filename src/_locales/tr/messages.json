@@ -388,5 +388,26 @@
   "tempUnitAuto": { "message": "Otomatik" },
   "weatherHint": { "message": "Yazdığın metin ve sonra yerin konumu nexuscortex.dev'e gider; o da OpenStreetMap ve MET Norway'e sorar. Seninle ilgili başka bir şey gönderilmez." },
   "weatherBy": { "message": "Tahmin: MET Norway, yr.no" },
-  "photoBy": { "message": "çeken: $1" }
+  "photoBy": { "message": "çeken: $1" },
+
+  "bgLiveClouds": { "message": "Çöl üzerinde bulutlar" },
+  "bgLiveSky": { "message": "Süzülen bulutlar" },
+  "bgLiveOcean": { "message": "Fırtınalı deniz" },
+  "bgLiveBeach": { "message": "Siyah kumsalda dalgalar" },
+  "bgLiveFalls": { "message": "Şelale" },
+  "bgLiveAurora": { "message": "Kuzey ışıkları" },
+  "liveHint": { "message": "Hareketli arka planlar: bir kez indirilir, sonra bu bilgisayardan oynatılır. Biraz daha fazla pil kullanır; sistemde hareketi azalt açıksa yalnızca sabit bir resim görünür." },
+  "uploadVideo": { "message": "Kendi videon" },
+  "videoTooBig": { "message": "Video çok büyük. 60 MB'den küçük birini seç." },
+  "videoUnreadable": { "message": "Bu video burada oynatılamıyor. MP4 veya WebM dosyası dene." },
+  "liveFailed": { "message": "Hareketli arka plan indirilemedi. Bağlantını kontrol edip yeniden seç." },
+  "extensions": { "message": "Uzantılar" },
+  "extensionsAllow": { "message": "Diğer uzantılarını burada gösterip açıp kapatabilmen, seçeneklerini açabilmen veya kaldırabilmen için Tabdial'ın uzantıları yönetme iznine ihtiyacı var. Liste bu bilgisayarda kalır." },
+  "extensionsOff": { "message": "Uzantıları yönetmeyi bırak" },
+  "extensionOptions": { "message": "Seçenekler" },
+  "extensionOn": { "message": "Açık" },
+  "extensionOff": { "message": "Kapalı" },
+  "extensionSwitch": { "message": "Aç veya kapat" },
+  "extensionRemove": { "message": "Kaldır" },
+  "extensionTheme": { "message": "tema" }
 }

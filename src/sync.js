@@ -18,6 +18,7 @@
 //
 // The pure helpers are unit-tested in Node; pull() and push() are tested there against a fake chrome.storage.
 import { validPlace } from './weather.js';
+import { liveId } from './live.js';
 import { addMissing, dialsOf, fillImages, normalizeUrl, ownGroups, pick, urlKey, withTeamGroups } from './merge.js';
 import { ask, opened, seal, unseal } from './team.js';
 import { fill, forSite, local, mergeNotes, namedBy, namedIn, picturesIn, readSynced, revsOf, synced } from './notes.js';
@@ -175,7 +176,7 @@ export async function push(state) {
 // over what sync holds, what changed there is taken, and of two computers changing the same setting one wins.
 export const NEW_LOOK = { background: 'photos/sunset.webp', columns: 6 }; // a new install opens on a photo (store.js)
 const LOOK = {
-  background: (v) => typeof v === 'string' && /^($|daily$|#[0-9a-f]{6}$|photos\/[\w-]+\.webp$|linear-gradient\([\w\s#,]+\)$)/i.test(v), // daily: the photo of the day (daily.js)
+  background: (v) => typeof v === 'string' && (/^($|daily$|#[0-9a-f]{6}$|photos\/[\w-]+\.webp$|linear-gradient\([\w\s#,]+\)$)/i.test(v) || !!liveId(v)), // daily: the photo of the day (daily.js); live/<id>: a moving background (live.js), one this version has; never 'video', the user's own
   columns: (v) => Number.isInteger(v) && v >= 3 && v <= 12,
   size: (v) => Number.isInteger(v) && v >= 60 && v <= 160,
   radius: (v) => Number.isInteger(v) && v >= 0 && v <= 32,

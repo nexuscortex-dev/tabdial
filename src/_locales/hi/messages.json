@@ -388,5 +388,26 @@
   "tempUnitAuto": { "message": "अपने आप" },
   "weatherHint": { "message": "आप जो लिखते हैं, और बाद में जगह की स्थिति, nexuscortex.dev पर जाती है, जो OpenStreetMap और MET Norway से पूछता है। आपके बारे में और कुछ नहीं भेजा जाता।" },
   "weatherBy": { "message": "पूर्वानुमान: MET Norway, yr.no" },
-  "photoBy": { "message": "$1 द्वारा" }
+  "photoBy": { "message": "$1 द्वारा" },
+
+  "bgLiveClouds": { "message": "रेगिस्तान पर बादल" },
+  "bgLiveSky": { "message": "तैरते बादल" },
+  "bgLiveOcean": { "message": "तूफ़ानी समुद्र" },
+  "bgLiveBeach": { "message": "काले तट पर लहरें" },
+  "bgLiveFalls": { "message": "झरना" },
+  "bgLiveAurora": { "message": "ध्रुवीय ज्योति" },
+  "liveHint": { "message": "चलती पृष्ठभूमि: एक बार डाउनलोड होती है, फिर इसी कंप्यूटर से चलती है। थोड़ी ज़्यादा बैटरी लगती है; सिस्टम में गति कम करें चालू हो तो सिर्फ़ स्थिर तस्वीर दिखती है।" },
+  "uploadVideo": { "message": "अपना वीडियो" },
+  "videoTooBig": { "message": "वीडियो बहुत बड़ा है। 60 MB से छोटा चुनें।" },
+  "videoUnreadable": { "message": "यह वीडियो यहाँ नहीं चल सकता। MP4 या WebM फ़ाइल आज़माएँ।" },
+  "liveFailed": { "message": "चलती पृष्ठभूमि डाउनलोड नहीं हो पाई। कनेक्शन जाँचें और फिर से चुनें।" },
+  "extensions": { "message": "एक्सटेंशन" },
+  "extensionsAllow": { "message": "अपने दूसरे एक्सटेंशन यहाँ दिखाने, उन्हें चालू-बंद करने, उनके विकल्प खोलने या हटाने के लिए Tabdial को एक्सटेंशन प्रबंधित करने की अनुमति चाहिए। सूची इसी कंप्यूटर पर रहती है।" },
+  "extensionsOff": { "message": "एक्सटेंशन प्रबंधित करना बंद करें" },
+  "extensionOptions": { "message": "विकल्प" },
+  "extensionOn": { "message": "चालू" },
+  "extensionOff": { "message": "बंद" },
+  "extensionSwitch": { "message": "चालू या बंद" },
+  "extensionRemove": { "message": "हटाएँ" },
+  "extensionTheme": { "message": "थीम" }
 }

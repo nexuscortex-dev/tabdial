@@ -388,5 +388,26 @@
   "tempUnitAuto": { "message": "Automatiskt" },
   "weatherHint": { "message": "Det du skriver, och sedan platsens position, går till nexuscortex.dev, som frågar OpenStreetMap och MET Norway. Inget annat om dig skickas med." },
   "weatherBy": { "message": "Prognos från MET Norway på yr.no" },
-  "photoBy": { "message": "av $1" }
+  "photoBy": { "message": "av $1" },
+
+  "bgLiveClouds": { "message": "Moln över öknen" },
+  "bgLiveSky": { "message": "Drivande moln" },
+  "bgLiveOcean": { "message": "Stormigt hav" },
+  "bgLiveBeach": { "message": "Vågor på en svart strand" },
+  "bgLiveFalls": { "message": "Vattenfall" },
+  "bgLiveAurora": { "message": "Norrsken" },
+  "liveHint": { "message": "Rörliga bakgrunder: hämtas en gång och spelas sedan från den här datorn. De drar lite mer batteri; med minska rörelse påslaget i systemet visas bara en stillbild." },
+  "uploadVideo": { "message": "Din egen video" },
+  "videoTooBig": { "message": "Videon är för stor. Välj en under 60 MB." },
+  "videoUnreadable": { "message": "Den videon kan inte spelas här. Prova en MP4- eller WebM-fil." },
+  "liveFailed": { "message": "Den rörliga bakgrunden kunde inte hämtas. Kontrollera anslutningen och välj den igen." },
+  "extensions": { "message": "Tillägg" },
+  "extensionsAllow": { "message": "För att visa dina andra tillägg här och kunna slå på eller av dem, öppna deras alternativ eller ta bort dem behöver Tabdial tillåtelse att hantera tillägg. Listan stannar på den här datorn." },
+  "extensionsOff": { "message": "Sluta hantera tillägg" },
+  "extensionOptions": { "message": "Alternativ" },
+  "extensionOn": { "message": "På" },
+  "extensionOff": { "message": "Av" },
+  "extensionSwitch": { "message": "På eller av" },
+  "extensionRemove": { "message": "Ta bort" },
+  "extensionTheme": { "message": "tema" }
 }

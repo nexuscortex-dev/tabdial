@@ -397,5 +397,26 @@
   "tempUnitAuto": { "message": "Automaticky" },
   "weatherHint": { "message": "Čo napíšete, a potom poloha miesta, ide na nexuscortex.dev, ktorý sa pýta OpenStreetMap a MET Norway. Nič iné o vás sa neposiela." },
   "weatherBy": { "message": "Predpoveď MET Norway na yr.no" },
-  "photoBy": { "message": "autor: $1" }
+  "photoBy": { "message": "autor: $1" },
+
+  "bgLiveClouds": { "message": "Oblaky nad púšťou" },
+  "bgLiveSky": { "message": "Plávajúce oblaky" },
+  "bgLiveOcean": { "message": "Rozbúrené more" },
+  "bgLiveBeach": { "message": "Vlny na čiernej pláži" },
+  "bgLiveFalls": { "message": "Vodopád" },
+  "bgLiveAurora": { "message": "Polárna žiara" },
+  "liveHint": { "message": "Pohyblivé pozadia: stiahnu sa raz a potom sa prehrávajú z tohto počítača. Spotrebujú trochu viac batérie; keď máte v systéme zapnuté obmedzenie pohybu, zobrazí sa len statický obrázok." },
+  "uploadVideo": { "message": "Vlastné video" },
+  "videoTooBig": { "message": "Video je príliš veľké. Vyberte súbor menší ako 60 MB." },
+  "videoUnreadable": { "message": "Toto video sa tu nedá prehrať. Skúste súbor MP4 alebo WebM." },
+  "liveFailed": { "message": "Pohyblivé pozadie sa nepodarilo stiahnuť. Skontrolujte pripojenie a vyberte ho znova." },
+  "extensions": { "message": "Rozšírenia" },
+  "extensionsAllow": { "message": "Aby sa tu zobrazili vaše ďalšie rozšírenia a dali sa zapínať a vypínať, otvárať ich možnosti alebo ich odstrániť, potrebuje Tabdial povolenie spravovať rozšírenia. Zoznam zostáva v tomto počítači." },
+  "extensionsOff": { "message": "Prestať spravovať rozšírenia" },
+  "extensionOptions": { "message": "Možnosti" },
+  "extensionOn": { "message": "Zapnuté" },
+  "extensionOff": { "message": "Vypnuté" },
+  "extensionSwitch": { "message": "Zapnúť alebo vypnúť" },
+  "extensionRemove": { "message": "Odstrániť" },
+  "extensionTheme": { "message": "motív" }
 }

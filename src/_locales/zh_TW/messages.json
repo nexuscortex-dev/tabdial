@@ -388,5 +388,26 @@
   "tempUnitAuto": { "message": "自動" },
   "weatherHint": { "message": "你輸入的文字，以及之後地點的位置，會傳給 nexuscortex.dev，由它詢問 OpenStreetMap 和 MET Norway。不會附上你的其他資訊。" },
   "weatherBy": { "message": "預報來自 MET Norway（yr.no）" },
-  "photoBy": { "message": "作者：$1" }
+  "photoBy": { "message": "作者：$1" },
+
+  "bgLiveClouds": { "message": "沙漠上的雲" },
+  "bgLiveSky": { "message": "飄動的雲" },
+  "bgLiveOcean": { "message": "暴風中的海" },
+  "bgLiveBeach": { "message": "黑沙灘上的浪" },
+  "bgLiveFalls": { "message": "瀑布" },
+  "bgLiveAurora": { "message": "北極光" },
+  "liveHint": { "message": "動態背景：只下載一次，之後從這台電腦播放。會稍微多耗一點電；系統開啟「減少動態效果」時只顯示靜止畫面。" },
+  "uploadVideo": { "message": "你自己的影片" },
+  "videoTooBig": { "message": "影片太大了，請選 60 MB 以內的。" },
+  "videoUnreadable": { "message": "這個影片在這裡無法播放，試試 MP4 或 WebM 檔案。" },
+  "liveFailed": { "message": "無法下載動態背景，請檢查網路後重新選擇。" },
+  "extensions": { "message": "擴充功能" },
+  "extensionsAllow": { "message": "要在這裡列出你的其他擴充功能，並能開關、開啟它們的選項或移除它們，Tabdial 需要你允許它管理擴充功能。清單只留在這台電腦上。" },
+  "extensionsOff": { "message": "停止管理擴充功能" },
+  "extensionOptions": { "message": "選項" },
+  "extensionOn": { "message": "已開啟" },
+  "extensionOff": { "message": "已關閉" },
+  "extensionSwitch": { "message": "開啟或關閉" },
+  "extensionRemove": { "message": "移除" },
+  "extensionTheme": { "message": "佈景主題" }
 }

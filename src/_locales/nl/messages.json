@@ -388,5 +388,26 @@
   "tempUnitAuto": { "message": "Automatisch" },
   "weatherHint": { "message": "Wat je typt, en daarna de positie van de plaats, gaan naar nexuscortex.dev, dat OpenStreetMap en MET Norway raadpleegt. Verder gaat er niets over jou mee." },
   "weatherBy": { "message": "Verwachting van MET Norway op yr.no" },
-  "photoBy": { "message": "door $1" }
+  "photoBy": { "message": "door $1" },
+
+  "bgLiveClouds": { "message": "Wolken boven de woestijn" },
+  "bgLiveSky": { "message": "Drijvende wolken" },
+  "bgLiveOcean": { "message": "Stormachtige zee" },
+  "bgLiveBeach": { "message": "Golven op een zwart strand" },
+  "bgLiveFalls": { "message": "Waterval" },
+  "bgLiveAurora": { "message": "Noorderlicht" },
+  "liveHint": { "message": "Bewegende achtergronden: één keer gedownload, daarna spelen ze af vanaf deze computer. Ze kosten wat meer batterij; met 'beweging beperken' aan in je systeem zie je alleen een stilstaand beeld." },
+  "uploadVideo": { "message": "Je eigen video" },
+  "videoTooBig": { "message": "Die video is te groot. Kies er een onder 60 MB." },
+  "videoUnreadable": { "message": "Die video kan hier niet worden afgespeeld. Probeer een MP4- of WebM-bestand." },
+  "liveFailed": { "message": "De bewegende achtergrond kon niet worden gedownload. Controleer je verbinding en kies hem opnieuw." },
+  "extensions": { "message": "Extensies" },
+  "extensionsAllow": { "message": "Om je andere extensies hier te tonen, ze aan of uit te zetten, hun opties te openen of ze te verwijderen, heeft Tabdial je toestemming nodig om extensies te beheren. De lijst blijft op deze computer." },
+  "extensionsOff": { "message": "Stoppen met extensies beheren" },
+  "extensionOptions": { "message": "Opties" },
+  "extensionOn": { "message": "Aan" },
+  "extensionOff": { "message": "Uit" },
+  "extensionSwitch": { "message": "Aan of uit" },
+  "extensionRemove": { "message": "Verwijderen" },
+  "extensionTheme": { "message": "thema" }
 }

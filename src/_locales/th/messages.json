@@ -388,5 +388,26 @@
   "tempUnitAuto": { "message": "อัตโนมัติ" },
   "weatherHint": { "message": "ข้อความที่คุณพิมพ์ และตำแหน่งของสถานที่ในภายหลัง จะส่งไปที่ nexuscortex.dev ซึ่งจะถาม OpenStreetMap และ MET Norway ไม่มีข้อมูลอื่นของคุณส่งไปด้วย" },
   "weatherBy": { "message": "พยากรณ์จาก MET Norway บน yr.no" },
-  "photoBy": { "message": "โดย $1" }
+  "photoBy": { "message": "โดย $1" },
+
+  "bgLiveClouds": { "message": "เมฆเหนือทะเลทราย" },
+  "bgLiveSky": { "message": "เมฆลอย" },
+  "bgLiveOcean": { "message": "ทะเลคลื่นแรง" },
+  "bgLiveBeach": { "message": "คลื่นบนหาดทรายดำ" },
+  "bgLiveFalls": { "message": "น้ำตก" },
+  "bgLiveAurora": { "message": "แสงเหนือ" },
+  "liveHint": { "message": "พื้นหลังเคลื่อนไหว: ดาวน์โหลดครั้งเดียว แล้วเล่นจากคอมพิวเตอร์เครื่องนี้ ใช้แบตเตอรี่มากขึ้นเล็กน้อย ถ้าระบบเปิดลดการเคลื่อนไหวไว้ จะแสดงเป็นภาพนิ่ง" },
+  "uploadVideo": { "message": "วิดีโอของคุณเอง" },
+  "videoTooBig": { "message": "วิดีโอใหญ่เกินไป เลือกไฟล์ที่เล็กกว่า 60 MB" },
+  "videoUnreadable": { "message": "เล่นวิดีโอนี้ที่นี่ไม่ได้ ลองไฟล์ MP4 หรือ WebM" },
+  "liveFailed": { "message": "ดาวน์โหลดพื้นหลังเคลื่อนไหวไม่ได้ ตรวจสอบการเชื่อมต่อแล้วเลือกอีกครั้ง" },
+  "extensions": { "message": "ส่วนขยาย" },
+  "extensionsAllow": { "message": "ถ้าจะแสดงส่วนขยายอื่นของคุณที่นี่ เพื่อเปิดปิด เปิดตัวเลือก หรือลบออก Tabdial ต้องได้รับอนุญาตให้จัดการส่วนขยาย รายการจะอยู่ในคอมพิวเตอร์เครื่องนี้เท่านั้น" },
+  "extensionsOff": { "message": "เลิกจัดการส่วนขยาย" },
+  "extensionOptions": { "message": "ตัวเลือก" },
+  "extensionOn": { "message": "เปิด" },
+  "extensionOff": { "message": "ปิด" },
+  "extensionSwitch": { "message": "เปิดหรือปิด" },
+  "extensionRemove": { "message": "ลบ" },
+  "extensionTheme": { "message": "ธีม" }
 }

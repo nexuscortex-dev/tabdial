@@ -388,5 +388,26 @@
   "tempUnitAuto": { "message": "Otomatis" },
   "weatherHint": { "message": "Teks yang kamu ketik, lalu posisi tempatnya, dikirim ke nexuscortex.dev, yang bertanya ke OpenStreetMap dan MET Norway. Tidak ada data lain tentangmu yang ikut dikirim." },
   "weatherBy": { "message": "Prakiraan dari MET Norway di yr.no" },
-  "photoBy": { "message": "oleh $1" }
+  "photoBy": { "message": "oleh $1" },
+
+  "bgLiveClouds": { "message": "Awan di atas gurun" },
+  "bgLiveSky": { "message": "Awan berarak" },
+  "bgLiveOcean": { "message": "Laut berbadai" },
+  "bgLiveBeach": { "message": "Ombak di pantai hitam" },
+  "bgLiveFalls": { "message": "Air terjun" },
+  "bgLiveAurora": { "message": "Aurora" },
+  "liveHint": { "message": "Latar bergerak: diunduh sekali, lalu diputar dari komputer ini. Sedikit lebih boros baterai; jika kurangi gerakan aktif di sistem, hanya gambar diam yang tampil." },
+  "uploadVideo": { "message": "Video sendiri" },
+  "videoTooBig": { "message": "Video terlalu besar. Pilih yang di bawah 60 MB." },
+  "videoUnreadable": { "message": "Video itu tidak bisa diputar di sini. Coba file MP4 atau WebM." },
+  "liveFailed": { "message": "Latar bergerak tidak bisa diunduh. Periksa koneksi lalu pilih lagi." },
+  "extensions": { "message": "Ekstensi" },
+  "extensionsAllow": { "message": "Agar ekstensi lainmu tampil di sini dan bisa dinyalakan atau dimatikan, dibuka opsinya, atau dihapus, Tabdial perlu izinmu untuk mengelola ekstensi. Daftarnya tetap di komputer ini." },
+  "extensionsOff": { "message": "Berhenti mengelola ekstensi" },
+  "extensionOptions": { "message": "Opsi" },
+  "extensionOn": { "message": "Aktif" },
+  "extensionOff": { "message": "Nonaktif" },
+  "extensionSwitch": { "message": "Aktif atau nonaktif" },
+  "extensionRemove": { "message": "Hapus" },
+  "extensionTheme": { "message": "tema" }
 }

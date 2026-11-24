@@ -411,5 +411,26 @@
   "tempUnitAuto": { "message": "Automatic", "description": "Option: °C or °F by the browser's region." },
   "weatherHint": { "message": "What you type, and later the place's position, go to nexuscortex.dev, which asks OpenStreetMap and MET Norway. Nothing else about you goes with them.", "description": "Under the weather settings." },
   "weatherBy": { "message": "Forecast from MET Norway on yr.no", "description": "Tooltip of the weather under the date; it links to yr.no." },
-  "photoBy": { "message": "by $1", "description": "Under the photo of the day. $1 = its author." }
+  "photoBy": { "message": "by $1", "description": "Under the photo of the day. $1 = its author." },
+
+  "bgLiveClouds": { "message": "Clouds over the desert", "description": "Moving background swatch: clouds over Joshua Tree (desert)." },
+  "bgLiveSky": { "message": "Drifting clouds", "description": "Moving background swatch: clouds drifting across a blue sky." },
+  "bgLiveOcean": { "message": "Stormy sea", "description": "Moving background swatch: a stormy open sea." },
+  "bgLiveBeach": { "message": "Waves on a black beach", "description": "Moving background swatch: waves on a black beach in Iceland." },
+  "bgLiveFalls": { "message": "Waterfall", "description": "Moving background swatch: a waterfall in a forest." },
+  "bgLiveAurora": { "message": "Northern lights", "description": "Moving background swatch: northern lights over a lake." },
+  "liveHint": { "message": "Moving backgrounds: downloaded once, then they play from this computer. They use a little more battery; with reduced motion turned on in your system, only a still picture shows.", "description": "In Settings above the moving backgrounds." },
+  "uploadVideo": { "message": "Your own video", "description": "Swatch title: upload your own video as the background." },
+  "videoTooBig": { "message": "That video is too big. Pick one under 60 MB.", "description": "Error when the video file is too large." },
+  "videoUnreadable": { "message": "That video can't be played here. Try an MP4 or WebM file.", "description": "Error when the video can't be read." },
+  "liveFailed": { "message": "The moving background couldn't be downloaded. Check your connection and pick it again.", "description": "Error when a moving background couldn't be downloaded." },
+  "extensions": { "message": "Extensions", "description": "Drawer tab: the browser's other extensions." },
+  "extensionsAllow": { "message": "To show your other extensions here, so you can switch them on or off, open their options or remove them, Tabdial needs your permission to manage extensions. The list stays on this computer.", "description": "In the extensions tab before the permission is given." },
+  "extensionsOff": { "message": "Stop managing extensions", "description": "Button in the extensions tab: give the permission back." },
+  "extensionOptions": { "message": "Options", "description": "Button tooltip: open an extension's options page." },
+  "extensionOn": { "message": "On", "description": "Switch tooltip when the extension is on." },
+  "extensionOff": { "message": "Off", "description": "Switch tooltip when the extension is off." },
+  "extensionSwitch": { "message": "On or off", "description": "Screen reader name of the on/off switch, followed by the extension's name." },
+  "extensionRemove": { "message": "Remove", "description": "Button tooltip: remove the extension (the browser asks first)." },
+  "extensionTheme": { "message": "theme", "description": "Shown after the name of a browser theme in the extensions tab." }
 }

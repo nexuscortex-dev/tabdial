@@ -415,5 +415,26 @@
   "tempUnitAuto": { "message": "تلقائي" },
   "weatherHint": { "message": "ما تكتبه، ثم موقع المكان، يُرسل إلى nexuscortex.dev الذي يسأل OpenStreetMap وMET Norway. لا يُرسل أي شيء آخر عنك." },
   "weatherBy": { "message": "توقعات MET Norway على yr.no" },
-  "photoBy": { "message": "بعدسة $1" }
+  "photoBy": { "message": "بعدسة $1" },
+
+  "bgLiveClouds": { "message": "سحب فوق الصحراء" },
+  "bgLiveSky": { "message": "سحب عابرة" },
+  "bgLiveOcean": { "message": "بحر عاصف" },
+  "bgLiveBeach": { "message": "أمواج على شاطئ أسود" },
+  "bgLiveFalls": { "message": "شلال" },
+  "bgLiveAurora": { "message": "الشفق القطبي" },
+  "liveHint": { "message": "خلفيات متحركة: تُنزّل مرة واحدة ثم تُشغّل من هذا الحاسوب. تستهلك بطارية أكثر قليلًا، وإذا كان تقليل الحركة مفعّلًا في النظام تظهر صورة ثابتة فقط." },
+  "uploadVideo": { "message": "فيديو خاص بك" },
+  "videoTooBig": { "message": "الفيديو كبير جدًا. اختر فيديو أصغر من 60 ميغابايت." },
+  "videoUnreadable": { "message": "لا يمكن تشغيل هذا الفيديو هنا. جرّب ملف MP4 أو WebM." },
+  "liveFailed": { "message": "تعذّر تنزيل الخلفية المتحركة. تحقق من الاتصال واخترها مرة أخرى." },
+  "extensions": { "message": "الإضافات" },
+  "extensionsAllow": { "message": "لعرض إضافاتك الأخرى هنا وتشغيلها أو إيقافها أو فتح خياراتها أو إزالتها، يحتاج Tabdial إلى إذنك بإدارة الإضافات. تبقى القائمة على هذا الحاسوب." },
+  "extensionsOff": { "message": "إيقاف إدارة الإضافات" },
+  "extensionOptions": { "message": "الخيارات" },
+  "extensionOn": { "message": "مفعّلة" },
+  "extensionOff": { "message": "متوقفة" },
+  "extensionSwitch": { "message": "تشغيل أو إيقاف" },
+  "extensionRemove": { "message": "إزالة" },
+  "extensionTheme": { "message": "سمة" }
 }

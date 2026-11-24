@@ -410,5 +410,26 @@
   "tempUnitAuto": { "message": "自动" },
   "weatherHint": { "message": "你输入的文字，以及之后地点的位置，会发给 nexuscortex.dev，由它去问 OpenStreetMap 和 MET Norway。不会带上你的其他信息。" },
   "weatherBy": { "message": "预报来自 MET Norway（yr.no）" },
-  "photoBy": { "message": "作者：$1" }
+  "photoBy": { "message": "作者：$1" },
+
+  "bgLiveClouds": { "message": "沙漠上的云" },
+  "bgLiveSky": { "message": "飘动的云" },
+  "bgLiveOcean": { "message": "风暴中的海" },
+  "bgLiveBeach": { "message": "黑沙滩上的浪" },
+  "bgLiveFalls": { "message": "瀑布" },
+  "bgLiveAurora": { "message": "北极光" },
+  "liveHint": { "message": "动态背景：只下载一次，之后从这台电脑播放。会稍微多耗一点电；系统开了「减少动态效果」时只显示静止画面。" },
+  "uploadVideo": { "message": "你自己的视频" },
+  "videoTooBig": { "message": "视频太大了，请选 60 MB 以内的。" },
+  "videoUnreadable": { "message": "这个视频在这里放不了，试试 MP4 或 WebM 文件。" },
+  "liveFailed": { "message": "动态背景没能下载，请检查网络后重新选择。" },
+  "extensions": { "message": "扩展" },
+  "extensionsAllow": { "message": "要在这里列出你的其他扩展，并能开关、打开它们的选项或移除它们，Tabdial 需要你允许它管理扩展。列表只留在这台电脑上。" },
+  "extensionsOff": { "message": "停止管理扩展" },
+  "extensionOptions": { "message": "选项" },
+  "extensionOn": { "message": "已开启" },
+  "extensionOff": { "message": "已关闭" },
+  "extensionSwitch": { "message": "开启或关闭" },
+  "extensionRemove": { "message": "移除" },
+  "extensionTheme": { "message": "主题" }
 }

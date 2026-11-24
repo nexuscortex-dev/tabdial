@@ -40,6 +40,8 @@
   <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="13" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></symbol>
 </svg>
 
+<video id="bg-video" class="bg-video" muted loop playsinline disablepictureinpicture aria-hidden="true" hidden></video>
+
 <header class="bar wrap">
   <button id="open-drawer" class="icon-btn" data-i18n-aria="bookmarksAndHistory"><svg class="i" aria-hidden="true"><use href="#i-bookmark"/></svg></button>
   <div class="group-bar">
@@ -134,6 +136,7 @@
   <div id="drawer-tabs" class="tabs" role="radiogroup" data-i18n-aria="bookmarksAndHistory">
     <label><input type="radio" name="drawer-tab" value="bookmarks" class="vh" checked><span data-i18n="bookmarks"></span></label>
     <label><input type="radio" name="drawer-tab" value="history" class="vh"><span data-i18n="history"></span></label>
+    <label><input type="radio" name="drawer-tab" value="extensions" class="vh"><span data-i18n="extensions"></span></label>
   </div>
   <input id="drawer-search" type="search" autofocus data-i18n-placeholder="drawerSearch" data-i18n-aria="drawerSearch" autocomplete="off" spellcheck="false">
   <div id="drawer-allow" class="drawer-allow" hidden>
@@ -298,6 +301,17 @@
         <button type="button" class="swatch" data-bg="photos/dunes.webp" data-tone="dark" data-i18n-title="bgDunes" data-i18n-aria="bgDunes"></button>
         <button type="button" class="swatch" data-bg="photos/aurora.webp" data-tone="dark" data-i18n-title="bgAurora" data-i18n-aria="bgAurora"></button>
         <button type="button" class="swatch" data-bg="photos/stars.webp" data-tone="dark" data-i18n-title="bgStars" data-i18n-aria="bgStars"></button>
+      </div>
+      <!-- Moving backgrounds (live.js): clips from Wikimedia Commons, fetched once from nexuscortex.dev, or the user's own video. -->
+      <p class="hint" data-i18n="liveHint"></p>
+      <div class="swatches">
+        <button type="button" class="swatch live" data-bg="live/clouds" data-i18n-title="bgLiveClouds" data-i18n-aria="bgLiveClouds"></button>
+        <button type="button" class="swatch live" data-bg="live/sky" data-i18n-title="bgLiveSky" data-i18n-aria="bgLiveSky"></button>
+        <button type="button" class="swatch live" data-bg="live/ocean" data-i18n-title="bgLiveOcean" data-i18n-aria="bgLiveOcean"></button>
+        <button type="button" class="swatch live" data-bg="live/beach" data-i18n-title="bgLiveBeach" data-i18n-aria="bgLiveBeach"></button>
+        <button type="button" class="swatch live" data-bg="live/falls" data-i18n-title="bgLiveFalls" data-i18n-aria="bgLiveFalls"></button>
+        <button type="button" class="swatch live" data-bg="live/aurora" data-i18n-title="bgLiveAurora" data-i18n-aria="bgLiveAurora"></button>
+        <label class="swatch upload-video" data-i18n-title="uploadVideo"><svg class="i" aria-hidden="true"><use href="#i-upload"/></svg><input id="bg-video-file" type="file" accept="video/mp4,video/webm" class="vh" data-i18n-aria="uploadVideo"></label>
       </div>
       <label class="field"><span data-i18n="layout"></span>
         <select id="layout">

@@ -13,6 +13,7 @@ import { getDrive, connectDrive, backUpToDrive, readDriveBackup, disconnectDrive
 import { t, plural, uiLanguage, direction } from './i18n.js';
 import { findPlaces, WEATHER_DATA, keptForecast, refreshForecast, nowAndNext, unitOf, degrees, iconOf as weatherIcon } from './weather.js';
 import { keptPhoto, refreshPhoto } from './daily.js';
+import { LIVE, liveId, isMoving, posterOf, keptVideo, liveVideo, keepUpload, tidyVideos } from './live.js';
 
 const $ = (sel) => document.querySelector(sel);
 
@@ -78,21 +79,29 @@ function showError(message, note = false) {
 }
 
 // '' = default, '#rrggbb' = a color, 'linear-gradient(…)' = a built-in gradient, 'photos/….webp' = a built-in photo,
-// 'data:…' = an uploaded image, 'daily' = the photo of the day (daily.js).
-const backgroundKind = (bg) => (!bg ? 'default' : bg === 'daily' ? 'daily' : bg.startsWith('#') ? 'color' : bg.startsWith('data:') ? 'image'
-  : bg.startsWith('photos/') ? 'photo' : 'gradient');
+// 'data:…' = an uploaded image, 'daily' = the photo of the day (daily.js), 'live/<id>' = a moving background and
+// 'video' = the user's own video (live.js).
+const backgroundKind = (bg) => (!bg ? 'default' : bg === 'daily' ? 'daily' : bg === 'video' ? 'video' : bg.startsWith('live/') ? 'live'
+  : bg.startsWith('#') ? 'color' : bg.startsWith('data:') ? 'image' : bg.startsWith('photos/') ? 'photo' : 'gradient');
+let movingBg = ''; // the moving background on screen, and its video's address (drawMoving)
+let movingUrl = '';
+let movingAsk = 0; // which drawMoving call is the latest
+let movingFailed = false; // the clip couldn't be fetched: tried again when the browser is back online
+let videoPoster = ''; // the still picture of the user's own video (live.js), read once the page is up
 let dailyPhoto = null; // the kept photo of the day (daily.js), read once the page is up
 let photoAsked = false;
 let forecast = null; // the kept forecast of the place in Settings (weather.js)
 let weatherAsking = false;
 
 // Whether the clock over a picked background needs light or dark text: a color or gradient by the average brightness
-// of its colors, a built-in photo as its swatch says, an uploaded photo taken as dark (the light text gets a shadow).
+// of its colors, a built-in photo as its swatch says, a moving background as its clip says (live.js),
+// an uploaded photo or video taken as dark (the light text gets a shadow).
 // '' = the default background, which follows the theme.
 function toneOf(bg) {
   if (!bg) return '';
   if (bg.startsWith('photos/')) return document.querySelector(`.swatch[data-bg="${CSS.escape(bg)}"]`)?.dataset.tone || 'dark';
-  if (bg.startsWith('data:') || bg === 'daily') return 'dark';
+  if (liveId(bg)) return LIVE[liveId(bg)].tone; // a clip as its LIVE entry says
+  if (bg.startsWith('data:') || bg === 'daily' || bg === 'video') return 'dark';
   const colors = (bg.match(/#[0-9a-f]{6}/gi) || []).map((hex) => parseInt(hex.slice(1), 16));
   const luma = colors.reduce((sum, n) => sum + .299 * (n >> 16) + .587 * (n >> 8 & 255) + .114 * (n & 255), 0) / colors.length;
   return luma < 140 ? 'dark' : 'light';
@@ -236,9 +245,14 @@ async function findIcon(url) {
 // The settings for how the page looks, with what those the user never touched stand at.
 const look = () => ({ size: 100, radius: 16, gap: 18, text: 13, font: '', theme: '', ...state.settings });
 
+// The background the page can show: a clip this version doesn't have (picked with a newer one) or a video uploaded on
+// another computer (named by its backup or export, or this computer's was cleared) shows the default instead.
+const shownBackground = (bg) => ((bg?.startsWith('live/') && !liveId(bg)) || (bg === 'video' && !videoPoster) ? '' : bg);
+
 function render() {
   iconOf = new Map(state.groups.flatMap(dialsOf).filter((d) => d.icon).map((d) => [d.url, d.icon]));
-  const { background, columns, size, radius, gap, text, font, theme } = look();
+  const { columns, size, radius, gap, text, font, theme } = look();
+  const background = shownBackground(look().background);
   const kind = backgroundKind(background);
   document.documentElement.dataset.theme = theme; // '' = as the browser is
   document.body.classList.toggle('no-titles', state.settings.titles === false);
@@ -246,11 +260,12 @@ function render() {
   drawTodos();
   document.body.style.backgroundColor = kind === 'color' ? background : '';
   document.body.style.backgroundImage = { default: '', color: 'none', gradient: background, image: `url("${background}")`, photo: `url("${background}")`,
-    daily: dailyPhoto?.image ? `url("${dailyPhoto.image}")` : '' }[kind];
+    daily: dailyPhoto?.image ? `url("${dailyPhoto.image}")` : '', live: `url("${posterOf(background)}")`, video: videoPoster ? `url("${videoPoster}")` : '' }[kind];
   document.body.dataset.tone = kind === 'daily' && !dailyPhoto?.image ? '' : toneOf(background);
   const { backgroundColor: color, backgroundImage: image } = document.body.style; // for paint.js
-  try { localStorage.setItem('paint', JSON.stringify({ theme, font, ...(kind !== 'image' && kind !== 'daily' && { color, image, tone: document.body.dataset.tone }) })); } catch {}
-  drawCredit(kind === 'daily');
+  try { localStorage.setItem('paint', JSON.stringify({ theme, font, ...(!['image', 'daily', 'video'].includes(kind) && { color, image, tone: document.body.dataset.tone }) })); } catch {}
+  drawCredit(kind, background);
+  drawMoving(background);
   if (kind === 'daily' && !photoAsked) freshPhoto(); // picked here or on another computer
   drawWeather();
   document.documentElement.style.setProperty('--cols', columns);
@@ -265,6 +280,8 @@ function render() {
   $('.swatch.custom').style.backgroundColor = kind === 'color' ? background : '';
   $('.swatch.upload').classList.toggle('on', kind === 'image');
   $('.swatch.upload').style.backgroundImage = kind === 'image' ? `url("${background}")` : '';
+  $('.swatch.upload-video').classList.toggle('on', kind === 'video');
+  $('.swatch.upload-video').style.backgroundImage = kind === 'video' && videoPoster ? `url("${videoPoster}")` : '';
   $('.swatch.daily').classList.toggle('has-photo', !!dailyPhoto?.image);
   $('.swatch.daily').style.backgroundImage = dailyPhoto?.image ? `url("${dailyPhoto.image}")` : '';
 
@@ -954,9 +971,11 @@ async function freshWeather() {
   }
 }
 
-function drawCredit(on) {
-  const p = dailyPhoto;
-  $('#photo-credit').hidden = !(on && p?.image);
+// Who made the photo of the day or the moving background, and its license, as the licenses ask.
+function drawCredit(kind, bg) {
+  const clip = kind === 'live' && LIVE[liveId(bg)];
+  const p = clip ? { ...clip, title: t(`bgLive${liveId(bg)[0].toUpperCase()}${liveId(bg).slice(1)}`), image: true } : kind === 'daily' ? dailyPhoto : null;
+  $('#photo-credit').hidden = !p?.image;
   if ($('#photo-credit').hidden) return;
   const link = $('#photo-link');
   link.textContent = [p.title, p.artist && t('photoBy', p.artist)].filter(Boolean).join(' · ') || 'Wikimedia Commons';
@@ -966,6 +985,50 @@ function drawCredit(on) {
   lic.textContent = p.license || 'Wikimedia Commons';
   lic.href = p.licenseUrl || link.href;
 }
+// The moving background: the video behind the page, from IndexedDB, playing only while the page is seen and the
+// system doesn't ask for reduced motion (then the still picture stays). A clip not kept yet is fetched first.
+const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
+function playOrPause() {
+  const v = $('#bg-video');
+  if (!v.hidden && movingUrl && !document.hidden && !reducedMotion.matches) v.play().catch(() => {});
+  else v.pause();
+}
+async function drawMoving(bg) {
+  if (bg === movingBg) return;
+  movingBg = bg;
+  movingFailed = false;
+  const ask = ++movingAsk;
+  const v = $('#bg-video');
+  if (movingUrl) URL.revokeObjectURL(movingUrl);
+  movingUrl = '';
+  v.hidden = true;
+  v.removeAttribute('src');
+  v.load();
+  if (!isMoving(bg)) return;
+  try {
+    const blob = bg === 'video' ? await keptVideo('video') : await liveVideo(bg);
+    if (ask !== movingAsk) return; // changed meanwhile
+    if (!blob) { // this computer's own video is gone: the default, not a dark page without it (shownBackground)
+      videoPoster = '';
+      chrome.storage.local.remove('videoPoster');
+      render();
+      return;
+    }
+    movingUrl = URL.createObjectURL(blob);
+    v.src = movingUrl;
+    v.hidden = false;
+    playOrPause();
+    if (bg !== 'video') tidyVideos(bg);
+  } catch {
+    if (ask !== movingAsk) return;
+    movingFailed = true;
+    showError(t('liveFailed'));
+  }
+}
+addEventListener('online', () => { if (movingFailed) { movingBg = ''; render(); } });
+document.addEventListener('visibilitychange', playOrPause);
+reducedMotion.addEventListener('change', playOrPause);
+
 async function freshPhoto() {
   photoAsked = true;
   dailyPhoto = await keptPhoto();
@@ -1291,6 +1354,7 @@ const drawer = $('#drawer');
 const LISTS = {
   bookmarks: { permissions: ['bookmarks'], allow: 'bookmarksAllow', off: 'bookmarksOff' },
   history: { permissions: ['history'], allow: 'historyAllow', off: 'historyOff' },
+  extensions: { permissions: ['management'], allow: 'extensionsAllow', off: 'extensionsOff' },
 };
 const drawerTab = () => drawer.querySelector('[name=drawer-tab]:checked').value;
 
@@ -1302,18 +1366,21 @@ drawer.addEventListener('dragover', (e) => {
   if (dragNew && (rtl() ? e.clientX < r.left : e.clientX > r.right)) drawer.close();
 });
 
+// The words in the drawer's search box; the Extensions tab hides the box, so what was typed on another tab doesn't
+// filter it.
+const searchedFor = (tab) => (tab === 'extensions' ? '' : $('#drawer-search').value.trim());
 async function showDrawer() {
   const tab = drawerTab();
-  const query = $('#drawer-search').value.trim();
+  const query = searchedFor(tab);
   const list = LISTS[tab];
   const allowed = await chrome.permissions.contains({ permissions: list.permissions });
   $('#drawer-allow').hidden = allowed;
-  $('#drawer-search').hidden = !allowed;
+  $('#drawer-search').hidden = !allowed || tab === 'extensions'; // a short list; the box says bookmarks and history
   $('#drawer-allow-text').textContent = t(list.allow);
   $('#drawer-off').hidden = !allowed;
   $('#drawer-off').textContent = t(list.off);
-  const items = !allowed ? [] : tab === 'bookmarks' ? await bookmarkList(query) : await historyItems(query);
-  if (tab !== drawerTab() || query !== $('#drawer-search').value.trim()) return; // changed meanwhile
+  const items = !allowed ? [] : tab === 'bookmarks' ? await bookmarkList(query) : tab === 'history' ? await historyItems(query) : await extensionItems(query);
+  if (tab !== drawerTab() || query !== searchedFor(tab)) return; // changed meanwhile
   $('#drawer-list').replaceChildren(...items, ...(allowed && !items.length ? [Object.assign(document.createElement('li'), { className: 'none', textContent: t('drawerEmpty') })] : []));
 }
 
@@ -1367,6 +1434,75 @@ async function historyItems(query) {
     items.push(pageItem(page.url, page.title));
   }
   return items;
+}
+
+// The browser's other extensions and themes (the optional `management` permission, asked here the first time and kept
+// until "Stop reading"): switch one on or off, open its options, or remove it (the browser asks to confirm). Nothing
+// of this list is stored or sent. Firefox lets an extension switch only themes, so there the switch is left out for
+// the rest.
+const firefox = navigator.userAgent.includes('Firefox/');
+async function extensionItems(query) {
+  const words = query.toLowerCase();
+  const all = (await chrome.management.getAll())
+    .filter((x) => x.id !== chrome.runtime.id && ['extension', 'theme'].includes(x.type) && (!words || x.name.toLowerCase().includes(words)))
+    .sort((a, b) => Number(b.enabled) - Number(a.enabled) || a.name.localeCompare(b.name));
+  return all.map(extensionItem);
+}
+function extensionItem(x) {
+  const li = document.createElement('li');
+  li.className = 'ext' + (x.enabled ? '' : ' off');
+  const pic = (x.icons || []).sort((a, b) => a.size - b.size).find((i) => i.size >= 32) || x.icons?.at(-1);
+  const img = Object.assign(new Image(), { alt: '', loading: 'lazy', width: 20, height: 20 });
+  if (pic) img.src = pic.url;
+  img.onerror = () => img.replaceWith(Object.assign(document.createElement('span'), { className: 'ext-letter', textContent: x.name.slice(0, 1).toUpperCase() }));
+  const name = document.createElement('span');
+  name.className = 'ext-name';
+  name.textContent = x.name;
+  name.title = `${x.name} ${x.version}${x.type === 'theme' ? ` · ${t('extensionTheme')}` : ''}`;
+  li.append(img, name);
+  if (x.optionsUrl && x.enabled) {
+    const options = document.createElement('button');
+    options.type = 'button';
+    options.className = 'icon-btn';
+    options.title = t('extensionOptions');
+    options.setAttribute('aria-label', `${options.title}: ${x.name}`);
+    options.append(icon('i-settings'));
+    options.addEventListener('click', () => chrome.tabs.create({ url: x.optionsUrl }));
+    li.append(options);
+  }
+  if (x.mayDisable !== false && (!firefox || x.type === 'theme')) {
+    const sw = document.createElement('input');
+    sw.type = 'checkbox';
+    sw.className = 'switch';
+    sw.checked = x.enabled;
+    sw.title = t(x.enabled ? 'extensionOn' : 'extensionOff');
+    sw.setAttribute('aria-label', `${t('extensionSwitch')}: ${x.name}`);
+    sw.addEventListener('change', async () => {
+      try {
+        await chrome.management.setEnabled(x.id, sw.checked);
+      } catch (err) {
+        showError(err.message);
+      }
+      showDrawer();
+    });
+    li.append(sw);
+  }
+  if (x.mayDisable !== false) {
+    const remove = document.createElement('button');
+    remove.type = 'button';
+    remove.className = 'icon-btn';
+    remove.title = t('extensionRemove');
+    remove.setAttribute('aria-label', `${remove.title}: ${x.name}`);
+    remove.append(icon('i-trash'));
+    remove.addEventListener('click', async () => {
+      try {
+        await chrome.management.uninstall(x.id, { showConfirmDialog: true });
+      } catch {} // the user said no
+      showDrawer();
+    });
+    li.append(remove);
+  }
+  return li;
 }
 
 // A page in the drawer: its link, and a button that adds it to the group on screen (or to the user's first own group,
@@ -2608,13 +2744,27 @@ $('#place').addEventListener('keydown', (e) => {
 });
 for (const sw of document.querySelectorAll('.swatch[data-bg]')) {
   const bg = sw.dataset.bg;
-  if (bg !== 'daily') sw.style.backgroundImage = backgroundKind(bg) === 'photo' ? `url("${bg.replace('.webp', '-s.webp')}")` : bg; // a photo's small copy
+  if (backgroundKind(bg) === 'live') sw.style.backgroundImage = `url("${posterOf(bg)}")`;
+  else if (bg !== 'daily') sw.style.backgroundImage = backgroundKind(bg) === 'photo' ? `url("${bg.replace('.webp', '-s.webp')}")` : bg; // a photo's small copy
   sw.addEventListener('click', () => {
     state.settings.background = sw.dataset.bg;
     saveAndRender();
     if (bg === 'daily') freshPhoto();
   });
 }
+$('#bg-video-file').addEventListener('change', async (e) => {
+  const file = e.target.files[0];
+  e.target.value = '';
+  if (!file) return;
+  try {
+    videoPoster = await keepUpload(file);
+    movingBg = ''; // a new video under the same name
+    state.settings.background = 'video';
+    saveAndRender();
+  } catch (err) {
+    showError(t(err.message === 'size' ? 'videoTooBig' : 'videoUnreadable'));
+  }
+});
 $('#bg-color').addEventListener('input', (e) => { state.settings.background = e.target.value; saveAndRender(); });
 $('#bg-file').addEventListener('change', async (e) => {
   const file = e.target.files[0];
@@ -2771,6 +2921,10 @@ async function showJumpTip() {
 }
 $('#jump-tip').addEventListener('toggle', (e) => { if (e.newState === 'closed') chrome.storage.local.set({ jumpHintDone: true }); });
 
+chrome.storage.local.get('videoPoster').then(({ videoPoster: p }) => { // for the next draw; the video itself comes in drawMoving
+  videoPoster = typeof p === 'string' ? p : '';
+  if (state.settings.background === 'video') render();
+});
 render();
 tick();
 if (!photoAsked) freshPhoto(); // the kept photo of the day for its swatch (render asks when it is the background)

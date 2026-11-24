@@ -388,5 +388,26 @@
   "tempUnitAuto": { "message": "Automatikus" },
   "weatherHint": { "message": "Amit beírsz, majd a hely koordinátái a nexuscortex.dev-re kerülnek, amely az OpenStreetMaptől és a MET Norwaytől kérdez. Más adat rólad nem megy velük." },
   "weatherBy": { "message": "Előrejelzés: MET Norway, yr.no" },
-  "photoBy": { "message": "készítette: $1" }
+  "photoBy": { "message": "készítette: $1" },
+
+  "bgLiveClouds": { "message": "Felhők a sivatag felett" },
+  "bgLiveSky": { "message": "Vonuló felhők" },
+  "bgLiveOcean": { "message": "Viharos tenger" },
+  "bgLiveBeach": { "message": "Hullámok fekete homokos parton" },
+  "bgLiveFalls": { "message": "Vízesés" },
+  "bgLiveAurora": { "message": "Sarki fény" },
+  "liveHint": { "message": "Mozgó hátterek: egyszer töltődnek le, aztán erről a számítógépről játszódnak le. Kicsit több akkut fogyasztanak; ha a rendszerben be van kapcsolva a mozgás csökkentése, csak állókép látszik." },
+  "uploadVideo": { "message": "Saját videó" },
+  "videoTooBig": { "message": "Túl nagy a videó. Válassz 60 MB alattit." },
+  "videoUnreadable": { "message": "Ez a videó itt nem játszható le. Próbálj MP4 vagy WebM fájlt." },
+  "liveFailed": { "message": "Nem sikerült letölteni a mozgó hátteret. Ellenőrizd a kapcsolatot, és válaszd ki újra." },
+  "extensions": { "message": "Bővítmények" },
+  "extensionsAllow": { "message": "Ahhoz, hogy a többi bővítményed itt megjelenjen, és be- vagy kikapcsolhasd, megnyithasd a beállításaikat vagy eltávolíthasd őket, a Tabdialnak engedély kell a bővítmények kezeléséhez. A lista ezen a számítógépen marad." },
+  "extensionsOff": { "message": "Bővítmények kezelésének leállítása" },
+  "extensionOptions": { "message": "Beállítások" },
+  "extensionOn": { "message": "Be" },
+  "extensionOff": { "message": "Ki" },
+  "extensionSwitch": { "message": "Be- vagy kikapcsolás" },
+  "extensionRemove": { "message": "Eltávolítás" },
+  "extensionTheme": { "message": "téma" }
 }

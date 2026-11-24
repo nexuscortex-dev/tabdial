@@ -1017,5 +1017,26 @@
   "tempUnitAuto": { "message": "自動" },
   "weatherHint": { "message": "入力した文字と、その後は場所の位置が nexuscortex.dev に送られ、そこから OpenStreetMap と MET Norway に問い合わせます。それ以外のあなたの情報は送られません。" },
   "weatherBy": { "message": "予報：MET Norway（yr.no）" },
-  "photoBy": { "message": "撮影：$1" }
+  "photoBy": { "message": "撮影：$1" },
+
+  "bgLiveClouds": { "message": "砂漠の雲" },
+  "bgLiveSky": { "message": "流れる雲" },
+  "bgLiveOcean": { "message": "荒れた海" },
+  "bgLiveBeach": { "message": "黒い砂浜の波" },
+  "bgLiveFalls": { "message": "滝" },
+  "bgLiveAurora": { "message": "オーロラ" },
+  "liveHint": { "message": "動く背景：一度ダウンロードすると、あとはこのパソコンから再生します。バッテリーを少し多く使います。システムで「視差効果を減らす」がオンなら静止画だけを表示します。" },
+  "uploadVideo": { "message": "自分の動画" },
+  "videoTooBig": { "message": "動画が大きすぎます。60 MB 未満のものを選んでください。" },
+  "videoUnreadable": { "message": "この動画はここでは再生できません。MP4 か WebM のファイルを試してください。" },
+  "liveFailed": { "message": "動く背景をダウンロードできませんでした。接続を確認して、もう一度選んでください。" },
+  "extensions": { "message": "拡張機能" },
+  "extensionsAllow": { "message": "ほかの拡張機能をここに表示して、オン・オフの切り替え、オプションを開く、削除ができるようにするには、拡張機能の管理の許可が必要です。一覧はこのパソコンの中だけで使います。" },
+  "extensionsOff": { "message": "拡張機能の管理をやめる" },
+  "extensionOptions": { "message": "オプション" },
+  "extensionOn": { "message": "オン" },
+  "extensionOff": { "message": "オフ" },
+  "extensionSwitch": { "message": "オン・オフ" },
+  "extensionRemove": { "message": "削除" },
+  "extensionTheme": { "message": "テーマ" }
 }

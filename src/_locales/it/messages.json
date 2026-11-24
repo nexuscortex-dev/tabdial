@@ -410,5 +410,26 @@
   "tempUnitAuto": { "message": "Automatica" },
   "weatherHint": { "message": "Ciò che scrivi, e poi la posizione del luogo, vanno a nexuscortex.dev, che interroga OpenStreetMap e MET Norway. Nient'altro su di te viene inviato." },
   "weatherBy": { "message": "Previsioni di MET Norway su yr.no" },
-  "photoBy": { "message": "di $1" }
+  "photoBy": { "message": "di $1" },
+
+  "bgLiveClouds": { "message": "Nuvole sul deserto" },
+  "bgLiveSky": { "message": "Nuvole in movimento" },
+  "bgLiveOcean": { "message": "Mare in tempesta" },
+  "bgLiveBeach": { "message": "Onde su una spiaggia nera" },
+  "bgLiveFalls": { "message": "Cascata" },
+  "bgLiveAurora": { "message": "Aurora boreale" },
+  "liveHint": { "message": "Sfondi animati: scaricati una volta, poi si riproducono da questo computer. Consumano un po' più di batteria; con la riduzione del movimento attiva nel sistema, appare solo un'immagine ferma." },
+  "uploadVideo": { "message": "Il tuo video" },
+  "videoTooBig": { "message": "Questo video è troppo grande. Scegline uno sotto i 60 MB." },
+  "videoUnreadable": { "message": "Questo video non si può riprodurre qui. Prova un file MP4 o WebM." },
+  "liveFailed": { "message": "Non è stato possibile scaricare lo sfondo animato. Controlla la connessione e sceglilo di nuovo." },
+  "extensions": { "message": "Estensioni" },
+  "extensionsAllow": { "message": "Per mostrare qui le altre estensioni, attivarle o disattivarle, aprirne le opzioni o rimuoverle, Tabdial ha bisogno del permesso di gestire le estensioni. L'elenco resta su questo computer." },
+  "extensionsOff": { "message": "Smetti di gestire le estensioni" },
+  "extensionOptions": { "message": "Opzioni" },
+  "extensionOn": { "message": "Attiva" },
+  "extensionOff": { "message": "Disattivata" },
+  "extensionSwitch": { "message": "Attiva o disattiva" },
+  "extensionRemove": { "message": "Rimuovi" },
+  "extensionTheme": { "message": "tema" }
 }

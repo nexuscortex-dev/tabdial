@@ -1017,5 +1017,26 @@
   "tempUnitAuto": { "message": "Automatique" },
   "weatherHint": { "message": "Ce que vous tapez, puis la position du lieu, vont à nexuscortex.dev, qui interroge OpenStreetMap et MET Norway. Rien d'autre sur vous n'est transmis." },
   "weatherBy": { "message": "Prévisions de MET Norway sur yr.no" },
-  "photoBy": { "message": "par $1" }
+  "photoBy": { "message": "par $1" },
+
+  "bgLiveClouds": { "message": "Nuages sur le désert" },
+  "bgLiveSky": { "message": "Nuages qui passent" },
+  "bgLiveOcean": { "message": "Mer agitée" },
+  "bgLiveBeach": { "message": "Vagues sur une plage noire" },
+  "bgLiveFalls": { "message": "Cascade" },
+  "bgLiveAurora": { "message": "Aurores boréales" },
+  "liveHint": { "message": "Arrière-plans animés : téléchargés une fois, ils sont ensuite lus depuis cet ordinateur. Ils consomment un peu plus de batterie ; si la réduction des animations est activée dans votre système, seule une image fixe s'affiche." },
+  "uploadVideo": { "message": "Votre propre vidéo" },
+  "videoTooBig": { "message": "Cette vidéo est trop lourde. Choisissez-en une de moins de 60 Mo." },
+  "videoUnreadable": { "message": "Cette vidéo ne peut pas être lue ici. Essayez un fichier MP4 ou WebM." },
+  "liveFailed": { "message": "L'arrière-plan animé n'a pas pu être téléchargé. Vérifiez la connexion et choisissez-le à nouveau." },
+  "extensions": { "message": "Extensions" },
+  "extensionsAllow": { "message": "Pour afficher ici vos autres extensions, les activer ou les désactiver, ouvrir leurs options ou les supprimer, Tabdial a besoin de votre autorisation de gérer les extensions. La liste reste sur cet ordinateur." },
+  "extensionsOff": { "message": "Ne plus gérer les extensions" },
+  "extensionOptions": { "message": "Options" },
+  "extensionOn": { "message": "Activée" },
+  "extensionOff": { "message": "Désactivée" },
+  "extensionSwitch": { "message": "Activer ou désactiver" },
+  "extensionRemove": { "message": "Supprimer" },
+  "extensionTheme": { "message": "thème" }
 }

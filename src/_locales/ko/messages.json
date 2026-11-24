@@ -388,5 +388,26 @@
   "tempUnitAuto": { "message": "자동" },
   "weatherHint": { "message": "입력한 내용과 이후 장소의 위치는 nexuscortex.dev로 전송되며, 여기서 OpenStreetMap과 MET Norway에 요청합니다. 그 밖의 정보는 함께 보내지 않습니다." },
   "weatherBy": { "message": "MET Norway(yr.no) 예보" },
-  "photoBy": { "message": "촬영: $1" }
+  "photoBy": { "message": "촬영: $1" },
+
+  "bgLiveClouds": { "message": "사막 위의 구름" },
+  "bgLiveSky": { "message": "흘러가는 구름" },
+  "bgLiveOcean": { "message": "폭풍치는 바다" },
+  "bgLiveBeach": { "message": "검은 해변의 파도" },
+  "bgLiveFalls": { "message": "폭포" },
+  "bgLiveAurora": { "message": "오로라" },
+  "liveHint": { "message": "움직이는 배경: 한 번 내려받은 뒤에는 이 컴퓨터에서 재생됩니다. 배터리를 조금 더 씁니다. 시스템에서 동작 줄이기가 켜져 있으면 정지 화면만 보입니다." },
+  "uploadVideo": { "message": "내 동영상" },
+  "videoTooBig": { "message": "동영상이 너무 큽니다. 60MB 미만을 고르세요." },
+  "videoUnreadable": { "message": "이 동영상은 여기서 재생할 수 없습니다. MP4 또는 WebM 파일을 써 보세요." },
+  "liveFailed": { "message": "움직이는 배경을 내려받지 못했습니다. 연결을 확인하고 다시 고르세요." },
+  "extensions": { "message": "확장 프로그램" },
+  "extensionsAllow": { "message": "다른 확장 프로그램을 여기에 보여 주고 켜거나 끄고, 옵션을 열고, 삭제하려면 확장 프로그램 관리 권한이 필요합니다. 목록은 이 컴퓨터에만 있습니다." },
+  "extensionsOff": { "message": "확장 프로그램 관리 중지" },
+  "extensionOptions": { "message": "옵션" },
+  "extensionOn": { "message": "켜짐" },
+  "extensionOff": { "message": "꺼짐" },
+  "extensionSwitch": { "message": "켜기/끄기" },
+  "extensionRemove": { "message": "삭제" },
+  "extensionTheme": { "message": "테마" }
 }
