@@ -207,7 +207,7 @@ li:hover .edit { opacity: 1; transform: translateY(-3px); }
 }
 .no-titles .add-tile { min-height: 62.5cqi; }
 .add-tile:hover { transform: none; box-shadow: none; border-color: var(--accent); color: var(--accent); background: var(--surface); }
-.add-tile .plus { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; background: var(--surface); box-shadow: var(--shadow); }
+.add-tile .add-plus { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; background: var(--surface); box-shadow: var(--shadow); }
 /* over a team group: whose it is and who can change it */
 .team-note {
   width: fit-content; max-width: 100%; margin: -16px auto 20px; padding: 6px 14px; border-radius: 999px; text-align: center;
@@ -363,6 +363,19 @@ dialog input[type=text]:focus-visible, dialog input[type=url]:focus-visible, dia
 /* The moving background (live.js), behind everything; the body's still picture shows until it plays. */
 .bg-video { position: fixed; inset: 0; z-index: -1; width: 100vw; height: 100vh; object-fit: cover; pointer-events: none; }
 .bg-video[hidden] { display: none; }
+/* While a moving background comes (newtab.js showProgress): a thin bar along the top of the page and one along the
+   bottom of its swatch, filled to --p (0 to 1), or a piece going to and fro while it can't say how far. */
+.bg-progress { position: fixed; z-index: 20; inset-inline: 0; top: 0; height: 3px; pointer-events: none; background: rgb(127 127 127 / .2); }
+.bg-progress[hidden] { display: none; }
+.swatch.loading::before, .swatch.loading::after { content: ''; position: absolute; inset-inline: 6px; bottom: 5px; height: 4px; border-radius: 2px; pointer-events: none; }
+.swatch.loading::before { background: rgb(0 0 0 / .45); }
+.bg-progress::after, .swatch.loading::after { width: calc(var(--p, 0) * (100% - 12px)); background: var(--accent); transition: width .2s; }
+.bg-progress::after { content: ''; position: absolute; inset-block: 0; inset-inline-start: 0; width: calc(var(--p, 0) * 100%); border-start-end-radius: 2px; border-end-end-radius: 2px; }
+.bg-progress.working::after, .swatch.working::after { width: 30%; --run: 233%; animation: bg-working 1.1s ease-in-out infinite alternate; }
+.swatch.working::after { width: 12px; --run: 167%; } /* across the 32 pixels of its track */
+@keyframes bg-working { from { translate: 0; } to { translate: var(--run); } }
+:root[dir=rtl] .bg-progress.working::after, :root[dir=rtl] .swatch.working::after { animation-name: bg-working-rtl; }
+@keyframes bg-working-rtl { from { translate: 0; } to { translate: calc(-1 * var(--run)); } }
 .weather-set { display: grid; gap: 8px; margin-inline-start: 28px; }
 .weather-set .row { flex-wrap: nowrap; align-items: stretch; gap: 8px; }
 .weather-set #place { flex: 1; min-width: 0; }

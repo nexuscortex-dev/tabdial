@@ -5,8 +5,10 @@
 // - 'video': a video the user uploaded. It stays on this computer: too big for sync, backups or the export file.
 // The videos are kept in IndexedDB (`tabdial-media`, store `videos`, by background value), the only store here that
 // takes a Blob as it is: chrome.storage would turn megabytes into text on every new tab. Only the background in use
-// and the uploaded video are kept. The page shows the clip's still picture first, never plays while hidden, and
-// shows only the picture when the system asks for reduced motion.
+// and the uploaded video are kept. The page shows the clip's still picture first and never plays while hidden. It
+// plays even when the system asks for reduced motion: picking a moving background is asking for one (owner 2026-11-24).
+// The packaged still (`src/live/<id>-s.webp`) is a swatch's 320 pixels; once the clip is here a sharp one is made from
+// it (`livePoster`), as for the uploaded video (`videoPoster`).
 
 export const LIVE_BASE = 'https://nexuscortex.dev/tabdial/live/';
 export const LIVE = {
@@ -50,18 +52,38 @@ export async function tidyVideos(bg) {
   for (const k of keys) if (k !== bg && k !== 'video') await run('readwrite', (s) => s.delete(k));
 }
 
-// The clip for a 'live/<id>' background, fetched and kept if this browser doesn't have it yet.
-export async function liveVideo(bg) {
+// The clip for a 'live/<id>' background, fetched and kept if this browser doesn't have it yet. While it is fetched,
+// `progress` hears how much has come (0 to 1, or -1 while the size isn't known); `signal` stops the fetch.
+export async function liveVideo(bg, { progress, signal } = {}) {
   const id = liveId(bg);
   if (!id) return null;
   const kept = await keptVideo(bg);
   if (kept) return kept;
-  const res = await fetch(`${LIVE_BASE}${id}.webm`, { signal: AbortSignal.timeout(120_000) });
+  progress?.(0);
+  const res = await fetch(`${LIVE_BASE}${id}.webm`, { signal: AbortSignal.any([AbortSignal.timeout(120_000), ...(signal ? [signal] : [])]) });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
-  const blob = await res.blob();
-  if (!/^video\//.test(blob.type)) throw new Error('not a video');
+  const type = (res.headers.get('content-type') || '').split(';')[0].trim();
+  if (!/^video\//.test(type)) throw new Error('not a video');
+  const size = Number(res.headers.get('content-length')) || 0;
+  const parts = [];
+  let got = 0;
+  for (const reader = res.body.getReader(); ;) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    parts.push(value);
+    got += value.length;
+    progress?.(size ? Math.min(1, got / size) : -1);
+  }
+  const blob = new Blob(parts, { type });
   await keep(bg, blob);
   return blob;
+}
+
+// The sharp still of a clip, made from the clip itself once it is here, for the first moment of each new tab.
+export async function keepLivePoster(bg, blob) {
+  const image = await stillOf(blob, 0);
+  await chrome.storage.local.set({ livePoster: { bg, image } });
+  return image;
 }
 
 // An uploaded video: checked (the types the file picker offers), kept, and a still picture of it made for the first
@@ -69,15 +91,16 @@ export async function liveVideo(bg) {
 export async function keepUpload(file) {
   if (!/^video\/(mp4|webm)$/.test(file.type)) throw new Error('type');
   if (file.size > MAX_VIDEO) throw new Error('size');
-  const poster = await stillOf(file);
+  const poster = await stillOf(file, 1);
   await keep('video', file);
   await chrome.storage.local.set({ videoPoster: poster });
   return poster;
 }
 
-// A JPEG of the video's first second, at most 960 pixels wide; fails for a file the browser can't play or that has no
-// picture (sound only).
-function stillOf(blob) {
+// A JPEG of the video at `at` seconds (the first second of an uploaded video, as it may open on black; a clip's very
+// start, where it starts playing), at most 1920 pixels wide, to look sharp on a full screen; fails for a file the
+// browser can't play or that has no picture (sound only).
+function stillOf(blob, at) {
   return new Promise((resolve, reject) => {
     const v = document.createElement('video');
     const url = URL.createObjectURL(blob);
@@ -85,12 +108,12 @@ function stillOf(blob) {
     v.muted = true;
     v.preload = 'auto';
     v.onerror = done(reject);
-    v.onloadeddata = () => { if (!v.videoWidth) return done(reject)(new Error('no picture')); v.currentTime = Math.min(1, (v.duration || 2) / 2); };
+    v.onloadeddata = () => { if (!v.videoWidth) return done(reject)(new Error('no picture')); v.currentTime = Math.max(0.01, Math.min(at, (v.duration || 2) / 2)); };
     v.onseeked = done(() => {
-      const scale = Math.min(1, 960 / v.videoWidth);
+      const scale = Math.min(1, 1920 / v.videoWidth);
       const c = Object.assign(document.createElement('canvas'), { width: Math.round(v.videoWidth * scale), height: Math.round(v.videoHeight * scale) });
       c.getContext('2d').drawImage(v, 0, 0, c.width, c.height);
-      resolve(c.toDataURL('image/jpeg', 0.8));
+      resolve(c.toDataURL('image/jpeg', 0.85));
     });
     setTimeout(done(() => reject(new Error('timeout'))), 15_000);
     v.src = url;

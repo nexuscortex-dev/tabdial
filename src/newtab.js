@@ -13,7 +13,7 @@ import { getDrive, connectDrive, backUpToDrive, readDriveBackup, disconnectDrive
 import { t, plural, uiLanguage, direction } from './i18n.js';
 import { findPlaces, WEATHER_DATA, keptForecast, refreshForecast, nowAndNext, unitOf, degrees, iconOf as weatherIcon } from './weather.js';
 import { keptPhoto, refreshPhoto } from './daily.js';
-import { LIVE, liveId, isMoving, posterOf, keptVideo, liveVideo, keepUpload, tidyVideos } from './live.js';
+import { LIVE, liveId, isMoving, posterOf, keptVideo, liveVideo, keepUpload, keepLivePoster, tidyVideos } from './live.js';
 
 const $ = (sel) => document.querySelector(sel);
 
@@ -87,7 +87,10 @@ let movingBg = ''; // the moving background on screen, and its video's address (
 let movingUrl = '';
 let movingAsk = 0; // which drawMoving call is the latest
 let movingFailed = false; // the clip couldn't be fetched: tried again when the browser is back online
+let movingStop = null; // stops fetching a clip that is no longer picked
+let progressBg = ''; // the moving background whose progress bar shows (showProgress)
 let videoPoster = ''; // the still picture of the user's own video (live.js), read once the page is up
+let livePoster = null; // the sharp still of the clip in use, { bg, image } (live.js), read once the page is up
 let dailyPhoto = null; // the kept photo of the day (daily.js), read once the page is up
 let photoAsked = false;
 let forecast = null; // the kept forecast of the place in Settings (weather.js)
@@ -260,10 +263,12 @@ function render() {
   drawTodos();
   document.body.style.backgroundColor = kind === 'color' ? background : '';
   document.body.style.backgroundImage = { default: '', color: 'none', gradient: background, image: `url("${background}")`, photo: `url("${background}")`,
-    daily: dailyPhoto?.image ? `url("${dailyPhoto.image}")` : '', live: `url("${posterOf(background)}")`, video: videoPoster ? `url("${videoPoster}")` : '' }[kind];
+    daily: dailyPhoto?.image ? `url("${dailyPhoto.image}")` : '', live: `url("${livePoster?.bg === background ? livePoster.image : posterOf(background)}")`, video: videoPoster ? `url("${videoPoster}")` : '' }[kind];
   document.body.dataset.tone = kind === 'daily' && !dailyPhoto?.image ? '' : toneOf(background);
   const { backgroundColor: color, backgroundImage: image } = document.body.style; // for paint.js
-  try { localStorage.setItem('paint', JSON.stringify({ theme, font, ...(!['image', 'daily', 'video'].includes(kind) && { color, image, tone: document.body.dataset.tone }) })); } catch {}
+  const painted = kind === 'live' ? { color, image: `url("${posterOf(background)}")`, tone: document.body.dataset.tone } // its sharp still is too big to copy
+    : !['image', 'daily', 'video'].includes(kind) && { color, image, tone: document.body.dataset.tone };
+  try { localStorage.setItem('paint', JSON.stringify({ theme, font, ...painted })); } catch {}
   drawCredit(kind, background);
   drawMoving(background);
   if (kind === 'daily' && !photoAsked) freshPhoto(); // picked here or on another computer
@@ -867,7 +872,7 @@ function addTile() {
   const addBtn = document.createElement('button');
   addBtn.className = 'tile add-tile';
   const plus = document.createElement('span');
-  plus.className = 'plus';
+  plus.className = 'add-plus'; // not .plus: that is the settings' boxes (Unlock, Drive)
   plus.append(icon('i-plus'));
   addBtn.append(plus, t('addSite'));
   addBtn.addEventListener('click', () => openDialDialog(null));
@@ -985,12 +990,29 @@ function drawCredit(kind, bg) {
   lic.textContent = p.license || 'Wikimedia Commons';
   lic.href = p.licenseUrl || link.href;
 }
-// The moving background: the video behind the page, from IndexedDB, playing only while the page is seen and the
-// system doesn't ask for reduced motion (then the still picture stays). A clip not kept yet is fetched first.
-const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
+// The bar along the top of the page and along the bottom of the swatch while a moving background comes: p from 0 to 1,
+// -1 while it can't say how far (an uploaded video being read), null when it is here or failed.
+function showProgress(bg, p) {
+  progressBg = p == null ? '' : bg;
+  const bar = $('#bg-progress');
+  bar.hidden = p == null;
+  bar.classList.toggle('working', p === -1);
+  bar.style.setProperty('--p', p > 0 ? p : 0);
+  if (p >= 0) bar.setAttribute('aria-valuenow', Math.round(p * 100));
+  else bar.removeAttribute('aria-valuenow');
+  for (const sw of document.querySelectorAll('.swatch.live, .swatch.upload-video')) {
+    const on = p != null && (sw.dataset.bg ?? 'video') === bg;
+    sw.classList.toggle('loading', on);
+    sw.classList.toggle('working', on && p === -1);
+    sw.style.setProperty('--p', on && p > 0 ? p : 0);
+  }
+}
+
+// The moving background: the video behind the page, from IndexedDB, playing only while the page is seen. A clip not
+// kept yet is fetched first, with a progress bar; once a clip is here, its sharp still is made if it hasn't one.
 function playOrPause() {
   const v = $('#bg-video');
-  if (!v.hidden && movingUrl && !document.hidden && !reducedMotion.matches) v.play().catch(() => {});
+  if (!v.hidden && movingUrl && !document.hidden) v.play().catch(() => {});
   else v.pause();
 }
 async function drawMoving(bg) {
@@ -998,6 +1020,10 @@ async function drawMoving(bg) {
   movingBg = bg;
   movingFailed = false;
   const ask = ++movingAsk;
+  movingStop?.abort();
+  movingStop = new AbortController();
+  const { signal } = movingStop;
+  if (progressBg !== bg) showProgress('', null); // not an uploaded video's, which stays until it shows
   const v = $('#bg-video');
   if (movingUrl) URL.revokeObjectURL(movingUrl);
   movingUrl = '';
@@ -1006,28 +1032,41 @@ async function drawMoving(bg) {
   v.load();
   if (!isMoving(bg)) return;
   try {
-    const blob = bg === 'video' ? await keptVideo('video') : await liveVideo(bg);
+    const blob = bg === 'video' ? await keptVideo('video')
+      : await liveVideo(bg, { signal, progress: (p) => ask === movingAsk && showProgress(bg, p) });
     if (ask !== movingAsk) return; // changed meanwhile
     if (!blob) { // this computer's own video is gone: the default, not a dark page without it (shownBackground)
+      showProgress('', null);
       videoPoster = '';
       chrome.storage.local.remove('videoPoster');
       render();
       return;
     }
     movingUrl = URL.createObjectURL(blob);
+    const shown = () => ask === movingAsk && progressBg && showProgress('', null);
+    v.addEventListener('loadeddata', shown, { once: true });
+    v.addEventListener('error', shown, { once: true });
     v.src = movingUrl;
     v.hidden = false;
     playOrPause();
-    if (bg !== 'video') tidyVideos(bg);
+    if (bg !== 'video') {
+      tidyVideos(bg);
+      if (livePoster?.bg !== bg) {
+        keepLivePoster(bg, blob).then((image) => {
+          livePoster = { bg, image };
+          if (ask === movingAsk) render();
+        }, () => {}); // the small still stays
+      }
+    }
   } catch {
     if (ask !== movingAsk) return;
+    showProgress('', null);
     movingFailed = true;
     showError(t('liveFailed'));
   }
 }
 addEventListener('online', () => { if (movingFailed) { movingBg = ''; render(); } });
 document.addEventListener('visibilitychange', playOrPause);
-reducedMotion.addEventListener('change', playOrPause);
 
 async function freshPhoto() {
   photoAsked = true;
@@ -2756,12 +2795,14 @@ $('#bg-video-file').addEventListener('change', async (e) => {
   const file = e.target.files[0];
   e.target.value = '';
   if (!file) return;
+  showProgress('video', -1); // until it shows (drawMoving)
   try {
     videoPoster = await keepUpload(file);
     movingBg = ''; // a new video under the same name
     state.settings.background = 'video';
     saveAndRender();
   } catch (err) {
+    showProgress('', null);
     showError(t(err.message === 'size' ? 'videoTooBig' : 'videoUnreadable'));
   }
 });
@@ -2921,9 +2962,10 @@ async function showJumpTip() {
 }
 $('#jump-tip').addEventListener('toggle', (e) => { if (e.newState === 'closed') chrome.storage.local.set({ jumpHintDone: true }); });
 
-chrome.storage.local.get('videoPoster').then(({ videoPoster: p }) => { // for the next draw; the video itself comes in drawMoving
+chrome.storage.local.get(['videoPoster', 'livePoster']).then(({ videoPoster: p, livePoster: l }) => { // for the next draw; the video itself comes in drawMoving
   videoPoster = typeof p === 'string' ? p : '';
-  if (state.settings.background === 'video') render();
+  livePoster ??= typeof l?.bg === 'string' && typeof l.image === 'string' ? l : null; // unless one was made meanwhile
+  if (isMoving(state.settings.background)) render();
 });
 render();
 tick();
