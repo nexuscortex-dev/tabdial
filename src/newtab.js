@@ -1487,7 +1487,7 @@ function extensionItem(x) {
     });
     li.append(sw);
   }
-  if (x.mayDisable !== false) {
+  if (x.mayDisable !== false && chrome.management.uninstall) { // Firefox has no uninstall for other add-ons
     const remove = document.createElement('button');
     remove.type = 'button';
     remove.className = 'icon-btn';
