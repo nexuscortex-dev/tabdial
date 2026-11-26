@@ -32,9 +32,10 @@ html {
   background-blend-mode: soft-light, normal, normal, normal;
 }
 body {
-  margin: 0; min-height: 100vh; font: 14px/1.45 var(--font, system-ui), var(--sys); color: var(--ink);
+  position: relative; /* for .photo-credit */ margin: 0; min-height: 100vh; font: 14px/1.45 var(--font, system-ui), var(--sys); color: var(--ink);
   -webkit-font-smoothing: antialiased;
   background-position: center; background-size: cover; background-repeat: no-repeat; background-attachment: fixed;
+  isolation: isolate; /* the moving background (z-index -1) goes over this background, not under it (html has its own) */
 }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .i { width: 18px; height: 18px; flex: none; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
@@ -108,8 +109,10 @@ main { padding-top: clamp(8px, 4vh, 40px); padding-bottom: 64px; }
 .weather .w-range, .weather .w-place { font-weight: 500; opacity: .85; }
 body[data-tone="dark"] .weather { opacity: 1; text-shadow: 0 1px 2px rgb(0 0 0 / .55), 0 0 10px rgb(0 0 0 / .45); }
 body[data-tone="dark"] .weather img { filter: drop-shadow(0 1px 2px rgb(0 0 0 / .45)); }
-/* Who made the photo of the day and under which license (daily.js), as the license asks. */
-.photo-credit { position: fixed; inset-inline-start: 12px; bottom: 8px; z-index: 1; max-width: min(60vw, 640px); margin: 0; overflow: hidden;
+/* Who made the photo of the day or the moving background and under which license (daily.js, live.js), as the license
+   asks. At the bottom of the page, not of the window: in the window's corner, the dials of a page taller than the window
+   passed under it. A page that fits shows it in the corner; a longer one after its last row, in main's bottom padding. */
+.photo-credit { position: absolute; inset-inline-start: 12px; bottom: 8px; z-index: 1; max-width: min(60vw, 640px); margin: 0; overflow: hidden;
   font-size: 11px; white-space: nowrap; text-overflow: ellipsis; color: #fff; opacity: .75; text-shadow: 0 1px 2px rgb(0 0 0 / .7); }
 .photo-credit:hover { opacity: 1; }
 .photo-credit a { color: inherit; text-decoration: none; }
